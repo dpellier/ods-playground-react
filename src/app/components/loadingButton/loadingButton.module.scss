@@ -1,0 +1,16 @@
+.loading-button {
+  position: relative;
+
+  &__spinner {
+    position: absolute;
+    right: 0;
+    left: 0;
+    text-align: center;
+  }
+
+  &__content {
+    &--hidden {
+      opacity: 0;
+    }
+  }
+}

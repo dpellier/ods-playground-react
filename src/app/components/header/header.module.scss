@@ -1,0 +1,13 @@
+.header {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  align-items: center;
+  padding: .5rem 1rem;
+  background-color: var(--ods-color-primary-500);
+
+  &__sign-out {
+    &__icon {
+      margin-left: .5rem;
+    }
+  }
+}

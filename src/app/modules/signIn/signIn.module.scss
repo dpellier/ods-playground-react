@@ -1,0 +1,13 @@
+.sign-in {
+  display: flex;
+  flex-flow: column;
+  grid-row-gap: 2rem;
+  justify-content: center;
+  margin: auto;
+  width: 300px;
+  height: 100%;
+
+  &__title {
+    text-align: center;
+  }
+}

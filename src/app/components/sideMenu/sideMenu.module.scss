@@ -1,0 +1,12 @@
+.side-menu {
+  background-color: var(--ods-color-gray-100);
+  list-style: none;
+
+  &__item {
+    padding: 1rem;
+
+    &__icon {
+      margin-right: .5rem;
+    }
+  }
+}
