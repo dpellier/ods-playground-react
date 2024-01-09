@@ -11,6 +11,11 @@ The application is built on top of:
 - [React Router](https://reactrouter.com/en/main) for the navigation
 - [Redux](https://redux.js.org/) for the state management
 - [Formik](https://formik.org/) for the form management (until ODS provides a form component)
+- [DummyJSON](https://dummyjson.com/) for the fake API
+
+## Accounts
+
+You can find an account to log in in the [following list](https://dummyjson.com/users?select=username,password).
 
 ## Run locally
 
