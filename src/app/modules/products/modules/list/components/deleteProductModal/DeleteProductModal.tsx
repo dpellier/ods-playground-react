@@ -4,6 +4,7 @@ import { ODS_THEME_COLOR_INTENT } from '@ovhcloud/ods-common-theming'
 import { ODS_BUTTON_TYPE, ODS_BUTTON_VARIANT, ODS_TEXT_COLOR_INTENT, ODS_TEXT_LEVEL } from '@ovhcloud/ods-components'
 import { OsdsButton, OsdsModal, OsdsText } from '@ovhcloud/ods-components/react'
 import PropTypes from 'prop-types'
+import { useEffect, useRef } from 'react'
 import { LoadingButton } from 'app/components/loadingButton/LoadingButton'
 
 const propTypes = {
@@ -15,10 +16,19 @@ const propTypes = {
 }
 
 const DeleteProductModal: FC<InferProps<typeof propTypes>> = ({ isOpen, isPending, onCancelDelete, onSubmitDelete, productTitle }) => {
+  const modalElement = useRef<HTMLOsdsModalElement>(null)
+
+  useEffect(() => {
+    if (!isOpen) {
+      modalElement.current?.close()
+    }
+  }, [isOpen])
+
   return (
     <OsdsModal dismissible={ true }
                headline="Product deletion"
                onOdsModalClose={ onCancelDelete }
+               ref={ modalElement }
                masked={ isOpen ? undefined : true }>
       <OsdsText color={ ODS_TEXT_COLOR_INTENT.text }
                 level={ ODS_TEXT_LEVEL.body }>
