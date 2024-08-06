@@ -11,9 +11,9 @@ import {
 } from 'app/state/services/products'
 
 type ProductReducerState = {
-  createStatus: ACTION_STATUS,
   count?: number,
   countStatus: ACTION_STATUS,
+  createStatus: ACTION_STATUS,
   deleteStatus: ACTION_STATUS,
   fetchStatus: ACTION_STATUS,
   listStatus: ACTION_STATUS,
@@ -28,9 +28,9 @@ type ListActionPayload = {
 }
 
 const initialState: ProductReducerState = {
-  createStatus: ACTION_STATUS.idle,
   count: undefined,
   countStatus: ACTION_STATUS.idle,
+  createStatus: ACTION_STATUS.idle,
   deleteStatus: ACTION_STATUS.idle,
   fetchStatus: ACTION_STATUS.idle,
   listStatus: ACTION_STATUS.idle,
@@ -39,12 +39,12 @@ const initialState: ProductReducerState = {
   updateStatus: ACTION_STATUS.idle,
 }
 
-const create = createAsyncThunk('products/create', async (product: Product) => {
-  return createRequest(product)
-})
-
 const count = createAsyncThunk('products/count', async () => {
   return countRequest()
+})
+
+const create = createAsyncThunk('products/create', async (product: Product) => {
+  return createRequest(product)
 })
 
 const deleteProduct = createAsyncThunk('products/deleteProduct', async (id: number) => {
@@ -69,6 +69,17 @@ const productsSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      .addCase(count.fulfilled, (state, action) => {
+        state.count = action.payload
+        state.countStatus = ACTION_STATUS.succeeded
+      })
+      .addCase(count.pending, (state) => {
+        state.countStatus = ACTION_STATUS.pending
+      })
+      .addCase(count.rejected, (state) => {
+        state.countStatus = ACTION_STATUS.failed
+      })
+
       .addCase(create.fulfilled, (state, action) => {
         state.createStatus = ACTION_STATUS.succeeded
         state.product = action.payload
@@ -79,17 +90,6 @@ const productsSlice = createSlice({
       })
       .addCase(create.rejected, (state) => {
         state.createStatus = ACTION_STATUS.failed
-      })
-
-      .addCase(count.fulfilled, (state, action) => {
-        state.count = action.payload
-        state.countStatus = ACTION_STATUS.succeeded
-      })
-      .addCase(count.pending, (state) => {
-        state.countStatus = ACTION_STATUS.pending
-      })
-      .addCase(count.rejected, (state) => {
-        state.countStatus = ACTION_STATUS.failed
       })
 
       .addCase(deleteProduct.fulfilled, (state, action) => {
@@ -104,8 +104,8 @@ const productsSlice = createSlice({
       })
 
       .addCase(fetch.fulfilled, (state, action) => {
-        state.product = action.payload
         state.fetchStatus = ACTION_STATUS.succeeded
+        state.product = action.payload
       })
       .addCase(fetch.pending, (state) => {
         state.fetchStatus = ACTION_STATUS.pending
@@ -115,9 +115,9 @@ const productsSlice = createSlice({
       })
 
       .addCase(list.fulfilled, (state, action) => {
-        state.count = action.payload.count,
-        state.products = action.payload.products
+        state.count = action.payload.count
         state.listStatus = ACTION_STATUS.succeeded
+        state.products = action.payload.products
       })
       .addCase(list.pending, (state) => {
         state.listStatus = ACTION_STATUS.pending
@@ -143,8 +143,8 @@ const productsSlice = createSlice({
 })
 
 export {
-  create,
   count,
+  create,
   deleteProduct,
   fetch,
   list,

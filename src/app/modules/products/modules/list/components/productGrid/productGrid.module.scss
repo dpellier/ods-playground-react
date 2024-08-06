@@ -1,3 +1,26 @@
 .product-grid {
   width: 100%;
+  overflow: auto;
+
+  &__header {
+    &__action {
+      &__toggle {
+        display: flex;
+        flex-flow: row;
+        column-gap: .5rem;
+        align-items: center;
+
+        & + & {
+          margin-top: .5rem;
+        }
+      }
+    }
+  }
+
+  &__row {
+    &__actions,
+    &__thumbnail {
+      text-align: center;
+    }
+  }
 }

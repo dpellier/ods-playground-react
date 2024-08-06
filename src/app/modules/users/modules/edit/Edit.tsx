@@ -1,4 +1,4 @@
-import type { ProductProps } from 'app/models/Product'
+import type { UserProps } from 'app/models/User'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -6,51 +6,51 @@ import { LoadingMask } from 'app/components/loadingMask/LoadingMask'
 import { PageTitle } from 'app/components/pageTitle/PageTitle'
 import { ROUTE } from 'app/constants/navigation'
 import { ACTION_STATUS } from 'app/constants/slice'
-import { ProductForm } from 'app/modules/products/components/productForm/ProductForm'
+import { UserForm } from 'app/modules/users/components/userForm/UserForm'
 import { useAppSelector, useAppDispatch } from 'app/hooks/useRedux'
-import { Product } from 'app/models/Product'
-import { fetch, update } from 'app/state/slices/products'
+import { User } from 'app/models/User'
+import { fetch, update } from 'app/state/slices/users'
 import styles from './edit.module.scss'
 
 const Edit = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { id } = useParams()
-  const fetchStatus = useAppSelector((state) => state.products.fetchStatus)
-  const product = useAppSelector((state) => state.products.product)
-  const updateStatus = useAppSelector((state) => state.products.updateStatus)
+  const fetchStatus = useAppSelector((state) => state.users.fetchStatus)
+  const updateStatus = useAppSelector((state) => state.users.updateStatus)
+  const user = useAppSelector((state) => state.users.user)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     if (id) {
-      const productId = parseInt(id, 10)
+      const userId = parseInt(id, 10)
 
       if (fetchStatus === ACTION_STATUS.idle
-        || (fetchStatus === ACTION_STATUS.succeeded && product.id !== productId)) {
-        dispatch(fetch(productId))
+        || (fetchStatus === ACTION_STATUS.succeeded && user.id !== userId)) {
+        dispatch(fetch(userId))
       }
     }
   }, [dispatch, fetchStatus, id])
 
   useEffect(() => {
     if (isSubmitting && updateStatus === ACTION_STATUS.succeeded) {
-      toast.success('Product successfully updated')
-      navigate(ROUTE.products)
+      toast.success('User successfully updated')
+      navigate(ROUTE.users)
     }
 
     if (isSubmitting && updateStatus === ACTION_STATUS.failed) {
-      toast.error('Something went wrong while updating the product')
+      toast.error('Something went wrong while updating the user')
       setIsSubmitting(false)
     }
   }, [isSubmitting, updateStatus])
 
   function onCancel() {
-    navigate(ROUTE.products)
+    navigate(ROUTE.users)
   }
 
-  function onSubmit(product: ProductProps) {
+  function onSubmit(user: UserProps) {
     setIsSubmitting(true)
-    dispatch(update(new Product(product)))
+    dispatch(update(new User(user)))
   }
 
   if (fetchStatus !== ACTION_STATUS.succeeded) {
@@ -59,12 +59,12 @@ const Edit = () => {
 
   return (
     <div className={ styles.edit }>
-      <PageTitle label={ `Edit product "${product.title}"` } />
+      <PageTitle label={ `Edit user "${user.name}"` } />
 
-      <ProductForm isPending={ updateStatus === ACTION_STATUS.pending }
-                   onCancel={ onCancel }
-                   onSubmit={ onSubmit }
-                   product={ product } />
+      <UserForm isPending={ updateStatus === ACTION_STATUS.pending }
+                onCancel={ onCancel }
+                onSubmit={ onSubmit }
+                user={ user } />
     </div>
   )
 }

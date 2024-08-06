@@ -1,6 +1,6 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
-import { OsdsSkeleton } from '@ovhcloud/ods-components/react'
+import { OdsSkeleton } from '@ovhcloud/ods-components/react'
 import PropTypes from 'prop-types'
 
 const propTypes = {
@@ -10,7 +10,7 @@ const propTypes = {
 
 const LoadingContent: FC<InferProps<typeof propTypes>> = ({ children, isPending }) => {
   return isPending ?
-    <OsdsSkeleton /> :
+    <OdsSkeleton /> :
     children
 }
 

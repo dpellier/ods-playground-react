@@ -1,20 +1,20 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
-import { OsdsLink } from '@ovhcloud/ods-components/react'
+import { OdsLink } from '@ovhcloud/ods-components/react'
 import PropTypes from 'prop-types'
 import { Link as LinkVendor } from 'react-router-dom'
 
 const propTypes = {
-  children: PropTypes.node.isRequired,
+  label: PropTypes.string.isRequired,
   route: PropTypes.string.isRequired,
 }
 
-const Link: FC<InferProps<typeof propTypes>> = ({ children, route }) => {
+const Link: FC<InferProps<typeof propTypes>> = ({ label, route }) => {
   return (
     <LinkVendor to={ route }>
-      <OsdsLink>
-        { children }
-      </OsdsLink>
+      <OdsLink href=""
+               label={ label }>
+      </OdsLink>
     </LinkVendor>
   )
 }
