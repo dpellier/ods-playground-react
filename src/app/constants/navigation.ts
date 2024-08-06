@@ -9,17 +9,17 @@ enum ROUTE {
 
 const SIDE_MENU_ITEM = Object.freeze({
   dashboard: {
-    icon: ODS_ICON_NAME.APP_REPLICATION_CONCEPT,
+    icon: ODS_ICON_NAME.grid,
     label: 'Dashboard',
     route: ROUTE.dashboard,
   },
   users: {
-    icon: ODS_ICON_NAME.USER_CONCEPT,
+    icon: ODS_ICON_NAME.user,
     label: 'User Management',
     route: ROUTE.users,
   },
   products: {
-    icon: ODS_ICON_NAME.TODO_LIST_CONCEPT,
+    icon: ODS_ICON_NAME.list,
     label: 'Product Management',
     route: ROUTE.products,
   }

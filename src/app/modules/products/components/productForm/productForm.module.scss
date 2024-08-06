@@ -8,6 +8,10 @@
       display: flex;
       grid-column-gap: .5rem;
       align-items: center;
+
+      &__currency {
+        color: var(--ods-color-primary-500);
+      }
     }
   }
 

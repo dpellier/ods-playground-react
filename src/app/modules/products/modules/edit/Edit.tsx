@@ -1,10 +1,9 @@
 import type { ProductProps } from 'app/models/Product'
-import { ODS_TEXT_COLOR_INTENT, ODS_TEXT_LEVEL, ODS_TEXT_SIZE } from '@ovhcloud/ods-components'
-import { OsdsText } from '@ovhcloud/ods-components/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 import { LoadingMask } from 'app/components/loadingMask/LoadingMask'
+import { PageTitle } from 'app/components/pageTitle/PageTitle.tsx'
 import { ROUTE } from 'app/constants/navigation'
 import { ACTION_STATUS } from 'app/constants/slice'
 import { ProductForm } from 'app/modules/products/components/productForm/ProductForm'
@@ -60,11 +59,7 @@ const Edit = () => {
 
   return (
     <div className={ styles.edit }>
-      <OsdsText color={ ODS_TEXT_COLOR_INTENT.primary }
-                level={ ODS_TEXT_LEVEL.heading }
-                size={ ODS_TEXT_SIZE._500 }>
-        Edit product "{ product.title }"
-      </OsdsText>
+      <PageTitle label={ `Edit product "${product.title}"` } />
 
       <ProductForm isPending={ updateStatus === ACTION_STATUS.pending }
                    onCancel={ onCancel }

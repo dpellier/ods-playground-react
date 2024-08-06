@@ -5,9 +5,14 @@
   padding: .5rem 1rem;
   background-color: var(--ods-color-primary-500);
 
+  &__title {
+    font-weight: 600;
+    color: var(--ods-color-primary-000);
+  }
+
   &__sign-out {
-    &__icon {
-      margin-left: .5rem;
+    &::part(link) {
+      color: var(--ods-color-primary-000);
     }
   }
 }

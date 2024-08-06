@@ -1,12 +1,10 @@
-// TODO datagrid using react-tabulator
-import { OsdsText } from '@ovhcloud/ods-components/react';
-
+// TODO datagrid using react-tabulator?
 const List = () => {
   return (
     <div>
-      <OsdsText>
+      <p>
         Coming soon ...
-      </OsdsText>
+      </p>
     </div>
   )
 }

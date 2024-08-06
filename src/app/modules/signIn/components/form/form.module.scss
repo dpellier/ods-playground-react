@@ -2,4 +2,9 @@
   display: flex;
   flex-flow: column;
   grid-row-gap: 1rem;
+
+  &__field,
+  &__submit {
+    display: grid;
+  }
 }
