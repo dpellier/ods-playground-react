@@ -1,6 +1,6 @@
 @import '@ovhcloud/ods-components/style';
 
-.product-form {
+.user-form {
   display: flex;
   flex-flow: column;
   grid-row-gap: 1rem;
@@ -12,16 +12,6 @@
   &__fields {
     &__label {
       @include ods-text-label();
-    }
-
-    &__price {
-      display: flex;
-      grid-column-gap: .5rem;
-      align-items: center;
-
-      &__currency {
-        color: var(--ods-color-primary-500);
-      }
     }
   }
 

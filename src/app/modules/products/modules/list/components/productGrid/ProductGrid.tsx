@@ -1,86 +1,22 @@
-import type { OdsDatagridColumn } from '@ovhcloud/ods-components'
+import type { OdsCheckboxChangeEvent } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
-import type { FC } from 'react'
-import { ODS_BUTTON_SIZE, ODS_BUTTON_VARIANT, ODS_ICON_NAME, ODS_ICON_SIZE } from '@ovhcloud/ods-components'
-import { OsdsButton, OsdsDatagrid, OsdsIcon, OsdsMedium } from '@ovhcloud/ods-components/react'
+import type { FC, ReactElement } from 'react'
+import type { ProductProps } from 'app/models/Product'
+import { ODS_BUTTON_VARIANT, ODS_ICON_NAME } from '@ovhcloud/ods-components'
+import { OdsButton, OdsCheckbox, OdsMedium, OdsPopover, OdsTable } from '@ovhcloud/ods-components/react'
 import PropTypes from 'prop-types'
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE } from 'app/constants/navigation'
-import { reactFormatter } from 'app/helpers/datagrid'
 import { Product } from 'app/models/Product'
 import styles from './productGrid.module.scss'
 
-type ProductGridRow = {
-  id: number,
-  price: number,
-  thumbnail: string,
-  title: string
+type Column = {
+  className?: string,
+  customRenderer?: (product: Product) => ReactElement,
+  label: string,
+  prop: keyof Omit<ProductProps, 'restockDate'>,
 }
-
-const productGridDeleteEvent = 'product-grid-delete-event'
-const productGridEditEvent = 'product-grid-edit-event'
-
-const Actions = (props?: { cellData?: string, rowData?: ProductGridRow }) => (
-  <div style={{
-    display: 'flex',
-    flexFlow: 'row',
-    gridColumnGap: '.5rem',
-    alignItems: 'center',
-  }}>
-    <OsdsButton onClick={ ()=> {
-      const event = new CustomEvent<{productId: number | undefined}>(productGridEditEvent, {
-        detail: {
-          productId: props?.rowData?.id
-        }
-      })
-      window.dispatchEvent(event)
-    }}
-                size={ ODS_BUTTON_SIZE.sm }
-                variant={ ODS_BUTTON_VARIANT.ghost }>
-      <OsdsIcon name={ ODS_ICON_NAME.PEN_CONCEPT }
-                size={ ODS_ICON_SIZE.xs } />
-    </OsdsButton>
-
-    <OsdsButton onClick={ ()=> {
-      const event = new CustomEvent<{product: ProductGridRow | undefined}>(productGridDeleteEvent, {
-        detail: {
-          product: props?.rowData
-        }
-      })
-      window.dispatchEvent(event)
-    }}
-                size={ ODS_BUTTON_SIZE.sm }
-                variant={ ODS_BUTTON_VARIANT.ghost }>
-      <OsdsIcon name={ ODS_ICON_NAME.TRASH_CONCEPT }
-                size={ ODS_ICON_SIZE.xs } />
-    </OsdsButton>
-  </div>
-)
-
-const Thumbnail = (props?: { cellData?: string, rowData?: ProductGridRow }) => (
-  <OsdsMedium alt={ props?.rowData?.title }
-              height={ 60 }
-              src={ props?.cellData } />
-);
-
-const columns: OdsDatagridColumn[] = [
-  { title: 'ID', field: 'id', isSortable: true },
-  { title: 'Product', field: 'title', isSortable: true },
-  { title: 'Price', field: 'price', isSortable: true },
-  {
-    title: 'Thumbnail',
-    field: 'thumbnail',
-    isSortable: false,
-    formatter: reactFormatter(<Thumbnail />),
-  },
-  {
-    title: '',
-    field: '',
-    isSortable: false,
-    formatter: reactFormatter(<Actions />),
-  },
-]
 
 const propTypes = {
   height: PropTypes.number.isRequired,
@@ -88,54 +24,118 @@ const propTypes = {
   products: PropTypes.arrayOf(PropTypes.instanceOf(Product).isRequired).isRequired,
 }
 
+const Thumbnail = (product: Product) => (
+  <OdsMedium alt={ product.title }
+             height={ 60 }
+             src={ product.thumbnail }
+             width={ 60 } />
+)
+
+const COLUMNS: Column[] = [
+  { label: 'ID', prop: 'id' },
+  { label: 'Product', prop: 'title' },
+  { label: 'Price', prop: 'price' },
+  {
+    className: styles['product-grid__row__thumbnail'],
+    customRenderer: Thumbnail,
+    label: 'Thumbnail',
+    prop: 'thumbnail'
+  },
+]
+
 const ProductGrid: FC<InferProps<typeof propTypes>> = ({ height, onDeleteProduct, products }) => {
   const navigate = useNavigate()
-  const [rows, setRows] = useState<ProductGridRow[] | null>(null)
+  const [displayedColumns, setDisplayedColumns] = useState(COLUMNS)
 
-  const onProductDeleteEvent = useCallback((e: CustomEvent) => {
-    e.stopPropagation()
-    onDeleteProduct(e.detail.product)
-  }, [])
-
-  const onProductEditEvent = useCallback((e: CustomEvent) => {
-    e.stopPropagation()
-    navigate(`${ROUTE.products}/${e.detail.productId}/edit`)
-  }, [navigate])
-
-  useEffect(() => {
-    setRows(products.map((product) => ({
-      id: product.id,
-      price: product.price,
-      thumbnail: product.thumbnail,
-      title: product.title,
-    })))
-  }, [products])
-
-  useEffect(() => {
-    window.addEventListener(productGridDeleteEvent, onProductDeleteEvent as (e: Event) => void)
-    window.addEventListener(productGridEditEvent, onProductEditEvent as (e: Event) => void)
-
-    return () => {
-      window.removeEventListener(productGridDeleteEvent, onProductDeleteEvent as (e: Event) => void)
-      window.removeEventListener(productGridEditEvent, onProductEditEvent as (e: Event) => void)
+  function onToggleColumn(event: OdsCheckboxChangeEvent, prop: keyof ProductProps) {
+    if (event.detail.checked) {
+      setDisplayedColumns((prev) => COLUMNS.filter((column => {
+        return column.prop === prop || prev.some((c) => c.prop === column.prop)
+      })))
+    } else {
+      setDisplayedColumns((prev) => prev.filter((column) => column.prop !== prop))
     }
-  }, [onProductDeleteEvent, onProductEditEvent])
-
-  if (!rows) {
-    return <></>
   }
 
   return (
-    <OsdsDatagrid className={ styles['product-grid'] }
-                  columns={ columns }
-                  height={ height }
-                  noResultLabel="No products found"
-                  rows={ rows }>
-    </OsdsDatagrid>
+    <OdsTable className={ styles['product-grid'] }
+              style={{ height }}>
+      <table>
+        <thead>
+          <tr>
+            {
+              displayedColumns.map((column) => (
+                <th key={ column.prop }
+                    scope="col">
+                  { column.label }
+                </th>
+              ))
+            }
+
+            <th scope="col">
+              <OdsButton icon={ ODS_ICON_NAME.cog }
+                         id="header-action-trigger"
+                         label=""
+                         variant={ ODS_BUTTON_VARIANT.ghost } />
+
+              <OdsPopover triggerId="header-action-trigger">
+                {
+                  COLUMNS.map((column) => (
+                    <div className={ styles['product-grid__header__action__toggle'] }
+                         key={ column.prop }>
+                      <OdsCheckbox inputId={ `header-action-toggle-${column.prop}` }
+                                   isChecked={ true }
+                                   name={ `toggle-${column.prop}` }
+                                   onOdsChange={ (e: OdsCheckboxChangeEvent) => onToggleColumn(e, column.prop) } />
+
+                      <label htmlFor={ `header-action-toggle-${column.prop}` }>
+                        { column.label }
+                      </label>
+                    </div>
+                  ))
+                }
+              </OdsPopover>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {
+            products.map((product) => (
+              <tr key={ product.id }>
+                {
+                  displayedColumns.map((column) => (
+                    <td className={ column.className || '' }
+                        key={ column.prop }>
+                      {
+                        column.customRenderer ?
+                          column.customRenderer(product) :
+                          product[column.prop]
+                      }
+                    </td>
+                  ))
+                }
+
+                <td className={ styles['product-grid__row__actions'] }>
+                  <OdsButton icon={ ODS_ICON_NAME.pen }
+                             label=""
+                             onClick={ () => navigate(`${ROUTE.products}/${product.id}/edit`) }
+                             variant={ ODS_BUTTON_VARIANT.ghost } />
+
+                  <OdsButton icon={ ODS_ICON_NAME.trash }
+                             label=""
+                             onClick={ () => { onDeleteProduct(product) } }
+                             variant={ ODS_BUTTON_VARIANT.ghost } />
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </OdsTable>
   )
 }
 
 ProductGrid.propTypes = propTypes
 
-export type { ProductGridRow }
 export { ProductGrid }

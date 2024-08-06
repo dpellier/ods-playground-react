@@ -2,14 +2,14 @@ import { config } from 'app/config'
 import { erase, get, post, put } from 'app/helpers/http'
 import { Product } from 'app/models/Product'
 
-async function create(product: Product) {
-  return post(`${config.api.products}/add`, product.toApi())
-    .then(Product.fromApi)
-}
-
 async function count() {
   return get(`${config.api.products}?limit=1&select=id`)
     .then(({ total }) => total)
+}
+
+async function create(product: Product) {
+  return post(`${config.api.products}/add`, product.toApi())
+    .then(Product.fromApi)
 }
 
 async function deleteProduct(id: number) {

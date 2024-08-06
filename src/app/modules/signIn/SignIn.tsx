@@ -1,6 +1,6 @@
 import type { SignInSlicePayload } from 'app/state/slices/session'
-import { ODS_TEXT_LEVEL, ODS_TEXT_SIZE } from '@ovhcloud/ods-components'
-import { OsdsText } from '@ovhcloud/ods-components/react'
+import { ODS_TEXT_PRESET } from '@ovhcloud/ods-components'
+import { OdsText } from '@ovhcloud/ods-components/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { ACTION_STATUS } from 'app/constants/slice'
@@ -28,11 +28,10 @@ const SignIn = () => {
 
   return (
     <div className={ styles['sign-in'] }>
-      <OsdsText className={ styles['sign-in__title'] }
-                level={ ODS_TEXT_LEVEL.heading }
-                size={ ODS_TEXT_SIZE._500 }>
+      <OdsText className={ styles['sign-in__title'] }
+               preset={ ODS_TEXT_PRESET.heading1 }>
         Welcome to the ODS React Playground App
-      </OsdsText>
+      </OdsText>
 
       <Form isPending={ signInStatus === ACTION_STATUS.pending }
             onSubmit={ onSignIn } />

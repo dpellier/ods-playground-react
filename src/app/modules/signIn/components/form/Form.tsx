@@ -1,11 +1,10 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
-import { ODS_BUTTON_TYPE, ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OsdsFormField, OsdsInput, OsdsText } from '@ovhcloud/ods-components/react'
+import { ODS_BUTTON_COLOR, ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
+import { OdsButton, OdsFormField, OdsInput, OdsPassword } from '@ovhcloud/ods-components/react'
 import { useFormik } from 'formik'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
-import { LoadingButton } from 'app/components/loadingButton/LoadingButton'
 import styles from './form.module.scss'
 
 const propTypes = {
@@ -31,34 +30,36 @@ const Form: FC<InferProps<typeof propTypes>> = ({ isPending, onSubmit }) => {
   return (
     <form className={ styles.form }
           onSubmit={ formik.handleSubmit }>
-      <OsdsFormField error={ (formik.touched.username && formik.errors.username) as string }>
-        <OsdsText slot="label">
+      <OdsFormField error={ (formik.touched.username && formik.errors.username) as string }>
+        <label className={ styles['form__field__label'] }>
           Username:
-        </OsdsText>
+        </label>
 
-        <OsdsInput error={ formik.touched.username && !!formik.errors.username }
-                   name="username"
-                   onOdsInputBlur={ formik.handleBlur }
-                   onOdsValueChange={ formik.handleChange }
-                   type={ ODS_INPUT_TYPE.text } />
-      </OsdsFormField>
+        <OdsInput className={ styles['form__field__username'] }
+                  hasError={ formik.touched.username && !!formik.errors.username }
+                  name="username"
+                  onOdsBlur={ formik.handleBlur }
+                  onOdsChange={ formik.handleChange }
+                  type={ ODS_INPUT_TYPE.text } />
+      </OdsFormField>
 
-      <OsdsFormField error={ (formik.touched.password && formik.errors.password) as string }>
-        <OsdsText slot="label">
+      <OdsFormField error={ (formik.touched.password && formik.errors.password) as string }>
+        <label className={ styles['form__field__label'] }>
           Password:
-        </OsdsText>
+        </label>
 
-        <OsdsInput error={ formik.touched.password && !!formik.errors.password }
-                   name="password"
-                   onOdsInputBlur={ formik.handleBlur }
-                   onOdsValueChange={ formik.handleChange }
-                   type={ ODS_INPUT_TYPE.password } />
-      </OsdsFormField>
+        <OdsPassword className={ styles['form__field__password'] }
+                     hasError={ formik.touched.password && !!formik.errors.password }
+                     name="password"
+                     onOdsBlur={ formik.handleBlur }
+                     onOdsChange={ formik.handleChange } />
+      </OdsFormField>
 
-      <LoadingButton isPending={ isPending }
-                     type={ ODS_BUTTON_TYPE.submit }>
-        Sign In
-      </LoadingButton>
+      <OdsButton className={ styles['form__submit'] }
+                 color={ ODS_BUTTON_COLOR.primary }
+                 isLoading={ isPending }
+                 label="Sign In"
+                 type="submit" />
     </form>
   )
 }

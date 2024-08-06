@@ -1,16 +1,16 @@
 import type { Toast } from 'react-hot-toast'
-import { ODS_THEME_COLOR_INTENT } from '@ovhcloud/ods-common-theming'
-import { OsdsMessage, OsdsText } from '@ovhcloud/ods-components/react'
+import { ODS_MESSAGE_COLOR } from '@ovhcloud/ods-components'
+import { OdsMessage } from '@ovhcloud/ods-components/react'
 import { resolveValue, Toaster as ToasterVendor } from 'react-hot-toast'
 
 function getMessageColor(toast: Toast) {
   switch (toast.type) {
     case 'error':
-      return ODS_THEME_COLOR_INTENT.error
+      return ODS_MESSAGE_COLOR.critical
     case 'success':
-      return ODS_THEME_COLOR_INTENT.success
+      return ODS_MESSAGE_COLOR.success
     default:
-      return ODS_THEME_COLOR_INTENT.default
+      return ODS_MESSAGE_COLOR.information
   }
 }
 
@@ -23,12 +23,9 @@ const Toaster = () => {
           const messageColor = getMessageColor(toast)
 
           return (
-            <OsdsMessage color={ messageColor }
-                         inline={ true }>
-              <OsdsText color={ messageColor }>
-                { resolveValue(toast.message, toast) }
-              </OsdsText>
-            </OsdsMessage>
+            <OdsMessage color={ messageColor }>
+              { resolveValue(toast.message, toast) }
+            </OdsMessage>
           )
         }
       }

@@ -9,6 +9,7 @@ import { useAuth } from 'app/hooks/useAuth'
 import styles from './app.module.scss'
 
 const Dashboard = lazy(() => import('app/modules/dashboard/Dashboard'))
+const Faq = lazy(() => import('app/modules/faq/Faq'))
 const Products = lazy(() => import('app/modules/products/Products'))
 const SignIn = lazy(() => import('app/modules/signIn/SignIn'))
 const Users = lazy(() => import('app/modules/users/Users'))
@@ -47,6 +48,7 @@ const App = () => {
               <Suspense fallback={ <LoadingMask /> }>
                 <Routes>
                   <Route path={ `${ROUTE.dashboard}/*` } element={ <Dashboard /> } />
+                  <Route path={ `${ROUTE.faq}/*` } element={ <Faq /> } />
                   <Route path={ `${ROUTE.products}/*` } element={ <Products /> } />
                   <Route path={ `${ROUTE.users}/*` } element={ <Users /> } />
                   <Route path="*" element={ <Navigate to={ ROUTE.dashboard } replace /> } />

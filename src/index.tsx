@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './app/App'
 import { AuthProvider } from 'app/hooks/useAuth'
 import { store } from 'app/state/store'
-import '@ovhcloud/ods-theme-blue-jeans'
 import './index.scss'
 
 const root = createRoot(document.getElementById('root')!)

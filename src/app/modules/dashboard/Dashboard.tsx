@@ -1,9 +1,8 @@
-import { ODS_THEME_COLOR_INTENT } from '@ovhcloud/ods-common-theming'
-import { ODS_DIVIDER_SIZE, ODS_TEXT_COLOR_INTENT, ODS_TEXT_LEVEL, ODS_TEXT_SIZE } from '@ovhcloud/ods-components'
-import { OsdsDivider, OsdsText, OsdsTile } from '@ovhcloud/ods-components/react'
+import { OdsCard, OdsDivider } from '@ovhcloud/ods-components/react'
 import { useEffect } from 'react'
 import { LoadingContent } from 'app/components/loadingContent/LoadingContent'
 import { Link } from 'app/components/link/Link'
+import { PageTitle } from 'app/components/pageTitle/PageTitle'
 import { ROUTE } from 'app/constants/navigation'
 import { ACTION_STATUS } from 'app/constants/slice'
 import { useAppDispatch, useAppSelector } from 'app/hooks/useRedux'
@@ -32,69 +31,42 @@ const Dashboard = () => {
 
   return (
     <div className={ styles.dashboard }>
-      <OsdsText className={ styles['dashboard__title'] }
-                color={ ODS_TEXT_COLOR_INTENT.primary }
-                level={ ODS_TEXT_LEVEL.heading }
-                size={ ODS_TEXT_SIZE._600 }>
-        Overview of your playground resources
-      </OsdsText>
+      <PageTitle label="Overview of your playground resources" />
 
       <div className={ styles['dashboard__tiles'] }>
-        <OsdsTile className={ styles['dashboard__tiles__tile'] }
-                  color={ ODS_THEME_COLOR_INTENT.primary }>
-          <div className={ styles['dashboard__tiles__tile__content'] }>
-            <OsdsText color={ ODS_TEXT_COLOR_INTENT.primary }
-                      level={ ODS_TEXT_LEVEL.heading }
-                      size={ ODS_TEXT_SIZE._300 }>
-              Users
-            </OsdsText>
+        <OdsCard className={ styles['dashboard__tiles__tile'] }>
+          <span className={ styles['dashboard__tiles__tile__title'] }>
+            Users
+          </span>
 
-            <OsdsDivider color={ ODS_THEME_COLOR_INTENT.primary }
-                         separator={ true }
-                         size={ ODS_DIVIDER_SIZE.six } />
+          <OdsDivider className={ styles['dashboard__tiles__tile__divider'] } />
 
-            <LoadingContent isPending={ usersCountStatus === ACTION_STATUS.pending }>
-              <OsdsText color={ ODS_TEXT_COLOR_INTENT.text }
-                        level={ ODS_TEXT_LEVEL.body }>
-                You have { usersCount } users registered
-              </OsdsText>
-            </LoadingContent>
+          <LoadingContent isPending={ usersCountStatus === ACTION_STATUS.pending }>
+            <span>
+              You have { usersCount } users registered
+            </span>
+          </LoadingContent>
 
-            <OsdsDivider size={ ODS_DIVIDER_SIZE.four } />
+          <Link label="Manage users"
+                route={ ROUTE.users } />
+        </OdsCard>
 
-            <Link route={ ROUTE.users }>
-              Manage users
-            </Link>
-          </div>
-        </OsdsTile>
+        <OdsCard className={ styles['dashboard__tiles__tile'] }>
+          <span className={ styles['dashboard__tiles__tile__title'] }>
+            Products
+          </span>
 
-        <OsdsTile className={ styles['dashboard__tiles__tile'] }
-                  color={ ODS_THEME_COLOR_INTENT.primary }>
-          <div className={ styles['dashboard__tiles__tile__content'] }>
-            <OsdsText color={ ODS_TEXT_COLOR_INTENT.primary }
-                      level={ ODS_TEXT_LEVEL.heading }
-                      size={ ODS_TEXT_SIZE._300 }>
-              Products
-            </OsdsText>
+          <OdsDivider className={ styles['dashboard__tiles__tile__divider'] } />
 
-            <OsdsDivider color={ ODS_THEME_COLOR_INTENT.primary }
-                         separator={ true }
-                         size={ ODS_DIVIDER_SIZE.six } />
+          <LoadingContent isPending={ productsCountStatus === ACTION_STATUS.pending }>
+            <span>
+              You have { productsCount } products registered
+            </span>
+          </LoadingContent>
 
-            <LoadingContent isPending={ productsCountStatus === ACTION_STATUS.pending }>
-              <OsdsText color={ ODS_TEXT_COLOR_INTENT.text }
-                        level={ ODS_TEXT_LEVEL.body }>
-                You have { productsCount } products registered
-              </OsdsText>
-            </LoadingContent>
-
-            <OsdsDivider size={ ODS_DIVIDER_SIZE.four } />
-
-            <Link route={ ROUTE.products }>
-              Manage products
-            </Link>
-          </div>
-        </OsdsTile>
+          <Link label="Manage products"
+                route={ ROUTE.products } />
+        </OdsCard>
       </div>
     </div>
   )

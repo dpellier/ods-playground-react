@@ -1,11 +1,12 @@
 import type { OdsPaginationCurrentChangeEvent, OdsPaginationItemPerPageChangedEvent } from '@ovhcloud/ods-components'
-import type { ProductGridRow } from 'app/modules/products/modules/list/components/productGrid/ProductGrid'
-import { ODS_TEXT_COLOR_INTENT, ODS_TEXT_LEVEL, ODS_TEXT_SIZE } from '@ovhcloud/ods-components'
-import { OsdsPagination, OsdsText } from '@ovhcloud/ods-components/react'
+import type { Product } from 'app/models/Product'
+import { ODS_ICON_NAME } from '@ovhcloud/ods-components'
+import { OdsButton, OdsPagination } from '@ovhcloud/ods-components/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
-import { Link } from 'app/components/link/Link'
+import { useNavigate } from 'react-router-dom'
 import { LoadingMask } from 'app/components/loadingMask/LoadingMask'
+import { PageTitle } from 'app/components/pageTitle/PageTitle'
 import { ROUTE } from 'app/constants/navigation'
 import { ACTION_STATUS } from 'app/constants/slice'
 import { useAppDispatch, useAppSelector } from 'app/hooks/useRedux'
@@ -18,13 +19,12 @@ const DEFAULT_PER_PAGE = 10
 
 const List = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const count = useAppSelector((state) => state.products.count)
   const products = useAppSelector((state) => state.products.products)
   const deleteStatus = useAppSelector((state) => state.products.deleteStatus)
   const listStatus = useAppSelector((state) => state.products.listStatus)
-  const [perPage, setPerPage] = useState(DEFAULT_PER_PAGE)
-  const [totalPages, setTotalPages] = useState(0)
-  const [productToDelete, setProductToDelete] = useState<ProductGridRow | null>(null)
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
@@ -32,10 +32,6 @@ const List = () => {
       listProducts(1)
     }
   }, [dispatch, listStatus])
-
-  useEffect(() => {
-    setTotalPages(Math.ceil(count / perPage))
-  }, [count])
 
   useEffect(() => {
     if (isSubmitting && deleteStatus === ACTION_STATUS.succeeded) {
@@ -59,7 +55,7 @@ const List = () => {
     setProductToDelete(null)
   }
 
-  function onDeleteProductClick(product: ProductGridRow) {
+  function onDeleteProductClick(product: Product) {
     setProductToDelete(product)
   }
 
@@ -71,26 +67,21 @@ const List = () => {
   }
 
   function onPaginationChange({ detail }: OdsPaginationCurrentChangeEvent) {
-    listProducts(detail.current)
+    listProducts(detail.current, detail.itemPerPage)
   }
 
   function onPaginationPerPageChange({ detail }: OdsPaginationItemPerPageChangedEvent) {
-    setPerPage(detail.current)
     listProducts(detail.currentPage, detail.current)
   }
 
   return (
     <div className={ styles.list }>
       <div className={ styles['list__header'] }>
-        <OsdsText color={ ODS_TEXT_COLOR_INTENT.primary }
-                  level={ ODS_TEXT_LEVEL.heading }
-                  size={ ODS_TEXT_SIZE._500 }>
-          List of products
-        </OsdsText>
+        <PageTitle label="List of products" />
 
-        <Link route={ `${ROUTE.products}/new` }>
-          Create a new product
-        </Link>
+        <OdsButton icon={ ODS_ICON_NAME.plus }
+                   label="Create a new product"
+                   onClick={ () => { navigate(`${ROUTE.products}/new`) } } />
       </div>
 
       <div className={ styles['list__content'] }>
@@ -99,17 +90,16 @@ const List = () => {
           <ProductGrid height={ parseInt(styles.datagridHeight, 10) }
                        onDeleteProduct={ onDeleteProductClick }
                        products={ products } /> :
-            <div className={ styles['list__content__mask'] }>
-              <LoadingMask />
-            </div>
+          <div className={ styles['list__content__mask'] }>
+            <LoadingMask />
+          </div>
         }
 
         {
           !!count &&
-          <OsdsPagination onOdsPaginationChanged={ onPaginationChange }
-                          onOdsPaginationItemPerPageChanged={ onPaginationPerPageChange }
-                          totalItems={ count }
-                          totalPages={ totalPages } />
+          <OdsPagination onOdsChange={ onPaginationChange }
+                         onOdsItemPerPageChange={ onPaginationPerPageChange }
+                         totalItems={ count } />
         }
       </div>
 
