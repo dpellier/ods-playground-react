@@ -3,7 +3,7 @@ import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
-  // base: 'ods-playground-react/',
+  base: 'ods-playground-react/',
   plugins: [react(), tsconfigPaths()],
   server: {
     port: 8080,
