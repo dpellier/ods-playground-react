@@ -1,0 +1,9 @@
+.breadcrumb {
+  margin-bottom: 1rem;
+  border-bottom: solid 1px #ccc;
+  padding-bottom: .5rem;
+
+  &__item {
+    text-transform: capitalize;
+  }
+}
