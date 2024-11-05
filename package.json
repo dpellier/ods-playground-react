@@ -9,8 +9,8 @@
     "start": "vite"
   },
   "dependencies": {
-    "@ovhcloud/ods-components": "18.0.0",
-    "@ovhcloud/ods-themes": "18.0.0",
+    "@ovhcloud/ods-components": "18.3.0",
+    "@ovhcloud/ods-themes": "18.3.0",
     "@reduxjs/toolkit": "2.0.1",
     "classnames": "2.5.1",
     "formik": "2.4.5",
