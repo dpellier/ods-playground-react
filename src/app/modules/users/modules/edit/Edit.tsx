@@ -2,13 +2,16 @@ import type { UserProps } from 'app/models/User'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
+import { FORM_SELECTOR_TAB, FormSelector } from 'app/components/formSelector/FormSelector'
 import { LoadingMask } from 'app/components/loadingMask/LoadingMask'
 import { PageTitle } from 'app/components/pageTitle/PageTitle'
 import { ROUTE } from 'app/constants/navigation'
 import { ACTION_STATUS } from 'app/constants/slice'
-import { UserForm } from 'app/modules/users/components/userForm/UserForm'
 import { useAppSelector, useAppDispatch } from 'app/hooks/useRedux'
 import { User } from 'app/models/User'
+import { UserFormFormik } from 'app/modules/users/components/userForm/UserFormFormik.tsx'
+import { UserFormHookForm } from 'app/modules/users/components/userForm/UserFormHookForm.tsx'
+import { UserFormNative } from 'app/modules/users/components/userForm/UserFormNative.tsx'
 import { fetch, update } from 'app/state/slices/users'
 import styles from './edit.module.scss'
 
@@ -61,10 +64,37 @@ const Edit = () => {
     <div className={ styles.edit }>
       <PageTitle label={ `Edit user "${user.name}"` } />
 
-      <UserForm isPending={ updateStatus === ACTION_STATUS.pending }
-                onCancel={ onCancel }
-                onSubmit={ onSubmit }
-                user={ user } />
+      <FormSelector isDisabled={ updateStatus === ACTION_STATUS.pending }>
+        {
+          (currentTab) => {
+            switch (currentTab) {
+              case FORM_SELECTOR_TAB.formik:
+                return (
+                  <UserFormFormik isPending={ updateStatus === ACTION_STATUS.pending }
+                                   onCancel={ onCancel }
+                                   onSubmit={ onSubmit }
+                                  user={ user } />
+                )
+              case FORM_SELECTOR_TAB.hookForm:
+                return (
+                  <UserFormHookForm isPending={ updateStatus === ACTION_STATUS.pending }
+                                    onCancel={ onCancel }
+                                    onSubmit={ onSubmit }
+                                    user={ user } />
+                )
+              case FORM_SELECTOR_TAB.native:
+                return (
+                  <UserFormNative isPending={ updateStatus === ACTION_STATUS.pending }
+                                  onCancel={ onCancel }
+                                  onSubmit={ onSubmit }
+                                  user={ user } />
+                )
+              default:
+                return ''
+            }
+          }
+        }
+      </FormSelector>
     </div>
   )
 }

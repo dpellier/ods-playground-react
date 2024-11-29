@@ -19,15 +19,12 @@ const Toaster = () => {
     <ToasterVendor position="top-right"
                    reverseOrder={ false }>
       {
-        (toast) => {
-          const messageColor = getMessageColor(toast)
-
-          return (
-            <OdsMessage color={ messageColor }>
-              { resolveValue(toast.message, toast) }
-            </OdsMessage>
-          )
-        }
+        (toast) => ((
+          <OdsMessage color={ getMessageColor(toast) }
+                      isDismissible={ false }>
+            { resolveValue(toast.message, toast) }
+          </OdsMessage>
+        ))
       }
     </ToasterVendor>
   )

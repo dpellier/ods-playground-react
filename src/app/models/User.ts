@@ -1,4 +1,16 @@
+import { formatDate, parseDate } from 'app/helpers/date'
+
+enum USER_ROLE {
+  admin = 'admin',
+  moderator = 'moderator',
+  user = 'user',
+}
+
+const USER_BIRTH_DATE_FORMAT = 'yyyy-mm-dd'
+const USER_ROLES = Object.freeze(Object.keys(USER_ROLE))
+
 type UserApiData = {
+  birthDate: string
   email: string
   firstName: string
   id: number
@@ -6,10 +18,11 @@ type UserApiData = {
   ip: string
   lastName: string
   phone: string
-  role: string // TODO "admin" or "moderator" or "user"
+  role: USER_ROLE
 }
 
 type UserProps = {
+  birthDate: Date
   email: string
   firstName: string
   id: number
@@ -17,10 +30,11 @@ type UserProps = {
   ip: string
   lastName: string
   phone: string
-  role: string
+  role: USER_ROLE
 }
 
 class User {
+  birthDate: Date
   email: string
   firstName: string
   id: number
@@ -28,9 +42,10 @@ class User {
   ip: string
   lastName: string
   phone: string
-  role: string
+  role: USER_ROLE
 
   constructor(props: UserProps) {
+    this.birthDate = props.birthDate
     this.email = props.email
     this.firstName = props.firstName
     this.id = props.id
@@ -43,6 +58,7 @@ class User {
 
   static fromApi(props: UserApiData): User {
     return new User({
+      birthDate: parseDate(props.birthDate, USER_BIRTH_DATE_FORMAT),
       email: props.email,
       firstName: props.firstName,
       id: props.id,
@@ -60,6 +76,7 @@ class User {
 
   toApi(): Omit<UserApiData, 'id'> {
     return {
+      birthDate: formatDate(this.birthDate, USER_BIRTH_DATE_FORMAT),
       email: this.email,
       firstName: this.firstName,
       image: this.image,
@@ -75,4 +92,9 @@ export type {
   UserApiData,
   UserProps,
 }
-export { User }
+export {
+  USER_BIRTH_DATE_FORMAT,
+  USER_ROLE,
+  USER_ROLES,
+  User,
+}

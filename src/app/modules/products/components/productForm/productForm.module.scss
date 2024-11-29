@@ -16,11 +16,30 @@
 
     &__price {
       display: flex;
-      grid-column-gap: .5rem;
+      column-gap: .5rem;
       align-items: center;
 
       &__currency {
         color: var(--ods-color-primary-500);
+      }
+    }
+
+    &__stock {
+      display: flex;
+      column-gap: 1rem;
+      align-items: center;
+    }
+
+    &__category,
+    &__return-policy {
+      display: flex;
+      column-gap: 1rem;
+      align-items: center;
+
+      &__option {
+        display: flex;
+        column-gap: .5rem;
+        align-items: center;
       }
     }
   }
@@ -28,7 +47,7 @@
   &__actions {
     display: flex;
     flex-flow: row;
-    grid-column-gap: .5rem;
+    column-gap: .5rem;
     justify-content: flex-end;
   }
 }
