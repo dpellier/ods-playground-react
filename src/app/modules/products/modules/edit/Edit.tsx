@@ -2,13 +2,16 @@ import type { ProductProps } from 'app/models/Product'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
+import { FORM_SELECTOR_TAB, FormSelector } from 'app/components/formSelector/FormSelector'
 import { LoadingMask } from 'app/components/loadingMask/LoadingMask'
 import { PageTitle } from 'app/components/pageTitle/PageTitle'
 import { ROUTE } from 'app/constants/navigation'
 import { ACTION_STATUS } from 'app/constants/slice'
-import { ProductForm } from 'app/modules/products/components/productForm/ProductForm'
 import { useAppSelector, useAppDispatch } from 'app/hooks/useRedux'
 import { Product } from 'app/models/Product'
+import { ProductFormFormik } from 'app/modules/products/components/productForm/ProductFormFormik'
+import { ProductFormHookForm } from 'app/modules/products/components/productForm/ProductFormHookForm'
+import { ProductFormNative } from 'app/modules/products/components/productForm/ProductFormNative'
 import { fetch, update } from 'app/state/slices/products'
 import styles from './edit.module.scss'
 
@@ -61,10 +64,37 @@ const Edit = () => {
     <div className={ styles.edit }>
       <PageTitle label={ `Edit product "${product.title}"` } />
 
-      <ProductForm isPending={ updateStatus === ACTION_STATUS.pending }
-                   onCancel={ onCancel }
-                   onSubmit={ onSubmit }
-                   product={ product } />
+      <FormSelector isDisabled={ updateStatus === ACTION_STATUS.pending }>
+        {
+          (currentTab) => {
+            switch (currentTab) {
+              case FORM_SELECTOR_TAB.formik:
+                return (
+                  <ProductFormFormik isPending={ updateStatus === ACTION_STATUS.pending }
+                                     onCancel={ onCancel }
+                                     onSubmit={ onSubmit }
+                                     product={ product } />
+                )
+              case FORM_SELECTOR_TAB.hookForm:
+                return (
+                  <ProductFormHookForm isPending={ updateStatus === ACTION_STATUS.pending }
+                                       onCancel={ onCancel }
+                                       onSubmit={ onSubmit }
+                                       product={ product } />
+                )
+              case FORM_SELECTOR_TAB.native:
+                return (
+                  <ProductFormNative isPending={ updateStatus === ACTION_STATUS.pending }
+                                     onCancel={ onCancel }
+                                     onSubmit={ onSubmit }
+                                     product={ product } />
+                )
+              default:
+                return ''
+            }
+          }
+        }
+      </FormSelector>
     </div>
   )
 }

@@ -2,12 +2,15 @@ import type { UserProps } from 'app/models/User'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { FORM_SELECTOR_TAB, FormSelector } from 'app/components/formSelector/FormSelector'
 import { PageTitle } from 'app/components/pageTitle/PageTitle'
 import { ROUTE } from 'app/constants/navigation'
 import { ACTION_STATUS } from 'app/constants/slice'
-import { UserForm } from 'app/modules/users/components/userForm/UserForm'
 import { useAppSelector, useAppDispatch } from 'app/hooks/useRedux'
 import { User } from 'app/models/User'
+import { UserFormFormik } from 'app/modules/users/components/userForm/UserFormFormik.tsx'
+import { UserFormHookForm } from 'app/modules/users/components/userForm/UserFormHookForm.tsx'
+import { UserFormNative } from 'app/modules/users/components/userForm/UserFormNative.tsx'
 import { create } from 'app/state/slices/users'
 import styles from './create.module.scss'
 
@@ -42,9 +45,34 @@ const Create = () => {
     <div className={ styles.create }>
       <PageTitle label="New user" />
 
-      <UserForm isPending={ createStatus === ACTION_STATUS.pending }
-                onCancel={ onCancel }
-                onSubmit={ onSubmit } />
+      <FormSelector isDisabled={ createStatus === ACTION_STATUS.pending }>
+        {
+          (currentTab) => {
+            switch (currentTab) {
+              case FORM_SELECTOR_TAB.formik:
+                return (
+                  <UserFormFormik isPending={ createStatus === ACTION_STATUS.pending }
+                                   onCancel={ onCancel }
+                                   onSubmit={ onSubmit } />
+                )
+              case FORM_SELECTOR_TAB.hookForm:
+                return (
+                  <UserFormHookForm isPending={ createStatus === ACTION_STATUS.pending }
+                                    onCancel={ onCancel }
+                                    onSubmit={ onSubmit } />
+                )
+              case FORM_SELECTOR_TAB.native:
+                return (
+                  <UserFormNative isPending={ createStatus === ACTION_STATUS.pending }
+                                  onCancel={ onCancel }
+                                  onSubmit={ onSubmit } />
+                )
+              default:
+                return ''
+            }
+          }
+        }
+      </FormSelector>
     </div>
   )
 }

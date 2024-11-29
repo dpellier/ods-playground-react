@@ -1,5 +1,4 @@
 @import '@ovhcloud/ods-components/style';
-//TODO fix vite alias for scss file
 @import '../../../../styles/utils';
 
 $list-height: 400px;
@@ -12,7 +11,7 @@ $list-height: 400px;
   &__header {
     display: grid;
     grid-template-columns: 1fr max-content;
-    grid-column-gap: 1rem;
+    column-gap: 1rem;
     align-items: center;
   }
 

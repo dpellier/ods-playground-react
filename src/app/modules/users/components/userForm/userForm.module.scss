@@ -5,10 +5,6 @@
   flex-flow: column;
   grid-row-gap: 1rem;
 
-  &__info {
-    align-self: center;
-  }
-
   &__fields {
     &__label {
       @include ods-text-label();
@@ -18,7 +14,7 @@
   &__actions {
     display: flex;
     flex-flow: row;
-    grid-column-gap: .5rem;
+    column-gap: .5rem;
     justify-content: flex-end;
   }
 }
