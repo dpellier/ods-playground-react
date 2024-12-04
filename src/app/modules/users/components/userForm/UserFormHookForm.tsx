@@ -19,7 +19,7 @@ const propTypes = {
 
 const validationSchema = z.object({
   birthDate: z.date({ invalid_type_error: 'Date has to be set', required_error: 'Date has to be set' }),
-  email: z.string().min(1, { message: 'Email has to be set' }).email(),
+  email: z.string().min(1, { message: 'Email has to be set' }).email({ message: 'Incorrect email format' }),
   firstName: z.string().min(1, { message: 'First name has to be set' }),
   ip: z.string().min(1, { message: 'IP has to be set' }).ip(),
   lastName: z.string().min(1, { message: 'Last name has to be set' }),
