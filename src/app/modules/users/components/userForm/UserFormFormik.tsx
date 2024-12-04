@@ -18,7 +18,7 @@ const propTypes = {
 
 const validationSchema = yup.object({
   birthDate: yup.date().required('Birth date has to be set'),
-  email: yup.string().email().required('Email has to be set'),
+  email: yup.string().email('Incorrect email format').required('Email has to be set'),
   firstName: yup.string().required('First name has to be set'),
   ip: yup.string()
     .matches(
