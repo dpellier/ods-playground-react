@@ -31,12 +31,19 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
   }
 
   async function updateError(e: CustomEvent, field: string): Promise<void> {
-    const errorMessage = await (e.target as HTMLElement & OdsFormElement).getValidationMessage()
+    if (e.detail) {
+      const errorMessage = await (e.target as HTMLElement & OdsFormElement).getValidationMessage()
 
-    if (errorMessage) {
+      if (errorMessage) {
+        setError((error) => ({
+          ...error,
+          [field]: errorMessage,
+        }))
+      }
+    } else {
       setError((error) => ({
         ...error,
-        [field]: errorMessage,
+        [field]: '',
       }))
     }
   }
