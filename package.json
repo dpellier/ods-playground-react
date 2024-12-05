@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "3.9.1",
-    "@ovhcloud/ods-components": "18.4.0-alpha.1",
-    "@ovhcloud/ods-themes": "18.4.0-alpha.1",
+    "@ovhcloud/ods-components": "18.4.0",
+    "@ovhcloud/ods-themes": "18.4.0",
     "@reduxjs/toolkit": "2.0.1",
     "classnames": "2.5.1",
     "formik": "2.4.5",
