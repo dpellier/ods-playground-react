@@ -57,11 +57,13 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
     <form className={ styles['user-form'] }
           onSubmit={ onFormSubmit }>
       <OdsFormField error={ error?.firstName }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="firstName">
           First name:
         </label>
 
         <OdsInput defaultValue={ user?.firstName }
+                  id="firstName"
                   isRequired={ true }
                   name="firstName"
                   onOdsInvalid={ (e) => updateError(e, 'firstName') }
@@ -69,11 +71,13 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
       </OdsFormField>
 
       <OdsFormField error={ error?.lastName }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="lastName">
           Last name:
         </label>
 
         <OdsInput defaultValue={ user?.lastName }
+                  id="lastName"
                   isRequired={ true }
                   name="lastName"
                   onOdsInvalid={ (e) => updateError(e, 'lastName') }
@@ -81,11 +85,13 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
       </OdsFormField>
 
       <OdsFormField error={ error?.email }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="email">
           Email:
         </label>
 
         <OdsInput defaultValue={ user?.email }
+                  id="email"
                   isRequired={ true }
                   name="email"
                   onOdsInvalid={ (e) => updateError(e, 'email') }
@@ -93,36 +99,42 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
       </OdsFormField>
 
       <OdsFormField error={ error?.phone }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="phone">
           Phone number:
         </label>
 
         <OdsPhoneNumber countries="all"
                         defaultValue={ user?.phone }
+                        id="phone"
                         isRequired={ true }
                         name="phone"
                         onOdsInvalid={ (e) => updateError(e, 'phone') } />
       </OdsFormField>
 
       <OdsFormField error={ error?.birthDate }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="birthDate">
           Birth date:
         </label>
 
         {/* @ts-ignore IDE gets confused with other React wrapper type */}
         <OdsDatepicker defaultValue={ user?.birthDate }
                        format={ USER_BIRTH_DATE_FORMAT }
+                       id="birthDate"
                        isRequired={ true }
                        name="birthDate"
                        onOdsInvalid={ (e) => updateError(e, 'birthDate') } />
       </OdsFormField>
 
       <OdsFormField error={ error?.ip }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="ip">
           IP address:
         </label>
 
         <OdsInput defaultValue={ user?.ip }
+                  id="ip"
                   isRequired={ true }
                   name="ip"
                   onOdsInvalid={ (e) => updateError(e, 'ip') }
@@ -131,11 +143,13 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
       </OdsFormField>
 
       <OdsFormField error={ error?.role }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="role">
           Role:
         </label>
 
         <OdsSelect defaultValue={ user?.role }
+                   id="role"
                    isRequired={ true }
                    name="role"
                    onOdsInvalid={ (e) => updateError(e, 'role') }>

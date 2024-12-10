@@ -12,6 +12,7 @@ import { Product } from 'app/models/Product'
 import { ProductFormFormik } from 'app/modules/products/components/productForm/ProductFormFormik'
 import { ProductFormHookForm } from 'app/modules/products/components/productForm/ProductFormHookForm'
 import { ProductFormNative } from 'app/modules/products/components/productForm/ProductFormNative'
+import { ProductFormTanstackForm } from 'app/modules/products/components/productForm/ProductFormTanstackForm'
 import { fetch, update } from 'app/state/slices/products'
 import styles from './edit.module.scss'
 
@@ -88,6 +89,13 @@ const Edit = () => {
                                      onCancel={ onCancel }
                                      onSubmit={ onSubmit }
                                      product={ product } />
+                )
+              case FORM_SELECTOR_TAB.tanstackForm:
+                return (
+                  <ProductFormTanstackForm isPending={ updateStatus === ACTION_STATUS.pending }
+                                           onCancel={ onCancel }
+                                           onSubmit={ onSubmit }
+                                           product={ product } />
                 )
               default:
                 return ''

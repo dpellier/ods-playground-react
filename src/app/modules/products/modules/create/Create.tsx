@@ -11,6 +11,7 @@ import { Product } from 'app/models/Product'
 import { ProductFormFormik } from 'app/modules/products/components/productForm/ProductFormFormik'
 import { ProductFormHookForm } from 'app/modules/products/components/productForm/ProductFormHookForm'
 import { ProductFormNative } from 'app/modules/products/components/productForm/ProductFormNative'
+import { ProductFormTanstackForm } from 'app/modules/products/components/productForm/ProductFormTanstackForm'
 import { create } from 'app/state/slices/products'
 import styles from './create.module.scss'
 
@@ -66,6 +67,12 @@ const Create = () => {
                   <ProductFormNative isPending={ createStatus === ACTION_STATUS.pending }
                                      onCancel={ onCancel }
                                      onSubmit={ onSubmit } />
+                )
+              case FORM_SELECTOR_TAB.tanstackForm:
+                return (
+                  <ProductFormTanstackForm isPending={ createStatus === ACTION_STATUS.pending }
+                                           onCancel={ onCancel }
+                                           onSubmit={ onSubmit } />
                 )
               default:
                 return ''

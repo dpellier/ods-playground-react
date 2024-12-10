@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { User, USER_ROLES } from 'app/models/User'
+import { User, USER_BIRTH_DATE_FORMAT, USER_ROLES } from 'app/models/User'
 import styles from './userForm.module.scss'
 
 const propTypes = {
@@ -31,7 +31,6 @@ const validationSchema = z.object({
 const UserFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel, onSubmit, user }) => {
   const {
     control,
-    formState: { errors },
     handleSubmit,
   } = useForm({
     mode: 'onBlur',
@@ -55,125 +54,140 @@ const UserFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCance
   return (
     <form className={ styles['user-form'] }
           onSubmit={ handleSubmit(onSubmit) }>
-      <OdsFormField error={ errors.firstName?.message }>
-        <label className={ styles['user-form__fields__label'] }>
-          First name:
-        </label>
+      <Controller control={ control }
+                  name="firstName"
+                  render={({ field, fieldState }) =>
+                    <OdsFormField error={ fieldState.error?.message }>
+                      <label className={ styles['user-form__fields__label'] }
+                             htmlFor={ field.name }>
+                        First name:
+                      </label>
 
-        <Controller control={ control }
-                    name="firstName"
-                    render={({ field }) =>
                       <OdsInput defaultValue={ user?.firstName || '' }
-                                hasError={ !!errors.firstName }
+                                hasError={ !!fieldState.error }
+                                id={ field.name }
                                 name={ field.name }
                                 onOdsBlur={ field.onBlur }
                                 onOdsChange={ field.onChange }
                                 type={ ODS_INPUT_TYPE.text } />
-                    } />
-      </OdsFormField>
+                    </OdsFormField>
+                  } />
 
-      <OdsFormField error={ errors.lastName?.message }>
-        <label className={ styles['user-form__fields__label'] }>
-          Last name:
-        </label>
+      <Controller control={ control }
+                  name="lastName"
+                  render={({ field, fieldState }) =>
+                    <OdsFormField error={ fieldState.error?.message }>
+                      <label className={ styles['user-form__fields__label'] }
+                             htmlFor={ field.name }>
+                        Last name:
+                      </label>
 
-        <Controller control={ control }
-                    name="lastName"
-                    render={({ field }) =>
                       <OdsInput defaultValue={ user?.lastName || '' }
-                                hasError={ !!errors.lastName }
+                                hasError={ !!fieldState.error }
+                                id={ field.name }
                                 name={ field.name }
                                 onOdsBlur={ field.onBlur }
                                 onOdsChange={ field.onChange }
                                 type={ ODS_INPUT_TYPE.text } />
-                    } />
-      </OdsFormField>
+                    </OdsFormField>
+                  } />
 
-      <OdsFormField error={ errors.email?.message }>
-        <label className={ styles['user-form__fields__label'] }>
-          Email:
-        </label>
+      <Controller control={ control }
+                  name="email"
+                  render={({ field, fieldState }) =>
+                    <OdsFormField error={ fieldState.error?.message }>
+                      <label className={ styles['user-form__fields__label'] }
+                             htmlFor={ field.name }>
+                        Email:
+                      </label>
 
-        <Controller control={ control }
-                    name="email"
-                    render={({ field }) =>
                       <OdsInput defaultValue={ user?.email || '' }
-                                hasError={ !!errors.email }
+                                hasError={ !!fieldState.error }
+                                id={ field.name }
                                 name={ field.name }
                                 onOdsBlur={ field.onBlur }
                                 onOdsChange={ field.onChange }
                                 type={ ODS_INPUT_TYPE.email } />
-                    } />
-      </OdsFormField>
+                    </OdsFormField>
+                  } />
 
-      <OdsFormField error={ errors.phone?.message }>
-        <label className={ styles['user-form__fields__label'] }>
-          Phone number:
-        </label>
+      <Controller control={ control }
+                  name="phone"
+                  render={({ field, fieldState }) =>
+                    <OdsFormField error={ fieldState.error?.message }>
+                      <label className={ styles['user-form__fields__label'] }
+                             htmlFor={ field.name }>
+                        Phone number:
+                      </label>
 
-        <Controller control={ control }
-                    name="phone"
-                    render={({ field }) =>
                       <OdsPhoneNumber countries="all"
                                       defaultValue={ user?.phone || '' }
-                                      hasError={ !!errors.phone }
+                                      hasError={ !!fieldState.error }
+                                      id={ field.name }
                                       name={ field.name }
                                       onOdsBlur={ field.onBlur }
                                       onOdsChange={ field.onChange } />
-                    } />
-      </OdsFormField>
+                    </OdsFormField>
+                  } />
 
-      <OdsFormField error={ errors.birthDate?.message }>
-        <label className={ styles['product-form__fields__label'] }>
-          Birth date:
-        </label>
+      <Controller control={ control }
+                  name="birthDate"
+                  render={({ field, fieldState }) =>
+                    <OdsFormField error={ fieldState.error?.message }>
+                      <label className={ styles['user-form__fields__label'] }
+                             htmlFor={ field.name }>
+                        Birth date:
+                      </label>
 
-        <Controller control={ control }
-                    name="birthDate"
-                    render={({ field }) =>
-                      // @ts-ignore if someone wants to have a look be my guest
+                      {/*@ts-ignore if someone wants to have a look be my guest*/}
                       <OdsDatepicker defaultValue={ user?.birthDate }
-                                     hasError={ !!errors.birthDate }
+                                     format={ USER_BIRTH_DATE_FORMAT }
+                                     hasError={ !!fieldState.error }
+                                     id={ field.name }
                                      name={ field.name }
                                      onOdsBlur={ field.onBlur }
                                      onOdsChange={ field.onChange } />
-                    } />
-      </OdsFormField>
+                    </OdsFormField>
+                  } />
 
-      <OdsFormField error={ errors.ip?.message }>
-        <label className={ styles['user-form__fields__label'] }>
-          IP address:
-        </label>
+      <Controller control={ control }
+                  name="ip"
+                  render={({ field, fieldState }) =>
+                    <OdsFormField error={ fieldState.error?.message }>
+                      <label className={ styles['user-form__fields__label'] }
+                             htmlFor={ field.name }>
+                        IP address:
+                      </label>
 
-        <Controller control={ control }
-                    name="ip"
-                    render={({ field }) =>
                       <OdsInput defaultValue={ user?.ip || '' }
-                                hasError={ !!errors.ip }
+                                hasError={ !!fieldState.error }
+                                id={ field.name }
                                 name={ field.name }
                                 onOdsBlur={ field.onBlur }
                                 onOdsChange={ field.onChange }
                                 type={ ODS_INPUT_TYPE.text } />
-                    } />
-      </OdsFormField>
+                    </OdsFormField>
+                  } />
 
-      <OdsFormField error={ errors.role?.message }>
-        <label className={ styles['user-form__fields__label'] }>
-          Role:
-        </label>
+      <Controller control={ control }
+                  name="role"
+                  render={({ field, fieldState }) =>
+                    <OdsFormField error={ fieldState.error?.message }>
+                      <label className={ styles['user-form__fields__label'] }
+                             htmlFor={ field.name }>
+                        Role:
+                      </label>
 
-        <Controller control={ control }
-                    name="role"
-                    render={({ field }) =>
                       <OdsSelect defaultValue={ user?.role }
-                                 hasError={ !!errors.role }
+                                 hasError={ !!fieldState.error }
+                                 id={ field.name }
                                  name={ field.name }
                                  onOdsBlur={ field.onBlur }
                                  onOdsChange={ field.onChange }>
                         { roleOptions }
                       </OdsSelect>
-                    } />
-      </OdsFormField>
+                    </OdsFormField>
+                  } />
 
       <div className={ styles['user-form__actions'] }>
         <OdsButton label="Cancel"

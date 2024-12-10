@@ -54,11 +54,13 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
     <form className={ styles['user-form'] }
           onSubmit={ formik.handleSubmit }>
       <OdsFormField error={ (formik.touched.firstName && formik.errors.firstName) as string }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="firstName">
           First name:
         </label>
 
         <OdsInput hasError={ formik.touched.firstName && !!formik.errors.firstName }
+                  id="firstName"
                   name="firstName"
                   onOdsBlur={ formik.handleBlur }
                   onOdsChange={ formik.handleChange }
@@ -67,11 +69,13 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
       </OdsFormField>
 
       <OdsFormField error={ (formik.touched.lastName && formik.errors.lastName) as string }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="lastName">
           Last name:
         </label>
 
         <OdsInput hasError={ formik.touched.lastName && !!formik.errors.lastName }
+                  id="lastName"
                   name="lastName"
                   onOdsBlur={ formik.handleBlur }
                   onOdsChange={ formik.handleChange }
@@ -80,11 +84,13 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
       </OdsFormField>
 
       <OdsFormField error={ (formik.touched.email && formik.errors.email) as string }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="email">
           Email:
         </label>
 
         <OdsInput hasError={ formik.touched.email && !!formik.errors.email }
+                  id="email"
                   name="email"
                   onOdsBlur={ formik.handleBlur }
                   onOdsChange={ formik.handleChange }
@@ -93,12 +99,14 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
       </OdsFormField>
 
       <OdsFormField error={ (formik.touched.phone && formik.errors.phone) as string }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="phone">
           Phone number:
         </label>
 
         <OdsPhoneNumber countries="all"
                         hasError={ formik.touched.phone && !!formik.errors.phone }
+                        id="phone"
                         name="phone"
                         onOdsBlur={ formik.handleBlur }
                         onOdsChange={ formik.handleChange }
@@ -106,12 +114,14 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
       </OdsFormField>
 
       <OdsFormField error={ (formik.touched.birthDate && formik.errors.birthDate) as string }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="birthDate">
           Birth date:
         </label>
 
         <OdsDatepicker format={ USER_BIRTH_DATE_FORMAT }
                        hasError={ formik.touched.birthDate && !!formik.errors.birthDate }
+                       id="birthDate"
                        name="birthDate"
                        onOdsBlur={ formik.handleBlur }
                        onOdsChange={ formik.handleChange }
@@ -119,11 +129,13 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
       </OdsFormField>
 
       <OdsFormField error={ (formik.touched.ip && formik.errors.ip) as string }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="ip">
           IP address:
         </label>
 
         <OdsInput hasError={ formik.touched.ip && !!formik.errors.ip }
+                  id="ip"
                   name="ip"
                   onOdsBlur={ formik.handleBlur }
                   onOdsChange={ formik.handleChange }
@@ -132,11 +144,13 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
       </OdsFormField>
 
       <OdsFormField error={ (formik.touched.role && formik.errors.role) as string }>
-        <label className={ styles['user-form__fields__label'] }>
+        <label className={ styles['user-form__fields__label'] }
+               htmlFor="role">
           Role:
         </label>
 
         <OdsSelect hasError={ formik.touched.role && !!formik.errors.role }
+                   id="role"
                    name="role"
                    onOdsBlur={ formik.handleBlur }
                    onOdsChange={ formik.handleChange }
