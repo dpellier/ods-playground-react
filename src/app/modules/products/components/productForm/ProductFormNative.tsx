@@ -52,11 +52,13 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
     <form className={ styles['product-form'] }
           onSubmit={ onFormSubmit }>
       <OdsFormField error={ error?.title }>
-        <label className={ styles['product-form__fields__label'] }>
+        <label className={ styles['product-form__fields__label'] }
+               htmlFor="title">
           Title:
         </label>
 
         <OdsInput defaultValue={ product?.title }
+                  id="title"
                   isRequired={ true }
                   name="title"
                   onOdsInvalid={ (e) => updateError(e, 'title') }
@@ -64,12 +66,14 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
       </OdsFormField>
 
       <OdsFormField error={ error?.price }>
-        <label className={ styles['product-form__fields__label'] }>
+        <label className={ styles['product-form__fields__label'] }
+               htmlFor="price">
           Price:
         </label>
 
         <div className={ styles['product-form__fields__price'] }>
           <OdsInput defaultValue={ product?.price }
+                    id="price"
                     isRequired={ true }
                     min={ 0 }
                     name="price"
@@ -84,11 +88,13 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
       </OdsFormField>
 
       <OdsFormField error={ error?.description }>
-        <label className={ styles['product-form__fields__label'] }>
+        <label className={ styles['product-form__fields__label'] }
+               htmlFor="description">
           Description:
         </label>
 
         <OdsTextarea defaultValue={ product?.description }
+                     id="description"
                      isRequired={ true }
                      name="description"
                      onOdsInvalid={ (e) => updateError(e, 'description') } />
@@ -112,11 +118,13 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
 
       <OdsFormField error={ error?.stock }>
         <div className={ styles['product-form__fields__stock'] }>
-          <label className={ styles['product-form__fields__label'] }>
+          <label className={ styles['product-form__fields__label'] }
+                 htmlFor="stock">
             Stock quantity:
           </label>
 
           <OdsQuantity defaultValue={ product?.stock }
+                       id="stock"
                        isRequired={ true }
                        min={ 0 }
                        name="stock"
@@ -125,11 +133,13 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
       </OdsFormField>
 
       <OdsFormField error={ error?.restockTime }>
-        <label className={ styles['product-form__fields__label'] }>
+        <label className={ styles['product-form__fields__label'] }
+               htmlFor="restockTime">
           Restock time:
         </label>
 
         <OdsTimepicker defaultValue={ product?.restockTime }
+                       id="restockTime"
                        isRequired={ true }
                        name="restockTime"
                        onOdsInvalid={ (e) => updateError(e, 'restockTime') }
@@ -137,12 +147,14 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
       </OdsFormField>
 
       <OdsFormField error={ error?.minimumOrderQuantity }>
-        <label className={ styles['product-form__fields__label'] }>
+        <label className={ styles['product-form__fields__label'] }
+               htmlFor="minimumOrderQuantity">
           Minimum order quantity:
         </label>
 
         <div>
           <OdsRange defaultValue={ product?.minimumOrderQuantity }
+                    id="minimumOrderQuantity"
                     isRequired={ true }
                     name="minimumOrderQuantity"
                     onOdsInvalid={ (e) => updateError(e, 'minimumOrderQuantity') } />

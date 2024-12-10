@@ -8,9 +8,10 @@ import { ROUTE } from 'app/constants/navigation'
 import { ACTION_STATUS } from 'app/constants/slice'
 import { useAppSelector, useAppDispatch } from 'app/hooks/useRedux'
 import { User } from 'app/models/User'
-import { UserFormFormik } from 'app/modules/users/components/userForm/UserFormFormik.tsx'
-import { UserFormHookForm } from 'app/modules/users/components/userForm/UserFormHookForm.tsx'
-import { UserFormNative } from 'app/modules/users/components/userForm/UserFormNative.tsx'
+import { UserFormFormik } from 'app/modules/users/components/userForm/UserFormFormik'
+import { UserFormHookForm } from 'app/modules/users/components/userForm/UserFormHookForm'
+import { UserFormNative } from 'app/modules/users/components/userForm/UserFormNative'
+import { UserFormTanstackForm } from 'app/modules/users/components/userForm/UserFormTanstackForm'
 import { create } from 'app/state/slices/users'
 import styles from './create.module.scss'
 
@@ -66,6 +67,12 @@ const Create = () => {
                   <UserFormNative isPending={ createStatus === ACTION_STATUS.pending }
                                   onCancel={ onCancel }
                                   onSubmit={ onSubmit } />
+                )
+              case FORM_SELECTOR_TAB.tanstackForm:
+                return (
+                  <UserFormTanstackForm isPending={ createStatus === ACTION_STATUS.pending }
+                                        onCancel={ onCancel }
+                                        onSubmit={ onSubmit } />
                 )
               default:
                 return ''

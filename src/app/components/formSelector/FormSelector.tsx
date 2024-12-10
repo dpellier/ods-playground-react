@@ -9,6 +9,7 @@ enum FORM_SELECTOR_TAB {
   formik = 'formik',
   hookForm = 'hook-form',
   native = 'native',
+  tanstackForm = 'tanstack-form',
 }
 
 const propTypes = {
@@ -42,6 +43,12 @@ const FormSelector: FC<InferProps<typeof propTypes>> = ({ children, isDisabled }
                 isDisabled={ isDisabled }
                 isSelected={ currentTab === FORM_SELECTOR_TAB.hookForm }>
           Using react-hook-form + zod
+        </OdsTab>
+
+        <OdsTab id={ FORM_SELECTOR_TAB.tanstackForm }
+                isDisabled={ isDisabled }
+                isSelected={ currentTab === FORM_SELECTOR_TAB.tanstackForm }>
+          Using tanstack-form + zod
         </OdsTab>
       </OdsTabs>
 

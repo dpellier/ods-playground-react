@@ -57,11 +57,13 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
     <form className={ styles['product-form'] }
           onSubmit={ formik.handleSubmit }>
       <OdsFormField error={ (formik.touched.title && formik.errors.title) as string }>
-        <label className={ styles['product-form__fields__label'] }>
+        <label className={ styles['product-form__fields__label'] }
+               htmlFor="title">
           Title:
         </label>
 
         <OdsInput hasError={ formik.touched.title && !!formik.errors.title }
+                  id="title"
                   name="title"
                   onOdsBlur={ formik.handleBlur }
                   onOdsChange={ formik.handleChange }
@@ -70,12 +72,14 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
       </OdsFormField>
 
       <OdsFormField error={ (formik.touched.price && formik.errors.price) as string }>
-        <label className={ styles['product-form__fields__label'] }>
+        <label className={ styles['product-form__fields__label'] }
+               htmlFor="price">
           Price:
         </label>
 
         <div className={ styles['product-form__fields__price'] }>
           <OdsInput hasError={ formik.touched.price && !!formik.errors.price }
+                    id="price"
                     min={ 0 }
                     name="price"
                     onOdsBlur={ formik.handleBlur }
@@ -91,11 +95,13 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
       </OdsFormField>
 
       <OdsFormField error={ (formik.touched.description && formik.errors.description) as string }>
-        <label className={ styles['product-form__fields__label'] }>
+        <label className={ styles['product-form__fields__label'] }
+               htmlFor="description">
           Description:
         </label>
 
         <OdsTextarea hasError={ formik.touched.description && !!formik.errors.description ? true : undefined }
+                     id="description"
                      name="description"
                      onOdsBlur={ formik.handleBlur }
                      onOdsChange={ formik.handleChange }
@@ -124,11 +130,14 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
 
       <OdsFormField error={ (formik.touched.stock && formik.errors.stock) as string }>
         <div className={ styles['product-form__fields__stock'] }>
-          <label className={ styles['product-form__fields__label'] }>
+          <label className={ styles['product-form__fields__label'] }
+                 htmlFor="stock">
             Stock quantity:
           </label>
 
           <OdsQuantity hasError={ formik.touched.stock && !!formik.errors.stock ? true : undefined }
+                       id="stock"
+                       min={ 0 }
                        name="stock"
                        onOdsBlur={ formik.handleBlur }
                        onOdsChange={ formik.handleChange }
@@ -137,11 +146,13 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
       </OdsFormField>
 
       <OdsFormField error={ (formik.touched.restockTime && formik.errors.restockTime) as string }>
-        <label className={ styles['product-form__fields__label'] }>
+        <label className={ styles['product-form__fields__label'] }
+               htmlFor="restockTime">
           Restock time:
         </label>
 
         <OdsTimepicker hasError={ formik.touched.restockTime && !!formik.errors.restockTime ? true : undefined }
+                       id="restockTime"
                        name="restockTime"
                        onOdsBlur={ formik.handleBlur }
                        onOdsChange={ formik.handleChange }
@@ -150,12 +161,14 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
       </OdsFormField>
 
       <OdsFormField error={ (formik.touched.minimumOrderQuantity && formik.errors.minimumOrderQuantity) as string }>
-        <label className={ styles['product-form__fields__label'] }>
+        <label className={ styles['product-form__fields__label'] }
+               htmlFor="minimumOrderQuantity">
           Minimum order quantity:
         </label>
 
         <div>
           <OdsRange hasError={ formik.touched.minimumOrderQuantity && !!formik.errors.minimumOrderQuantity }
+                    id="minimumOrderQuantity"
                     name="minimumOrderQuantity"
                     onOdsBlur={ formik.handleBlur }
                     onOdsChange={ formik.handleChange }

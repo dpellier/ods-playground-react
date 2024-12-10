@@ -1,11 +1,12 @@
+import type { OdsCheckboxChangeEvent, OdsInputChangeEvent, OdsQuantityChangeEvent, OdsRadioChangeEvent, OdsRangeChangeEvent, OdsTextareaChangeEvent, OdsTimepickerChangeEvent } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
 import type { ProductCategory } from 'app/models/Product'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { ODS_BUTTON_VARIANT, ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
 import { OdsButton, OdsCheckbox, OdsFormField, OdsInput, OdsQuantity, OdsRadio, OdsRange, OdsTextarea, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { useForm } from '@tanstack/react-form'
+import { zodValidator } from '@tanstack/zod-form-adapter'
 import PropTypes from 'prop-types'
-import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Product } from 'app/models/Product'
 import styles from './productForm.module.scss'
@@ -17,7 +18,7 @@ const propTypes = {
   product: PropTypes.instanceOf(Product),
 }
 
-const validationSchema = z.object({
+const validationSchema = {
   category: z.string({ required_error: 'Category has to be set' }).min(1, { message: 'Category has to be set' }),
   description: z.string().min(1, { message: 'Description has to be set' }),
   hasReturnPolicy: z.boolean(),
@@ -29,15 +30,10 @@ const validationSchema = z.object({
   stock: z.number({ invalid_type_error: 'Stock should be a number' })
     .min(0, { message: 'Stock value should be positive' }),
   title: z.string().min(1, { message: 'Title has to be set' }),
-}).passthrough()
+}
 
-const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel, onSubmit, product }) => {
-  const {
-    control,
-    handleSubmit,
-    setValue,
-  } = useForm({
-    mode: 'onBlur',
+const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel, onSubmit, product }) => {
+  const form = useForm({
     defaultValues: product || {
       category: undefined,
       description: '',
@@ -50,35 +46,47 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
       thumbnail: '',
       title: '',
     },
-    resolver: zodResolver(validationSchema),
+    onSubmit: async ({ value }) => {
+      onSubmit(value)
+    },
+    validatorAdapter: zodValidator(),
+    validators: {
+      onSubmit: z.object(validationSchema).passthrough(),
+    },
   })
 
   return (
     <form className={ styles['product-form'] }
-          onSubmit={ handleSubmit(onSubmit) }>
-      <Controller control={ control }
-                  name="title"
-                  render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
+          onSubmit={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            form.handleSubmit()
+          }}>
+      <form.Field name="title"
+                  validatorAdapter={ zodValidator() }
+                  validators={{ onBlur: validationSchema.title }}
+                  children={ (field) => ((
+                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Title:
                       </label>
 
                       <OdsInput defaultValue={ product?.title || '' }
-                                hasError={ !!fieldState.error }
+                                hasError={ !!field.state.meta.errors.length }
                                 id={ field.name }
                                 name={ field.name }
-                                onOdsBlur={ field.onBlur }
-                                onOdsChange={ field.onChange }
+                                onOdsBlur={ field.handleBlur }
+                                onOdsChange={ (e: OdsInputChangeEvent) => field.handleChange(e.detail.value as string || '') }
                                 type={ ODS_INPUT_TYPE.text } />
                     </OdsFormField>
-                  } />
+                  ))} />
 
-      <Controller control={ control }
-                name="price"
-                render={({ field, fieldState }) =>
-                  <OdsFormField error={ fieldState.error?.message }>
+      <form.Field name="price"
+                  validatorAdapter={ zodValidator() }
+                  validators={{ onBlur: validationSchema.price }}
+                  children={ (field) => ((
+                  <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                     <label className={ styles['product-form__fields__label'] }
                            htmlFor={ field.name }>
                       Price:
@@ -86,12 +94,13 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
 
                     <div className={ styles['product-form__fields__price'] }>
                       <OdsInput defaultValue={ product?.price }
-                                hasError={ !!fieldState.error }
+                                hasError={ !!field.state.meta.errors.length }
                                 id={ field.name }
                                 min={ 0 }
                                 name={ field.name }
-                                onOdsBlur={ field.onBlur }
-                                onOdsChange={ field.onChange }
+                                onOdsBlur={ field.handleBlur }
+                                // @ts-ignore to look later
+                                onOdsChange={ (e: OdsInputChangeEvent) => field.handleChange(e.detail.value) }
                                 step="any"
                                 type={ ODS_INPUT_TYPE.number } />
 
@@ -100,54 +109,55 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                       </span>
                     </div>
                   </OdsFormField>
-                } />
+                  ))} />
 
-      <Controller control={ control }
-                  name="description"
-                  render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
+      <form.Field name="description"
+                  validatorAdapter={ zodValidator() }
+                  validators={{ onBlur: validationSchema.description }}
+                  children={ (field) => ((
+                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Description:
                       </label>
 
                       <OdsTextarea defaultValue={ product?.description || '' }
-                                   hasError={ !!fieldState.error }
+                                   hasError={ !!field.state.meta.errors.length }
                                    id={ field.name }
                                    name={ field.name }
-                                   onOdsBlur={ field.onBlur }
-                                   onOdsChange={ field.onChange } />
+                                   onOdsBlur={ field.handleBlur }
+                                   onOdsChange={ (e: OdsTextareaChangeEvent) => field.handleChange(e.detail.value as string || '') } />
                     </OdsFormField>
-                  } />
+                  ))} />
 
-      <Controller control={ control }
-                  name="hasReturnPolicy"
-                  render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
+      <form.Field name="hasReturnPolicy"
+                  validatorAdapter={ zodValidator() }
+                  validators={{ onBlur: validationSchema.hasReturnPolicy }}
+                  children={ (field) => ((
+                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['product-form__fields__label'] }>
                         Return policy:
                       </label>
 
                       <div className={ styles['product-form__fields__return-policy'] }>
                         <div className={ styles['product-form__fields__return-policy__option'] }>
-                          <OdsCheckbox hasError={ !!fieldState.error }
+                          <OdsCheckbox hasError={ !!field.state.meta.errors.length }
                                        isChecked={ product?.hasReturnPolicy }
                                        inputId="has-return-policy"
                                        name={ field.name }
-                                       onOdsBlur={ field.onBlur }
-                                       onOdsChange={ (e) => {
-                                         setValue(field.name, e.detail.checked)
-                                       }} />
+                                       onOdsBlur={ field.handleBlur }
+                                       onOdsChange={ (e: OdsCheckboxChangeEvent) => field.handleChange(e.detail.checked) } />
                           <label htmlFor="has-return-policy">Product can be returned up to 30 days</label>
                         </div>
                       </div>
                     </OdsFormField>
-                  } />
+                  ))} />
 
-      <Controller control={ control }
-                  name="stock"
-                  render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
+      <form.Field name="stock"
+                  validatorAdapter={ zodValidator() }
+                  validators={{ onBlur: validationSchema.stock }}
+                  children={ (field) => ((
+                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <div className={ styles['product-form__fields__stock'] }>
                         <label className={ styles['product-form__fields__label'] }
                                htmlFor={ field.name }>
@@ -155,39 +165,42 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                         </label>
 
                         <OdsQuantity defaultValue={ product?.stock }
-                                     hasError={ !!fieldState.error }
+                                     hasError={ !!field.state.meta.errors.length }
                                      id={ field.name }
                                      min={ 0 }
                                      name={ field.name }
-                                     onOdsBlur={ field.onBlur }
-                                     onOdsChange={ field.onChange } />
+                                     onOdsBlur={ field.handleBlur }
+                                     // @ts-ignore to look later
+                                     onOdsChange={ (e: OdsQuantityChangeEvent) => field.handleChange(e.detail.value) } />
                       </div>
                     </OdsFormField>
-                  } />
+                  ))} />
 
-      <Controller control={ control }
-                  name="restockTime"
-                  render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
+      <form.Field name="restockTime"
+                  validatorAdapter={ zodValidator() }
+                  validators={{ onBlur: validationSchema.restockTime }}
+                  children={ (field) => ((
+                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Restock time:
                       </label>
 
                       <OdsTimepicker defaultValue={ product?.restockTime || '' }
-                                     hasError={ !!fieldState.error }
+                                     hasError={ !!field.state.meta.errors.length }
                                      id={ field.name }
                                      name={ field.name }
-                                     onOdsBlur={ field.onBlur }
-                                     onOdsChange={ field.onChange }
+                                     onOdsBlur={ field.handleBlur }
+                                     onOdsChange={ (e: OdsTimepickerChangeEvent) => field.handleChange(e.detail.value as string || '') }
                                      timezones="all" />
                     </OdsFormField>
-                  } />
+                  ))} />
 
-      <Controller control={ control }
-                  name="minimumOrderQuantity"
-                  render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
+      <form.Field name="minimumOrderQuantity"
+                  validatorAdapter={ zodValidator() }
+                  validators={{ onBlur: validationSchema.minimumOrderQuantity }}
+                  children={ (field) => ((
+                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Minimum order quantity:
@@ -195,33 +208,35 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
 
                       <div>
                         <OdsRange defaultValue={ product?.minimumOrderQuantity }
-                                  hasError={ !!fieldState.error }
+                                  hasError={ !!field.state.meta.errors.length }
                                   id={ field.name }
                                   name={ field.name }
-                                  onOdsBlur={ field.onBlur }
-                                  onOdsChange={ field.onChange } />
+                                  onOdsBlur={ field.handleBlur }
+                                  // @ts-ignore to look later
+                                  onOdsChange={ (e: OdsRangeChangeEvent) => field.handleChange(e.detail.value) } />
                       </div>
                     </OdsFormField>
-                  } />
+                  ))} />
 
-      <Controller control={ control }
-                  name="category"
-                  render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
+      <form.Field name="category"
+                  validatorAdapter={ zodValidator() }
+                  validators={{ onBlur: validationSchema.category }}
+                  children={ (field) => ((
+                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['product-form__fields__label'] }>
                         Category:
                       </label>
 
                       <div className={ styles['product-form__fields__category'] }>
                         <div className={ styles['product-form__fields__category__option'] }>
-                          <OdsRadio hasError={ !!fieldState.error }
+                          <OdsRadio hasError={ !!field.state.meta.errors.length }
                                     isChecked={ product?.category === 'beauty' }
                                     inputId="category-beauty"
                                     name={ field.name }
-                                    onOdsBlur={ field.onBlur }
-                                    onOdsChange={ (e) => {
+                                    onOdsBlur={ field.handleBlur }
+                                    onOdsChange={ (e: OdsRadioChangeEvent) => {
                                       if (e.detail.checked) {
-                                        setValue(field.name, e.detail.value as ProductCategory)
+                                        field.handleChange(e.detail.value as ProductCategory)
                                       }
                                     }}
                                     value="beauty" />
@@ -229,14 +244,14 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                         </div>
 
                         <div className={ styles['product-form__fields__category__option'] }>
-                          <OdsRadio hasError={ !!fieldState.error }
+                          <OdsRadio hasError={ !!field.state.meta.errors.length }
                                     isChecked={ product?.category === 'fragrances' }
                                     inputId="category-fragrances"
                                     name={ field.name }
-                                    onOdsBlur={ field.onBlur }
-                                    onOdsChange={ (e) => {
+                                    onOdsBlur={ field.handleBlur }
+                                    onOdsChange={ (e: OdsRadioChangeEvent) => {
                                       if (e.detail.checked) {
-                                        setValue(field.name, e.detail.value as ProductCategory)
+                                        field.handleChange(e.detail.value as ProductCategory)
                                       }
                                     }}
                                     value="fragrances" />
@@ -244,14 +259,14 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                         </div>
 
                         <div className={ styles['product-form__fields__category__option'] }>
-                          <OdsRadio hasError={ !!fieldState.error }
+                          <OdsRadio hasError={ !!field.state.meta.errors.length }
                                     isChecked={ product?.category === 'furniture' }
                                     inputId="category-furniture"
                                     name={ field.name }
-                                    onOdsBlur={ field.onBlur }
-                                    onOdsChange={ (e) => {
+                                    onOdsBlur={ field.handleBlur }
+                                    onOdsChange={ (e: OdsRadioChangeEvent) => {
                                       if (e.detail.checked) {
-                                        setValue(field.name, e.detail.value as ProductCategory)
+                                        field.handleChange(e.detail.value as ProductCategory)
                                       }
                                     }}
                                     value="furniture" />
@@ -259,14 +274,14 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                         </div>
 
                         <div className={ styles['product-form__fields__category__option'] }>
-                          <OdsRadio hasError={ !!fieldState.error }
+                          <OdsRadio hasError={ !!field.state.meta.errors.length }
                                     isChecked={ product?.category === 'groceries' }
                                     inputId="category-groceries"
                                     name={ field.name }
-                                    onOdsBlur={ field.onBlur }
-                                    onOdsChange={ (e) => {
+                                    onOdsBlur={ field.handleBlur }
+                                    onOdsChange={ (e: OdsRadioChangeEvent) => {
                                       if (e.detail.checked) {
-                                        setValue(field.name, e.detail.value as ProductCategory)
+                                        field.handleChange(e.detail.value as ProductCategory)
                                       }
                                     }}
                                     value="groceries" />
@@ -274,7 +289,7 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                         </div>
                       </div>
                     </OdsFormField>
-                  } />
+                  ))} />
 
       <div className={ styles['product-form__actions'] }>
         <OdsButton label="Cancel"
@@ -290,6 +305,6 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
   )
 }
 
-ProductFormHookForm.propTypes = propTypes
+ProductFormTanstackForm.propTypes = propTypes
 
-export { ProductFormHookForm }
+export { ProductFormTanstackForm }
