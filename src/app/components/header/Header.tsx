@@ -1,7 +1,6 @@
 import type { FC } from 'react'
 import type { InferProps } from 'prop-types'
-import { ODS_ICON_NAME } from '@ovhcloud/ods-components'
-import { OdsLink } from '@ovhcloud/ods-components/react'
+import { ODS_BUTTON_SIZE, ODS_BUTTON_VARIANT, ODS_ICON_NAME, OdsButton, OdsIcon } from '@ovhcloud/ods-react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import styles from './header.module.scss'
@@ -18,11 +17,11 @@ const Header: FC<InferProps<typeof propTypes>> = ({ className, onSignOut }) => {
         ODS React Playground
       </span>
 
-      <OdsLink className={ styles['header__sign-out'] }
-               href="#"
-               icon={ ODS_ICON_NAME.shutdown }
-               label="Sign Out"
-               onClick={ onSignOut } />
+      <OdsButton onClick={ onSignOut }
+                 size={ ODS_BUTTON_SIZE.xs }
+                 variant={ ODS_BUTTON_VARIANT.outline }>
+        <OdsIcon name={ ODS_ICON_NAME.shutdown } /> Sign Out
+      </OdsButton>
     </div>
   )
 }

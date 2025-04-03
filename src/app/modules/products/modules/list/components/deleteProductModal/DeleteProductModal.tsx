@@ -1,7 +1,7 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
-import { ODS_BUTTON_VARIANT } from '@ovhcloud/ods-components'
-import { OdsButton, OdsModal } from '@ovhcloud/ods-components/react'
+import { OdsModal } from '@ovhcloud/ods-components/react'
+import { ODS_BUTTON_VARIANT, OdsButton } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 
 const propTypes = {
@@ -20,15 +20,17 @@ const DeleteProductModal: FC<InferProps<typeof propTypes>> = ({ isOpen, isPendin
         Are you sure you want to delete the product: { productTitle }?
       </p>
 
-      <OdsButton label="Cancel"
-                 onClick={ onCancelDelete }
+      <OdsButton onClick={ onCancelDelete }
                  slot="actions"
-                 variant={ ODS_BUTTON_VARIANT.outline } />
+                 variant={ ODS_BUTTON_VARIANT.outline }>
+        Cancel
+      </OdsButton>
 
       <OdsButton isLoading={ isPending }
-                 label="Delete"
                  onClick={ onSubmitDelete }
-                 slot="actions" />
+                 slot="actions">
+        Delete
+      </OdsButton>
     </OdsModal>
   )
 }

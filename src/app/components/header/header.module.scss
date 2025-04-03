@@ -9,10 +9,4 @@
     font-weight: 600;
     color: var(--ods-color-primary-000);
   }
-
-  &__sign-out {
-    &::part(link) {
-      color: var(--ods-color-primary-000);
-    }
-  }
 }

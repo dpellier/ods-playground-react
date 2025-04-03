@@ -1,8 +1,9 @@
 import type { OdsFormElement } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
 import type { FC, FormEvent } from 'react'
-import { ODS_BUTTON_VARIANT, ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsButton, OdsCheckbox, OdsFormField, OdsInput, OdsQuantity, OdsRadio, OdsRange, OdsTextarea, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
+import { OdsCheckbox, OdsFormField as OdsFormFieldv18, OdsInput, OdsQuantity, OdsRadio, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { ODS_BUTTON_VARIANT, OdsButton, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsTextarea } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { Product } from 'app/models/Product'
@@ -30,28 +31,49 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
     })
   }
 
-  async function updateError(e: CustomEvent, field: string): Promise<void> {
-    if (e.detail.isInvalid) {
-      const errorMessage = await (e.target as HTMLElement & OdsFormElement).getValidationMessage()
-
-      if (errorMessage) {
-        setError((error) => ({
-          ...error,
-          [field]: errorMessage,
-        }))
-      }
-    } else {
+  function addError(field: string, errorMessage?: string): void {
+    if (errorMessage) {
       setError((error) => ({
         ...error,
-        [field]: '',
+        [field]: errorMessage,
       }))
+    }
+  }
+
+  function onInvalidField(e: FormEvent, field: string): void {
+    e.preventDefault()
+    updateError(e, field)
+  }
+
+  function removeError(field: string): void {
+    setError((error) => ({
+      ...error,
+      [field]: '',
+    }))
+  }
+
+  function updateError(e: FormEvent, field: string): void {
+    const target = e.target as HTMLFormElement;
+    if (!target.validity.valid) {
+      addError(field, target.validationMessage)
+    } else {
+      removeError(field)
+    }
+  }
+
+  async function updateErrorv18(e: CustomEvent, field: string): Promise<void> {
+    if (e.detail.isInvalid) {
+      const errorMessage = await (e.target as HTMLElement & OdsFormElement).getValidationMessage()
+      addError(field, errorMessage)
+    } else {
+      removeError(field)
     }
   }
 
   return (
     <form className={ styles['product-form'] }
           onSubmit={ onFormSubmit }>
-      <OdsFormField error={ error?.title }>
+      <OdsFormFieldv18 error={ error?.title }>
         <label className={ styles['product-form__fields__label'] }
                htmlFor="title">
           Title:
@@ -61,11 +83,11 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                   id="title"
                   isRequired={ true }
                   name="title"
-                  onOdsInvalid={ (e) => updateError(e, 'title') }
+                  onOdsInvalid={ (e) => updateErrorv18(e, 'title') }
                   type={ ODS_INPUT_TYPE.text } />
-      </OdsFormField>
+      </OdsFormFieldv18>
 
-      <OdsFormField error={ error?.price }>
+      <OdsFormFieldv18 error={ error?.price }>
         <label className={ styles['product-form__fields__label'] }
                htmlFor="price">
           Price:
@@ -77,7 +99,7 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                     isRequired={ true }
                     min={ 0 }
                     name="price"
-                    onOdsInvalid={ (e) => updateError(e, 'price') }
+                    onOdsInvalid={ (e) => updateErrorv18(e, 'price') }
                     step="any"
                     type={ ODS_INPUT_TYPE.number } />
 
@@ -85,22 +107,26 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
             €
           </span>
         </div>
-      </OdsFormField>
+      </OdsFormFieldv18>
 
-      <OdsFormField error={ error?.description }>
-        <label className={ styles['product-form__fields__label'] }
-               htmlFor="description">
+      <OdsFormField invalid={ !!error.description }>
+        <OdsFormFieldLabel>
           Description:
-        </label>
+        </OdsFormFieldLabel>
 
         <OdsTextarea defaultValue={ product?.description }
                      id="description"
-                     isRequired={ true }
                      name="description"
-                     onOdsInvalid={ (e) => updateError(e, 'description') } />
+                     required={ true }
+                     onBlur={ (e) => updateError(e, 'description') }
+                     onInvalid={ (e) => onInvalidField(e, 'description') } />
+
+        <OdsFormFieldError>
+          { error.description }
+        </OdsFormFieldError>
       </OdsFormField>
 
-      <OdsFormField error={ error?.hasReturnPolicy }>
+      <OdsFormFieldv18 error={ error?.hasReturnPolicy }>
         <label className={ styles['product-form__fields__label'] }>
           Return policy:
         </label>
@@ -110,13 +136,13 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
             <OdsCheckbox inputId="has-return-policy"
                          isChecked={ product?.hasReturnPolicy }
                          name="hasReturnPolicy"
-                         onOdsInvalid={ (e) => updateError(e, 'hasReturnPolicy') } />
+                         onOdsInvalid={ (e) => updateErrorv18(e, 'hasReturnPolicy') } />
             <label htmlFor="has-return-policy">Product can be returned up to 30 days</label>
           </div>
         </div>
-      </OdsFormField>
+      </OdsFormFieldv18>
 
-      <OdsFormField error={ error?.stock }>
+      <OdsFormFieldv18 error={ error?.stock }>
         <div className={ styles['product-form__fields__stock'] }>
           <label className={ styles['product-form__fields__label'] }
                  htmlFor="stock">
@@ -128,11 +154,11 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                        isRequired={ true }
                        min={ 0 }
                        name="stock"
-                       onOdsInvalid={ (e) => updateError(e, 'stock') } />
+                       onOdsInvalid={ (e) => updateErrorv18(e, 'stock') } />
         </div>
-      </OdsFormField>
+      </OdsFormFieldv18>
 
-      <OdsFormField error={ error?.restockTime }>
+      <OdsFormFieldv18 error={ error?.restockTime }>
         <label className={ styles['product-form__fields__label'] }
                htmlFor="restockTime">
           Restock time:
@@ -142,11 +168,11 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                        id="restockTime"
                        isRequired={ true }
                        name="restockTime"
-                       onOdsInvalid={ (e) => updateError(e, 'restockTime') }
+                       onOdsInvalid={ (e) => updateErrorv18(e, 'restockTime') }
                        timezones="all" />
-      </OdsFormField>
+      </OdsFormFieldv18>
 
-      <OdsFormField error={ error?.minimumOrderQuantity }>
+      <OdsFormFieldv18 error={ error?.minimumOrderQuantity }>
         <label className={ styles['product-form__fields__label'] }
                htmlFor="minimumOrderQuantity">
           Minimum order quantity:
@@ -157,11 +183,11 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                     id="minimumOrderQuantity"
                     isRequired={ true }
                     name="minimumOrderQuantity"
-                    onOdsInvalid={ (e) => updateError(e, 'minimumOrderQuantity') } />
+                    onOdsInvalid={ (e) => updateErrorv18(e, 'minimumOrderQuantity') } />
         </div>
-      </OdsFormField>
+      </OdsFormFieldv18>
 
-      <OdsFormField error={ error?.category }>
+      <OdsFormFieldv18 error={ error?.category }>
         <label className={ styles['product-form__fields__label'] }>
           Category:
         </label>
@@ -172,7 +198,7 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                       isRequired={ true }
                       inputId="category-beauty"
                       name="category"
-                      onOdsInvalid={ (e) => updateError(e, 'category') }
+                      onOdsInvalid={ (e) => updateErrorv18(e, 'category') }
                       value="beauty" />
             <label htmlFor="category-beauty">Beauty</label>
           </div>
@@ -182,7 +208,7 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                       isRequired={ true }
                       inputId="category-fragrances"
                       name="category"
-                      onOdsInvalid={ (e) => updateError(e, 'category') }
+                      onOdsInvalid={ (e) => updateErrorv18(e, 'category') }
                       value="fragrances" />
             <label htmlFor="category-fragrances">Fragrances</label>
           </div>
@@ -192,7 +218,7 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                       isRequired={ true }
                       inputId="category-furniture"
                       name="category"
-                      onOdsInvalid={ (e) => updateError(e, 'category') }
+                      onOdsInvalid={ (e) => updateErrorv18(e, 'category') }
                       value="furniture" />
             <label htmlFor="category-furniture">Furniture</label>
           </div>
@@ -202,22 +228,24 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                       isRequired={ true }
                       inputId="category-groceries"
                       name="category"
-                      onOdsInvalid={ (e) => updateError(e, 'category') }
+                      onOdsInvalid={ (e) => updateErrorv18(e, 'category') }
                       value="groceries" />
             <label htmlFor="category-groceries">Groceries</label>
           </div>
         </div>
-      </OdsFormField>
+      </OdsFormFieldv18>
 
       <div className={ styles['product-form__actions'] }>
-        <OdsButton label="Cancel"
-                   onClick={ onCancel }
+        <OdsButton onClick={ onCancel }
                    type="button"
-                   variant={ ODS_BUTTON_VARIANT.outline } />
+                   variant={ ODS_BUTTON_VARIANT.outline }>
+          Cancel
+        </OdsButton>
 
         <OdsButton isLoading={ isPending }
-                   label={ !!product ? 'Update' : 'Create' }
-                   type="submit" />
+                   type="submit">
+          { !!product ? 'Update' : 'Create' }
+        </OdsButton>
       </div>
     </form>
   )

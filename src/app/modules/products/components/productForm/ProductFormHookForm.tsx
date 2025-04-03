@@ -2,8 +2,9 @@ import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
 import type { ProductCategory } from 'app/models/Product'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ODS_BUTTON_VARIANT, ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsButton, OdsCheckbox, OdsFormField, OdsInput, OdsQuantity, OdsRadio, OdsRange, OdsTextarea, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
+import { OdsCheckbox, OdsFormField as OdsFormFieldv18, OdsInput, OdsQuantity, OdsRadio, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { ODS_BUTTON_VARIANT, OdsButton, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsTextarea } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -34,7 +35,9 @@ const validationSchema = z.object({
 const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel, onSubmit, product }) => {
   const {
     control,
+    formState: { errors },
     handleSubmit,
+    register,
     setValue,
   } = useForm({
     mode: 'onBlur',
@@ -59,7 +62,7 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
       <Controller control={ control }
                   name="title"
                   render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
+                    <OdsFormFieldv18 error={ fieldState.error?.message }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Title:
@@ -72,13 +75,13 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                                 onOdsBlur={ field.onBlur }
                                 onOdsChange={ field.onChange }
                                 type={ ODS_INPUT_TYPE.text } />
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   } />
 
       <Controller control={ control }
                 name="price"
                 render={({ field, fieldState }) =>
-                  <OdsFormField error={ fieldState.error?.message }>
+                  <OdsFormFieldv18 error={ fieldState.error?.message }>
                     <label className={ styles['product-form__fields__label'] }
                            htmlFor={ field.name }>
                       Price:
@@ -99,31 +102,25 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                         €
                       </span>
                     </div>
-                  </OdsFormField>
+                  </OdsFormFieldv18>
                 } />
 
-      <Controller control={ control }
-                  name="description"
-                  render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
-                      <label className={ styles['product-form__fields__label'] }
-                             htmlFor={ field.name }>
-                        Description:
-                      </label>
+      <OdsFormField invalid={ !!errors.description }>
+        <OdsFormFieldLabel>
+          Description:
+        </OdsFormFieldLabel>
 
-                      <OdsTextarea defaultValue={ product?.description || '' }
-                                   hasError={ !!fieldState.error }
-                                   id={ field.name }
-                                   name={ field.name }
-                                   onOdsBlur={ field.onBlur }
-                                   onOdsChange={ field.onChange } />
-                    </OdsFormField>
-                  } />
+        <OdsTextarea { ...register('description') } />
+
+        <OdsFormFieldError>
+          { errors.description?.message }
+        </OdsFormFieldError>
+      </OdsFormField>
 
       <Controller control={ control }
                   name="hasReturnPolicy"
                   render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
+                    <OdsFormFieldv18 error={ fieldState.error?.message }>
                       <label className={ styles['product-form__fields__label'] }>
                         Return policy:
                       </label>
@@ -141,13 +138,13 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                           <label htmlFor="has-return-policy">Product can be returned up to 30 days</label>
                         </div>
                       </div>
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   } />
 
       <Controller control={ control }
                   name="stock"
                   render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
+                    <OdsFormFieldv18 error={ fieldState.error?.message }>
                       <div className={ styles['product-form__fields__stock'] }>
                         <label className={ styles['product-form__fields__label'] }
                                htmlFor={ field.name }>
@@ -162,13 +159,13 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                                      onOdsBlur={ field.onBlur }
                                      onOdsChange={ field.onChange } />
                       </div>
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   } />
 
       <Controller control={ control }
                   name="restockTime"
                   render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
+                    <OdsFormFieldv18 error={ fieldState.error?.message }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Restock time:
@@ -181,13 +178,13 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                                      onOdsBlur={ field.onBlur }
                                      onOdsChange={ field.onChange }
                                      timezones="all" />
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   } />
 
       <Controller control={ control }
                   name="minimumOrderQuantity"
                   render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
+                    <OdsFormFieldv18 error={ fieldState.error?.message }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Minimum order quantity:
@@ -201,13 +198,13 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                                   onOdsBlur={ field.onBlur }
                                   onOdsChange={ field.onChange } />
                       </div>
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   } />
 
       <Controller control={ control }
                   name="category"
                   render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
+                    <OdsFormFieldv18 error={ fieldState.error?.message }>
                       <label className={ styles['product-form__fields__label'] }>
                         Category:
                       </label>
@@ -273,18 +270,20 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                           <label htmlFor="category-groceries">Groceries</label>
                         </div>
                       </div>
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   } />
 
       <div className={ styles['product-form__actions'] }>
-        <OdsButton label="Cancel"
-                   onClick={ onCancel }
+        <OdsButton onClick={ onCancel }
                    type="button"
-                   variant={ ODS_BUTTON_VARIANT.outline } />
+                   variant={ ODS_BUTTON_VARIANT.outline }>
+          Cancel
+        </OdsButton>
 
         <OdsButton isLoading={ isPending }
-                   label={ !!product ? 'Update' : 'Create' }
-                   type="submit" />
+                   type="submit">
+          { !!product ? 'Update' : 'Create' }
+        </OdsButton>
       </div>
     </form>
   )

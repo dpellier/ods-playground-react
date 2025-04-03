@@ -29,6 +29,10 @@
           background-color: var(--ods-color-primary-200);
         }
       }
+
+      &__link {
+        width: max-content;
+      }
     }
   }
 }
