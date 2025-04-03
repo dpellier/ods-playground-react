@@ -1,7 +1,6 @@
 import type { FC } from 'react'
 import type { InferProps } from 'prop-types'
-import { ODS_TEXT_PRESET } from '@ovhcloud/ods-components'
-import { OdsText } from '@ovhcloud/ods-components/react'
+import { ODS_TEXT_PRESET, OdsText } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import styles from './pageTitle.module.scss'
 

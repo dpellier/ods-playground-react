@@ -1,8 +1,9 @@
 import type { OdsFormElement } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
 import type { FC, FormEvent } from 'react'
-import { ODS_BUTTON_VARIANT, ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsButton, OdsDatepicker, OdsFormField, OdsInput, OdsPhoneNumber, OdsSelect } from '@ovhcloud/ods-components/react'
+import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
+import { OdsDatepicker, OdsFormField, OdsInput, OdsPhoneNumber, OdsSelect } from '@ovhcloud/ods-components/react'
+import { ODS_BUTTON_VARIANT, OdsButton } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useMemo, useState } from 'react'
 import { User, USER_BIRTH_DATE_FORMAT, USER_ROLES } from 'app/models/User'
@@ -158,14 +159,16 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
       </OdsFormField>
 
       <div className={ styles['user-form__actions'] }>
-        <OdsButton label="Cancel"
-                   onClick={ onCancel }
+        <OdsButton onClick={ onCancel }
                    type="button"
-                   variant={ ODS_BUTTON_VARIANT.outline } />
+                   variant={ ODS_BUTTON_VARIANT.outline }>
+          Cancel
+        </OdsButton>
 
         <OdsButton isLoading={ isPending }
-                   label={ !!user ? 'Update' : 'Create' }
-                   type="submit" />
+                   type="submit">
+          { !!user ? 'Update' : 'Create' }
+        </OdsButton>
       </div>
     </form>
   )

@@ -47,7 +47,8 @@ const Dashboard = () => {
             </span>
           </LoadingContent>
 
-          <Link label="Manage users"
+          <Link className={ styles['dashboard__tiles__tile__link'] }
+                label="Manage users"
                 route={ ROUTE.users } />
         </OdsCard>
 
@@ -64,7 +65,8 @@ const Dashboard = () => {
             </span>
           </LoadingContent>
 
-          <Link label="Manage products"
+          <Link className={ styles['dashboard__tiles__tile__link'] }
+                label="Manage products"
                 route={ ROUTE.products } />
         </OdsCard>
       </div>
