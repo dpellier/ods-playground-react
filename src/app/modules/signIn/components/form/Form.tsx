@@ -1,8 +1,9 @@
 import type { InferProps } from 'prop-types'
 import type { FC, FormEvent } from 'react'
 import type { ValidationError } from 'yup'
-import { ODS_BUTTON_COLOR, ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsButton, OdsFormField, OdsInput, OdsPassword } from '@ovhcloud/ods-components/react'
+import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
+import { OdsFormField, OdsInput, OdsPassword } from '@ovhcloud/ods-components/react'
+import { ODS_BUTTON_COLOR, OdsButton } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import * as yup from 'yup'
@@ -91,8 +92,9 @@ const Form: FC<InferProps<typeof propTypes>> = ({ isPending, onSubmit }) => {
       <OdsButton className={ styles['form__submit'] }
                  color={ ODS_BUTTON_COLOR.primary }
                  isLoading={ isPending }
-                 label="Sign In"
-                 type="submit" />
+                 type="submit">
+        Sign In
+      </OdsButton>
     </form>
   )
 }

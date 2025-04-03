@@ -1,9 +1,10 @@
-import type { OdsCheckboxChangeEvent, OdsInputChangeEvent, OdsQuantityChangeEvent, OdsRadioChangeEvent, OdsRangeChangeEvent, OdsTextareaChangeEvent, OdsTimepickerChangeEvent } from '@ovhcloud/ods-components'
+import type { OdsCheckboxChangeEvent, OdsInputChangeEvent, OdsQuantityChangeEvent, OdsRadioChangeEvent, OdsRangeChangeEvent, OdsTimepickerChangeEvent } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
-import type { FC } from 'react'
+import type { FC, FormEvent } from 'react'
 import type { ProductCategory } from 'app/models/Product'
-import { ODS_BUTTON_VARIANT, ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsButton, OdsCheckbox, OdsFormField, OdsInput, OdsQuantity, OdsRadio, OdsRange, OdsTextarea, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
+import { OdsCheckbox, OdsFormField as OdsFormFieldv18, OdsInput, OdsQuantity, OdsRadio, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { ODS_BUTTON_VARIANT, OdsButton, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsTextarea } from '@ovhcloud/ods-react'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import PropTypes from 'prop-types'
@@ -66,7 +67,7 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.title }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Title:
@@ -79,14 +80,14 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                                 onOdsBlur={ field.handleBlur }
                                 onOdsChange={ (e: OdsInputChangeEvent) => field.handleChange(e.detail.value as string || '') }
                                 type={ ODS_INPUT_TYPE.text } />
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   ))} />
 
       <form.Field name="price"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.price }}
                   children={ (field) => ((
-                  <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                  <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                     <label className={ styles['product-form__fields__label'] }
                            htmlFor={ field.name }>
                       Price:
@@ -108,25 +109,26 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                         €
                       </span>
                     </div>
-                  </OdsFormField>
+                  </OdsFormFieldv18>
                   ))} />
 
       <form.Field name="description"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.description }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
-                      <label className={ styles['product-form__fields__label'] }
-                             htmlFor={ field.name }>
+                    <OdsFormField invalid={ !!field.state.meta.errors.length }>
+                      <OdsFormFieldLabel>
                         Description:
-                      </label>
+                      </OdsFormFieldLabel>
 
                       <OdsTextarea defaultValue={ product?.description || '' }
-                                   hasError={ !!field.state.meta.errors.length }
-                                   id={ field.name }
                                    name={ field.name }
-                                   onOdsBlur={ field.handleBlur }
-                                   onOdsChange={ (e: OdsTextareaChangeEvent) => field.handleChange(e.detail.value as string || '') } />
+                                   onBlur={ field.handleBlur }
+                                   onChange={ (e: FormEvent) => field.handleChange((e.target as HTMLTextAreaElement).value) } />
+
+                      <OdsFormFieldError>
+                        { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
+                      </OdsFormFieldError>
                     </OdsFormField>
                   ))} />
 
@@ -134,7 +136,7 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.hasReturnPolicy }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['product-form__fields__label'] }>
                         Return policy:
                       </label>
@@ -150,14 +152,14 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                           <label htmlFor="has-return-policy">Product can be returned up to 30 days</label>
                         </div>
                       </div>
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   ))} />
 
       <form.Field name="stock"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.stock }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <div className={ styles['product-form__fields__stock'] }>
                         <label className={ styles['product-form__fields__label'] }
                                htmlFor={ field.name }>
@@ -173,14 +175,14 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                                      // @ts-ignore to look later
                                      onOdsChange={ (e: OdsQuantityChangeEvent) => field.handleChange(e.detail.value) } />
                       </div>
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   ))} />
 
       <form.Field name="restockTime"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.restockTime }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Restock time:
@@ -193,14 +195,14 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                                      onOdsBlur={ field.handleBlur }
                                      onOdsChange={ (e: OdsTimepickerChangeEvent) => field.handleChange(e.detail.value as string || '') }
                                      timezones="all" />
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   ))} />
 
       <form.Field name="minimumOrderQuantity"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.minimumOrderQuantity }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Minimum order quantity:
@@ -215,14 +217,14 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                                   // @ts-ignore to look later
                                   onOdsChange={ (e: OdsRangeChangeEvent) => field.handleChange(e.detail.value) } />
                       </div>
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   ))} />
 
       <form.Field name="category"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.category }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['product-form__fields__label'] }>
                         Category:
                       </label>
@@ -288,18 +290,20 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                           <label htmlFor="category-groceries">Groceries</label>
                         </div>
                       </div>
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   ))} />
 
       <div className={ styles['product-form__actions'] }>
-        <OdsButton label="Cancel"
-                   onClick={ onCancel }
+        <OdsButton onClick={ onCancel }
                    type="button"
-                   variant={ ODS_BUTTON_VARIANT.outline } />
+                   variant={ ODS_BUTTON_VARIANT.outline }>
+          Cancel
+        </OdsButton>
 
         <OdsButton isLoading={ isPending }
-                   label={ !!product ? 'Update' : 'Create' }
-                   type="submit" />
+                   type="submit">
+          { !!product ? 'Update' : 'Create' }
+        </OdsButton>
       </div>
     </form>
   )

@@ -1,0 +1,6 @@
+@import '@ovhcloud/ods-components/style';
+
+.link {
+  @include ods-link();
+  @include ods-link-color('primary');
+}

@@ -1,7 +1,7 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
-import { ODS_BUTTON_VARIANT, ODS_ICON_NAME } from '@ovhcloud/ods-components'
-import { OdsButton, OdsCard, OdsClipboard, OdsIcon, OdsLink, OdsMedium, OdsPopover } from '@ovhcloud/ods-components/react'
+import { OdsCard, OdsClipboard, OdsMedium } from '@ovhcloud/ods-components/react'
+import { ODS_BUTTON_VARIANT, ODS_ICON_NAME, ODS_POPOVER_POSITION, OdsButton, OdsIcon, OdsLink, OdsPopover, OdsPopoverContent, OdsPopoverTrigger } from '@ovhcloud/ods-react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import { Link } from 'app/components/link/Link'
@@ -14,8 +14,6 @@ const propTypes = {
   user: PropTypes.instanceOf(User).isRequired,
 }
 const UserListItem: FC<InferProps<typeof propTypes>> = ({ className, user }) => {
-  const actionMenuTriggerId = `header-action-trigger-${user.id}`
-
   return (
     <OdsCard className={ classNames(styles['user-list-item'], className) }>
       <div className={ styles['user-list-item__header'] }>
@@ -28,18 +26,21 @@ const UserListItem: FC<InferProps<typeof propTypes>> = ({ className, user }) => 
           { user.name }
         </span>
 
-        <OdsButton icon={ ODS_ICON_NAME.ellipsisVertical }
-                   id={ actionMenuTriggerId }
-                   label=""
-                   variant={ ODS_BUTTON_VARIANT.ghost } />
+        <OdsPopover position={ ODS_POPOVER_POSITION.bottom }>
+          <OdsPopoverTrigger asChild>
+            <OdsButton variant={ ODS_BUTTON_VARIANT.ghost }>
+              <OdsIcon name={ ODS_ICON_NAME.ellipsisVertical } />
+            </OdsButton>
+          </OdsPopoverTrigger>
 
-        <OdsPopover triggerId={ actionMenuTriggerId }>
-          <ul className={ styles['user-list-item__header__action-menu'] }>
-            <li>
-              <Link label="Update user"
-                    route={ `${ROUTE.users}/${user.id}/edit` } />
-            </li>
-          </ul>
+          <OdsPopoverContent>
+            <ul className={ styles['user-list-item__header__action-menu'] }>
+              <li>
+                <Link label="Update user"
+                      route={ `${ROUTE.users}/${user.id}/edit` } />
+              </li>
+            </ul>
+          </OdsPopoverContent>
         </OdsPopover>
       </div>
 
@@ -47,15 +48,17 @@ const UserListItem: FC<InferProps<typeof propTypes>> = ({ className, user }) => 
         <div className={ styles['user-list-item__details__email'] }>
           <OdsIcon name={ ODS_ICON_NAME.email } />
 
-          <OdsLink href={ `mailto:${user.email}` }
-                   label={ user.email } />
+          <OdsLink href={ `mailto:${user.email}` }>
+            { user.email }
+          </OdsLink>
         </div>
 
         <div className={ styles['user-list-item__details__phone-number'] }>
           <OdsIcon name={ ODS_ICON_NAME.phone } />
 
-          <OdsLink href={ `tel:${user.phone}` }
-                   label={ user.phone } />
+          <OdsLink href={ `tel:${user.phone}` }>
+            { user.phone }
+          </OdsLink>
         </div>
 
         <div className={ styles['user-list-item__details__ip-address'] }>

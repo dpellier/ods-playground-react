@@ -1,6 +1,5 @@
 import type { SignInSlicePayload } from 'app/state/slices/session'
-import { ODS_TEXT_PRESET } from '@ovhcloud/ods-components'
-import { OdsText } from '@ovhcloud/ods-components/react'
+import { ODS_TEXT_PRESET, OdsText } from '@ovhcloud/ods-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { ACTION_STATUS } from 'app/constants/slice'

@@ -1,7 +1,7 @@
 import type { OdsPaginationCurrentChangeEvent, OdsPaginationItemPerPageChangedEvent } from '@ovhcloud/ods-components'
 import type { User } from 'app/models/User'
-import { ODS_ICON_NAME } from '@ovhcloud/ods-components'
-import { OdsButton, OdsPagination } from '@ovhcloud/ods-components/react'
+import { OdsPagination } from '@ovhcloud/ods-components/react'
+import { ODS_ICON_NAME, OdsButton, OdsIcon } from '@ovhcloud/ods-react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LoadingMask } from 'app/components/loadingMask/LoadingMask'
@@ -45,9 +45,9 @@ const List = () => {
       <div className={ styles['list__header'] }>
         <PageTitle label="List of users" />
 
-        <OdsButton icon={ ODS_ICON_NAME.plus }
-                   label="Create a new user"
-                   onClick={ () => { navigate(`${ROUTE.users}/new`) } } />
+        <OdsButton onClick={ () => { navigate(`${ROUTE.users}/new`) } }>
+          <OdsIcon name={ ODS_ICON_NAME.plus } /> Create a new user
+        </OdsButton>
       </div>
 
       <div className={ styles['list__content'] }>

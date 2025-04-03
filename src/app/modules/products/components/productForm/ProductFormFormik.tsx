@@ -1,7 +1,8 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
-import { ODS_BUTTON_VARIANT, ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsButton, OdsCheckbox, OdsFormField, OdsInput, OdsQuantity, OdsRadio, OdsRange, OdsTextarea, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
+import { OdsCheckbox, OdsFormField as OdsFormFieldv18, OdsInput, OdsQuantity, OdsRadio, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { ODS_BUTTON_VARIANT, OdsButton, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsTextarea } from '@ovhcloud/ods-react'
 import { useFormik } from 'formik'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
@@ -56,7 +57,7 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
   return (
     <form className={ styles['product-form'] }
           onSubmit={ formik.handleSubmit }>
-      <OdsFormField error={ (formik.touched.title && formik.errors.title) as string }>
+      <OdsFormFieldv18 error={ (formik.touched.title && formik.errors.title) as string }>
         <label className={ styles['product-form__fields__label'] }
                htmlFor="title">
           Title:
@@ -69,9 +70,9 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                   onOdsChange={ formik.handleChange }
                   type={ ODS_INPUT_TYPE.text }
                   value={ formik.values.title } />
-      </OdsFormField>
+      </OdsFormFieldv18>
 
-      <OdsFormField error={ (formik.touched.price && formik.errors.price) as string }>
+      <OdsFormFieldv18 error={ (formik.touched.price && formik.errors.price) as string }>
         <label className={ styles['product-form__fields__label'] }
                htmlFor="price">
           Price:
@@ -92,23 +93,24 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
             €
           </span>
         </div>
-      </OdsFormField>
+      </OdsFormFieldv18>
 
-      <OdsFormField error={ (formik.touched.description && formik.errors.description) as string }>
-        <label className={ styles['product-form__fields__label'] }
-               htmlFor="description">
+      <OdsFormField invalid={ !!(formik.touched.description && formik.errors.description) }>
+        <OdsFormFieldLabel>
           Description:
-        </label>
+        </OdsFormFieldLabel>
 
-        <OdsTextarea hasError={ formik.touched.description && !!formik.errors.description ? true : undefined }
-                     id="description"
-                     name="description"
-                     onOdsBlur={ formik.handleBlur }
-                     onOdsChange={ formik.handleChange }
+        <OdsTextarea name="description"
+                     onBlur={ formik.handleBlur }
+                     onChange={ formik.handleChange }
                      value={ formik.values.description } />
+
+        <OdsFormFieldError>
+          { formik.errors.description }
+        </OdsFormFieldError>
       </OdsFormField>
 
-      <OdsFormField error={ (formik.touched.hasReturnPolicy && formik.errors.hasReturnPolicy) as string }>
+      <OdsFormFieldv18 error={ (formik.touched.hasReturnPolicy && formik.errors.hasReturnPolicy) as string }>
         <label className={ styles['product-form__fields__label'] }>
           Return policy:
         </label>
@@ -126,9 +128,9 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
             <label htmlFor="has-return-policy">Product can be returned up to 30 days</label>
           </div>
         </div>
-      </OdsFormField>
+      </OdsFormFieldv18>
 
-      <OdsFormField error={ (formik.touched.stock && formik.errors.stock) as string }>
+      <OdsFormFieldv18 error={ (formik.touched.stock && formik.errors.stock) as string }>
         <div className={ styles['product-form__fields__stock'] }>
           <label className={ styles['product-form__fields__label'] }
                  htmlFor="stock">
@@ -143,9 +145,9 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                        onOdsChange={ formik.handleChange }
                        value={ formik.values.stock } />
         </div>
-      </OdsFormField>
+      </OdsFormFieldv18>
 
-      <OdsFormField error={ (formik.touched.restockTime && formik.errors.restockTime) as string }>
+      <OdsFormFieldv18 error={ (formik.touched.restockTime && formik.errors.restockTime) as string }>
         <label className={ styles['product-form__fields__label'] }
                htmlFor="restockTime">
           Restock time:
@@ -158,9 +160,9 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                        onOdsChange={ formik.handleChange }
                        timezones="all"
                        value={ formik.values.restockTime } />
-      </OdsFormField>
+      </OdsFormFieldv18>
 
-      <OdsFormField error={ (formik.touched.minimumOrderQuantity && formik.errors.minimumOrderQuantity) as string }>
+      <OdsFormFieldv18 error={ (formik.touched.minimumOrderQuantity && formik.errors.minimumOrderQuantity) as string }>
         <label className={ styles['product-form__fields__label'] }
                htmlFor="minimumOrderQuantity">
           Minimum order quantity:
@@ -174,9 +176,9 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                     onOdsChange={ formik.handleChange }
                     value={ formik.values.minimumOrderQuantity } />
         </div>
-      </OdsFormField>
+      </OdsFormFieldv18>
 
-      <OdsFormField error={ (formik.touched.category && formik.errors.category) as string }>
+      <OdsFormFieldv18 error={ (formik.touched.category && formik.errors.category) as string }>
         <label className={ styles['product-form__fields__label'] }>
           Category:
         </label>
@@ -234,17 +236,19 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
             <label htmlFor="category-groceries">Groceries</label>
           </div>
         </div>
-      </OdsFormField>
+      </OdsFormFieldv18>
 
       <div className={ styles['product-form__actions'] }>
-        <OdsButton label="Cancel"
-                   onClick={ onCancel }
+        <OdsButton onClick={ onCancel }
                    type="button"
-                   variant={ ODS_BUTTON_VARIANT.outline } />
+                   variant={ ODS_BUTTON_VARIANT.outline }>
+          Cancel
+        </OdsButton>
 
         <OdsButton isLoading={ isPending }
-                   label={ !!product ? 'Update' : 'Create' }
-                   type="submit" />
+                   type="submit">
+          { !!product ? 'Update' : 'Create' }
+        </OdsButton>
       </div>
     </form>
   )
