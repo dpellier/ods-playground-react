@@ -3,8 +3,8 @@ import type { FC } from 'react'
 import type { ProductCategory } from 'app/models/Product'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsCheckbox, OdsFormField as OdsFormFieldv18, OdsInput, OdsQuantity, OdsRadio, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
-import { ODS_BUTTON_VARIANT, OdsButton, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsTextarea } from '@ovhcloud/ods-react'
+import { OdsFormField as OdsFormFieldv18, OdsQuantity, OdsRadio, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { ODS_BUTTON_VARIANT, OdsButton, OdsCheckbox, OdsCheckboxControl, OdsCheckboxLabel, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsInput, OdsTextarea } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -59,51 +59,32 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
   return (
     <form className={ styles['product-form'] }
           onSubmit={ handleSubmit(onSubmit) }>
-      <Controller control={ control }
-                  name="title"
-                  render={({ field, fieldState }) =>
-                    <OdsFormFieldv18 error={ fieldState.error?.message }>
-                      <label className={ styles['product-form__fields__label'] }
-                             htmlFor={ field.name }>
-                        Title:
-                      </label>
+      <OdsFormField invalid={ !!errors.title }>
+        <OdsFormFieldLabel>
+          Title:
+        </OdsFormFieldLabel>
 
-                      <OdsInput defaultValue={ product?.title || '' }
-                                hasError={ !!fieldState.error }
-                                id={ field.name }
-                                name={ field.name }
-                                onOdsBlur={ field.onBlur }
-                                onOdsChange={ field.onChange }
-                                type={ ODS_INPUT_TYPE.text } />
-                    </OdsFormFieldv18>
-                  } />
+        <OdsInput { ...register('title') } />
 
-      <Controller control={ control }
-                name="price"
-                render={({ field, fieldState }) =>
-                  <OdsFormFieldv18 error={ fieldState.error?.message }>
-                    <label className={ styles['product-form__fields__label'] }
-                           htmlFor={ field.name }>
-                      Price:
-                    </label>
+        <OdsFormFieldError>
+          { errors.title?.message }
+        </OdsFormFieldError>
+      </OdsFormField>
 
-                    <div className={ styles['product-form__fields__price'] }>
-                      <OdsInput defaultValue={ product?.price }
-                                hasError={ !!fieldState.error }
-                                id={ field.name }
-                                min={ 0 }
-                                name={ field.name }
-                                onOdsBlur={ field.onBlur }
-                                onOdsChange={ field.onChange }
-                                step="any"
-                                type={ ODS_INPUT_TYPE.number } />
+      <OdsFormField invalid={ !!errors.price }>
+        <OdsFormFieldLabel>
+          Price:
+        </OdsFormFieldLabel>
 
-                      <span className={ styles['product-form__fields__price__currency'] }>
-                        €
-                      </span>
-                    </div>
-                  </OdsFormFieldv18>
-                } />
+        <OdsInput { ...register('price') }
+                  min={ 0 }
+                  step="any"
+                  type={ ODS_INPUT_TYPE.number } />
+
+        <OdsFormFieldError>
+          { errors.price?.message }
+        </OdsFormFieldError>
+      </OdsFormField>
 
       <OdsFormField invalid={ !!errors.description }>
         <OdsFormFieldLabel>
@@ -117,29 +98,25 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
         </OdsFormFieldError>
       </OdsFormField>
 
-      <Controller control={ control }
-                  name="hasReturnPolicy"
-                  render={({ field, fieldState }) =>
-                    <OdsFormFieldv18 error={ fieldState.error?.message }>
-                      <label className={ styles['product-form__fields__label'] }>
-                        Return policy:
-                      </label>
+      <OdsFormField invalid={ !!errors.hasReturnPolicy }>
+        <OdsFormFieldLabel>
+          Return policy:
+        </OdsFormFieldLabel>
 
-                      <div className={ styles['product-form__fields__return-policy'] }>
-                        <div className={ styles['product-form__fields__return-policy__option'] }>
-                          <OdsCheckbox hasError={ !!fieldState.error }
-                                       isChecked={ product?.hasReturnPolicy }
-                                       inputId="has-return-policy"
-                                       name={ field.name }
-                                       onOdsBlur={ field.onBlur }
-                                       onOdsChange={ (e) => {
-                                         setValue(field.name, e.detail.checked)
-                                       }} />
-                          <label htmlFor="has-return-policy">Product can be returned up to 30 days</label>
-                        </div>
-                      </div>
-                    </OdsFormFieldv18>
-                  } />
+        <OdsCheckbox { ...register('hasReturnPolicy') }
+                     defaultChecked={ product?.hasReturnPolicy }
+                     value="true">
+          <OdsCheckboxControl />
+
+          <OdsCheckboxLabel>
+            Product can be returned up to 30 days
+          </OdsCheckboxLabel>
+        </OdsCheckbox>
+
+        <OdsFormFieldError>
+          { errors.hasReturnPolicy?.message }
+        </OdsFormFieldError>
+      </OdsFormField>
 
       <Controller control={ control }
                   name="stock"
