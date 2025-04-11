@@ -1,6 +1,6 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
-import { OdsSkeleton } from '@ovhcloud/ods-components/react'
+import { OdsSkeleton } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 
 const propTypes = {

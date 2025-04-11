@@ -1,4 +1,4 @@
-import { OdsCard, OdsDivider } from '@ovhcloud/ods-components/react'
+import { OdsCard, OdsDivider } from '@ovhcloud/ods-react'
 import { useEffect } from 'react'
 import { LoadingContent } from 'app/components/loadingContent/LoadingContent'
 import { Link } from 'app/components/link/Link'
@@ -47,7 +47,8 @@ const Dashboard = () => {
             </span>
           </LoadingContent>
 
-          <Link label="Manage users"
+          <Link className={ styles['dashboard__tiles__tile__link'] }
+                label="Manage users"
                 route={ ROUTE.users } />
         </OdsCard>
 
@@ -64,7 +65,8 @@ const Dashboard = () => {
             </span>
           </LoadingContent>
 
-          <Link label="Manage products"
+          <Link className={ styles['dashboard__tiles__tile__link'] }
+                label="Manage products"
                 route={ ROUTE.products } />
         </OdsCard>
       </div>

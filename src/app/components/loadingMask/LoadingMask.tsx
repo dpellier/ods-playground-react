@@ -1,4 +1,4 @@
-import { OdsSpinner } from '@ovhcloud/ods-components/react'
+import { OdsSpinner } from '@ovhcloud/ods-react'
 import styles from './loadingMask.module.scss'
 
 const LoadingMask = () => {
