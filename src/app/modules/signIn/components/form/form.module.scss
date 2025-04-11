@@ -1,18 +1,12 @@
-@import '@ovhcloud/ods-components/style';
-
 .form {
   display: flex;
   flex-flow: column;
   grid-row-gap: 1rem;
 
   &__field {
-    &__label {
-      @include ods-text-label();
-    }
-
     &__password,
     &__username {
-      display: grid;
+      width: 100%;
     }
   }
 

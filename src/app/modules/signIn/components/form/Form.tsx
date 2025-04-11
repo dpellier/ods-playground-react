@@ -1,8 +1,7 @@
 import type { InferProps } from 'prop-types'
-import type { FC, FormEvent } from 'react'
+import type { FC, FocusEvent, FormEvent } from 'react'
 import type { ValidationError } from 'yup'
-import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsFormField, OdsInput, OdsPassword } from '@ovhcloud/ods-components/react'
+import { OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsInput, OdsPassword } from '@ovhcloud/ods-react'
 import { ODS_BUTTON_COLOR, OdsButton } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
@@ -48,7 +47,7 @@ const Form: FC<InferProps<typeof propTypes>> = ({ isPending, onSubmit }) => {
     }
   }
 
-  async function validateField(e: Event, fieldName: string) {
+  async function validateField(e: FocusEvent, fieldName: string) {
     try {
       await validationSchema.validateAt(fieldName, { [fieldName]: (e.target as HTMLInputElement).value })
       setError((error) => ({
@@ -66,27 +65,32 @@ const Form: FC<InferProps<typeof propTypes>> = ({ isPending, onSubmit }) => {
   return (
     <form className={ styles.form }
           onSubmit={ onFormSubmit }>
-      <OdsFormField error={ error.username }>
-        <label className={ styles['form__field__label'] }>
+      <OdsFormField invalid={ !!error.username }>
+        <OdsFormFieldLabel>
           Username:
-        </label>
+        </OdsFormFieldLabel>
 
         <OdsInput className={ styles['form__field__username'] }
-                  hasError={ !!error.username }
                   name="username"
-                  onOdsBlur={ (e) => validateField(e, 'username') }
-                  type={ ODS_INPUT_TYPE.text } />
+                  onBlur={ (e) => validateField(e, 'username') } />
+
+        <OdsFormFieldError>
+          { error.username }
+        </OdsFormFieldError>
       </OdsFormField>
 
-      <OdsFormField error={ error.password }>
-        <label className={ styles['form__field__label'] }>
+      <OdsFormField invalid={ !!error.password }>
+        <OdsFormFieldLabel>
           Password:
-        </label>
+        </OdsFormFieldLabel>
 
         <OdsPassword className={ styles['form__field__password'] }
-                     hasError={ !!error.password }
                      name="password"
-                     onOdsBlur={ (e) => validateField(e, 'password') } />
+                     onBlur={ (e) => validateField(e, 'password') } />
+
+        <OdsFormFieldError>
+          { error.password }
+        </OdsFormFieldError>
       </OdsFormField>
 
       <OdsButton className={ styles['form__submit'] }

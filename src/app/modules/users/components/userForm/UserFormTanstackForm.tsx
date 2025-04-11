@@ -1,9 +1,9 @@
-import type { OdsDatepickerChangeEvent, OdsInputChangeEvent, OdsPhoneNumberChangeEvent, OdsSelectChangeEvent } from '@ovhcloud/ods-components'
+import type { OdsDatepickerChangeEvent, OdsPhoneNumberChangeEvent, OdsSelectChangeEvent } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
-import type { FC } from 'react'
+import type { ChangeEvent, FC } from 'react'
 import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsDatepicker, OdsFormField, OdsInput, OdsPhoneNumber, OdsSelect } from '@ovhcloud/ods-components/react'
-import { ODS_BUTTON_VARIANT, OdsButton } from '@ovhcloud/ods-react'
+import { OdsDatepicker, OdsFormField as OdsFormFieldv18, OdsPhoneNumber, OdsSelect } from '@ovhcloud/ods-components/react'
+import { ODS_BUTTON_VARIANT, OdsButton, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsInput } from '@ovhcloud/ods-react'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import PropTypes from 'prop-types'
@@ -67,19 +67,20 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.firstName }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
-                      <label className={ styles['user-form__fields__label'] }
-                             htmlFor={ field.name }>
+                    <OdsFormField invalid={ !!field.state.meta.errors.length }>
+                      <OdsFormFieldLabel>
                         First name:
-                      </label>
+                      </OdsFormFieldLabel>
 
                       <OdsInput defaultValue={ user?.firstName || '' }
-                                hasError={ !!field.state.meta.errors.length }
-                                id={ field.name }
                                 name={ field.name }
-                                onOdsBlur={ field.handleBlur }
-                                onOdsChange={ (e: OdsInputChangeEvent) => field.handleChange(e.detail.value as string || '') }
+                                onBlur={ field.handleBlur }
+                                onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
                                 type={ ODS_INPUT_TYPE.text } />
+
+                      <OdsFormFieldError>
+                        { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
+                      </OdsFormFieldError>
                     </OdsFormField>
                   ))} />
 
@@ -87,19 +88,20 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.lastName }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
-                      <label className={ styles['user-form__fields__label'] }
-                             htmlFor={ field.name }>
+                    <OdsFormField invalid={ !!field.state.meta.errors.length }>
+                      <OdsFormFieldLabel>
                         Last name:
-                      </label>
+                      </OdsFormFieldLabel>
 
                       <OdsInput defaultValue={ user?.lastName || '' }
-                                hasError={ !!field.state.meta.errors.length }
-                                id={ field.name }
                                 name={ field.name }
-                                onOdsBlur={ field.handleBlur }
-                                onOdsChange={ (e: OdsInputChangeEvent) => field.handleChange(e.detail.value as string || '') }
+                                onBlur={ field.handleBlur }
+                                onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
                                 type={ ODS_INPUT_TYPE.text } />
+
+                      <OdsFormFieldError>
+                        { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
+                      </OdsFormFieldError>
                     </OdsFormField>
                   ))} />
 
@@ -107,19 +109,20 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.email }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
-                      <label className={ styles['user-form__fields__label'] }
-                             htmlFor={ field.name }>
+                    <OdsFormField invalid={ !!field.state.meta.errors.length }>
+                      <OdsFormFieldLabel>
                         Email:
-                      </label>
+                      </OdsFormFieldLabel>
 
                       <OdsInput defaultValue={ user?.email || '' }
-                                hasError={ !!field.state.meta.errors.length }
-                                id={ field.name }
                                 name={ field.name }
-                                onOdsBlur={ field.handleBlur }
-                                onOdsChange={ (e: OdsInputChangeEvent) => field.handleChange(e.detail.value as string || '') }
+                                onBlur={ field.handleBlur }
+                                onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
                                 type={ ODS_INPUT_TYPE.email } />
+
+                      <OdsFormFieldError>
+                        { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
+                      </OdsFormFieldError>
                     </OdsFormField>
                   ))} />
 
@@ -127,7 +130,7 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.phone }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['user-form__fields__label'] }
                              htmlFor={ field.name }>
                         Phone number:
@@ -140,14 +143,14 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                                       name={ field.name }
                                       onOdsBlur={ field.handleBlur }
                                       onOdsChange={ (e: OdsPhoneNumberChangeEvent) => field.handleChange(e.detail.value as string || '') } />
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   ))} />
 
       <form.Field name="birthDate"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.birthDate }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['user-form__fields__label'] }
                              htmlFor={ field.name }>
                         Birth date:
@@ -162,26 +165,27 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                                      onOdsBlur={ field.handleBlur }
                                      // @ts-ignore to look later
                                      onOdsChange={ (e: OdsDatepickerChangeEvent) => field.handleChange(e.detail.value) } />
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   ))} />
 
       <form.Field name="ip"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.ip }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
-                      <label className={ styles['user-form__fields__label'] }
-                             htmlFor={ field.name }>
+                    <OdsFormField invalid={ !!field.state.meta.errors.length }>
+                      <OdsFormFieldLabel>
                         IP address:
-                      </label>
+                      </OdsFormFieldLabel>
 
                       <OdsInput defaultValue={ user?.ip || '' }
-                                hasError={ !!field.state.meta.errors.length }
-                                id={ field.name }
                                 name={ field.name }
-                                onOdsBlur={ field.handleBlur }
-                                onOdsChange={ (e: OdsInputChangeEvent) => field.handleChange(e.detail.value as string || '') }
+                                onBlur={ field.handleBlur }
+                                onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
                                 type={ ODS_INPUT_TYPE.text } />
+
+                      <OdsFormFieldError>
+                        { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
+                      </OdsFormFieldError>
                     </OdsFormField>
                   ))} />
 
@@ -189,7 +193,7 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.role }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['user-form__fields__label'] }
                              htmlFor={ field.name }>
                         Role:
@@ -204,7 +208,7 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                                  onOdsChange={ (e: OdsSelectChangeEvent) => field.handleChange(e.detail.value || '') }>
                         { roleOptions }
                       </OdsSelect>
-                    </OdsFormField>
+                    </OdsFormFieldv18>
                   ))} />
 
       <div className={ styles['user-form__actions'] }>

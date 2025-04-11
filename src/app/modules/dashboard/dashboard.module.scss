@@ -10,7 +10,6 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 2rem;
-    align-self: flex-start;
 
     &__tile {
       display: flex;
@@ -25,9 +24,8 @@
       }
 
       &__divider {
-        &::part(divider) {
-          background-color: var(--ods-color-primary-200);
-        }
+        background-color: var(--ods-color-primary-200);
+        width: 100%;
       }
 
       &__link {

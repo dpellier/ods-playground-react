@@ -1,4 +1,4 @@
-import { OdsCard, OdsDivider } from '@ovhcloud/ods-components/react'
+import { OdsCard, OdsDivider } from '@ovhcloud/ods-react'
 import { useEffect } from 'react'
 import { LoadingContent } from 'app/components/loadingContent/LoadingContent'
 import { Link } from 'app/components/link/Link'

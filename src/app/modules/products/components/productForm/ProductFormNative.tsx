@@ -2,8 +2,8 @@ import type { OdsFormElement } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
 import type { FC, FormEvent } from 'react'
 import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsCheckbox, OdsFormField as OdsFormFieldv18, OdsInput, OdsQuantity, OdsRadio, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
-import { ODS_BUTTON_VARIANT, OdsButton, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsTextarea } from '@ovhcloud/ods-react'
+import { OdsFormField as OdsFormFieldv18, OdsQuantity, OdsRadio, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { ODS_BUTTON_VARIANT, OdsButton, OdsCheckbox, OdsCheckboxControl, OdsCheckboxLabel, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsInput, OdsTextarea } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { Product } from 'app/models/Product'
@@ -73,41 +73,42 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
   return (
     <form className={ styles['product-form'] }
           onSubmit={ onFormSubmit }>
-      <OdsFormFieldv18 error={ error?.title }>
-        <label className={ styles['product-form__fields__label'] }
-               htmlFor="title">
+      <OdsFormField invalid={ !!error.title }>
+        <OdsFormFieldLabel>
           Title:
-        </label>
+        </OdsFormFieldLabel>
 
         <OdsInput defaultValue={ product?.title }
                   id="title"
-                  isRequired={ true }
                   name="title"
-                  onOdsInvalid={ (e) => updateErrorv18(e, 'title') }
-                  type={ ODS_INPUT_TYPE.text } />
-      </OdsFormFieldv18>
+                  required={ true }
+                  onBlur={ (e) => updateError(e, 'title') }
+                  onInvalid={ (e) => onInvalidField(e, 'title') } />
 
-      <OdsFormFieldv18 error={ error?.price }>
-        <label className={ styles['product-form__fields__label'] }
-               htmlFor="price">
+        <OdsFormFieldError>
+          { error.title }
+        </OdsFormFieldError>
+      </OdsFormField>
+
+      <OdsFormField invalid={ !!error.price }>
+        <OdsFormFieldLabel>
           Price:
-        </label>
+        </OdsFormFieldLabel>
 
-        <div className={ styles['product-form__fields__price'] }>
-          <OdsInput defaultValue={ product?.price }
-                    id="price"
-                    isRequired={ true }
-                    min={ 0 }
-                    name="price"
-                    onOdsInvalid={ (e) => updateErrorv18(e, 'price') }
-                    step="any"
-                    type={ ODS_INPUT_TYPE.number } />
+        <OdsInput defaultValue={ product?.price }
+                  id="price"
+                  min={ 0 }
+                  name="price"
+                  required={ true }
+                  onBlur={ (e) => updateError(e, 'price') }
+                  onInvalid={ (e) => onInvalidField(e, 'price') }
+                  step="any"
+                  type={ ODS_INPUT_TYPE.number } />
 
-          <span className={ styles['product-form__fields__price__currency'] }>
-            €
-          </span>
-        </div>
-      </OdsFormFieldv18>
+        <OdsFormFieldError>
+          { error.price }
+        </OdsFormFieldError>
+      </OdsFormField>
 
       <OdsFormField invalid={ !!error.description }>
         <OdsFormFieldLabel>
@@ -126,21 +127,17 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
         </OdsFormFieldError>
       </OdsFormField>
 
-      <OdsFormFieldv18 error={ error?.hasReturnPolicy }>
-        <label className={ styles['product-form__fields__label'] }>
-          Return policy:
-        </label>
+      <OdsFormField>
+        <OdsCheckbox defaultChecked={ product?.hasReturnPolicy }
+                     name="hasReturnPolicy"
+                     value="true">
+          <OdsCheckboxControl />
 
-        <div className={ styles['product-form__fields__return-policy'] }>
-          <div className={ styles['product-form__fields__return-policy__option'] }>
-            <OdsCheckbox inputId="has-return-policy"
-                         isChecked={ product?.hasReturnPolicy }
-                         name="hasReturnPolicy"
-                         onOdsInvalid={ (e) => updateErrorv18(e, 'hasReturnPolicy') } />
-            <label htmlFor="has-return-policy">Product can be returned up to 30 days</label>
-          </div>
-        </div>
-      </OdsFormFieldv18>
+          <OdsCheckboxLabel>
+            Product can be returned up to 30 days
+          </OdsCheckboxLabel>
+        </OdsCheckbox>
+      </OdsFormField>
 
       <OdsFormFieldv18 error={ error?.stock }>
         <div className={ styles['product-form__fields__stock'] }>
