@@ -1,8 +1,8 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
 import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsDatepicker, OdsFormField as OdsFormFieldv18, OdsPhoneNumber, OdsSelect } from '@ovhcloud/ods-components/react'
-import { ODS_BUTTON_VARIANT, OdsButton, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsInput } from '@ovhcloud/ods-react'
+import { OdsDatepicker, OdsFormField, OdsPhoneNumber } from '@ovhcloud/ods-components/react'
+import { BUTTON_VARIANT, Button, FormField, FormFieldError, FormFieldLabel, Input, Select, SelectContent, SelectControl } from '@ovhcloud/ods-react'
 import { useFormik } from 'formik'
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
@@ -46,63 +46,64 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
     validationSchema,
   })
   const roleOptions = useMemo(() => {
-    return USER_ROLES.map((role, idx) => (
-      <option key={ idx } value={ role }>{ role }</option>
-    ))
+    return USER_ROLES.map((role) => ({
+      label: role,
+      value: role,
+    }))
   }, [USER_ROLES])
 
   return (
     <form className={ styles['user-form'] }
           onSubmit={ formik.handleSubmit }>
-      <OdsFormField invalid={ !!(formik.touched.firstName && formik.errors.firstName) }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!(formik.touched.firstName && formik.errors.firstName) }>
+        <FormFieldLabel>
           First name:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput name="firstName"
-                  onBlur={ formik.handleBlur }
-                  onChange={ formik.handleChange }
-                  type={ ODS_INPUT_TYPE.text }
-                  value={ formik.values.firstName } />
+        <Input name="firstName"
+               onBlur={ formik.handleBlur }
+               onChange={ formik.handleChange }
+               type={ ODS_INPUT_TYPE.text }
+               value={ formik.values.firstName } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { formik.errors.firstName }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!(formik.touched.lastName && formik.errors.lastName) }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!(formik.touched.lastName && formik.errors.lastName) }>
+        <FormFieldLabel>
           Last name:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput name="lastName"
-                  onBlur={ formik.handleBlur }
-                  onChange={ formik.handleChange }
-                  type={ ODS_INPUT_TYPE.text }
-                  value={ formik.values.lastName } />
+        <Input name="lastName"
+               onBlur={ formik.handleBlur }
+               onChange={ formik.handleChange }
+               type={ ODS_INPUT_TYPE.text }
+               value={ formik.values.lastName } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { formik.errors.lastName }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!(formik.touched.email && formik.errors.email) }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!(formik.touched.email && formik.errors.email) }>
+        <FormFieldLabel>
           Email:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput name="email"
-                  onBlur={ formik.handleBlur }
-                  onChange={ formik.handleChange }
-                  type={ ODS_INPUT_TYPE.email }
-                  value={ formik.values.email } />
+        <Input name="email"
+               onBlur={ formik.handleBlur }
+               onChange={ formik.handleChange }
+               type={ ODS_INPUT_TYPE.email }
+               value={ formik.values.email } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { formik.errors.email }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormFieldv18 error={ (formik.touched.phone && formik.errors.phone) as string }>
+      <OdsFormField error={ (formik.touched.phone && formik.errors.phone) as string }>
         <label className={ styles['user-form__fields__label'] }
                htmlFor="phone">
           Phone number:
@@ -115,9 +116,9 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
                         onOdsBlur={ formik.handleBlur }
                         onOdsChange={ formik.handleChange }
                         value={ formik.values.phone } />
-      </OdsFormFieldv18>
+      </OdsFormField>
 
-      <OdsFormFieldv18 error={ (formik.touched.birthDate && formik.errors.birthDate) as string }>
+      <OdsFormField error={ (formik.touched.birthDate && formik.errors.birthDate) as string }>
         <label className={ styles['user-form__fields__label'] }
                htmlFor="birthDate">
           Birth date:
@@ -130,51 +131,56 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
                        onOdsBlur={ formik.handleBlur }
                        onOdsChange={ formik.handleChange }
                        value={ formik.values.birthDate } />
-      </OdsFormFieldv18>
-
-      <OdsFormField invalid={ !!(formik.touched.ip && formik.errors.ip) }>
-        <OdsFormFieldLabel>
-          IP address:
-        </OdsFormFieldLabel>
-
-        <OdsInput name="ip"
-                  onBlur={ formik.handleBlur }
-                  onChange={ formik.handleChange }
-                  type={ ODS_INPUT_TYPE.text }
-                  value={ formik.values.ip } />
-
-        <OdsFormFieldError>
-          { formik.errors.ip }
-        </OdsFormFieldError>
       </OdsFormField>
 
-      <OdsFormFieldv18 error={ (formik.touched.role && formik.errors.role) as string }>
-        <label className={ styles['user-form__fields__label'] }
-               htmlFor="role">
-          Role:
-        </label>
+      <FormField invalid={ !!(formik.touched.ip && formik.errors.ip) }>
+        <FormFieldLabel>
+          IP address:
+        </FormFieldLabel>
 
-        <OdsSelect hasError={ formik.touched.role && !!formik.errors.role }
-                   id="role"
-                   name="role"
-                   onOdsBlur={ formik.handleBlur }
-                   onOdsChange={ formik.handleChange }
-                   value={ formik.values.role }>
-          { roleOptions }
-        </OdsSelect>
-      </OdsFormFieldv18>
+        <Input name="ip"
+               onBlur={ formik.handleBlur }
+               onChange={ formik.handleChange }
+               type={ ODS_INPUT_TYPE.text }
+               value={ formik.values.ip } />
+
+        <FormFieldError>
+          { formik.errors.ip }
+        </FormFieldError>
+      </FormField>
+
+      <FormField invalid={ !!(formik.touched.role && formik.errors.role) }>
+        <FormFieldLabel>
+          Role:
+        </FormFieldLabel>
+
+        <Select defaultValue={ formik.initialValues.role }
+                items={ roleOptions }
+                name="role"
+                onBlur={ formik.handleBlur }
+                onChange={ formik.handleChange }
+                required={ true }>
+          <SelectControl />
+
+          <SelectContent />
+        </Select>
+
+        <FormFieldError>
+          { formik.errors.role }
+        </FormFieldError>
+      </FormField>
 
       <div className={ styles['user-form__actions'] }>
-        <OdsButton onClick={ onCancel }
-                   type="button"
-                   variant={ ODS_BUTTON_VARIANT.outline }>
+        <Button onClick={ onCancel }
+                type="button"
+                variant={ BUTTON_VARIANT.outline }>
           Cancel
-        </OdsButton>
+        </Button>
 
-        <OdsButton isLoading={ isPending }
-                   type="submit">
+        <Button loading={ isPending }
+                type="submit">
           { !!user ? 'Update' : 'Create' }
-        </OdsButton>
+        </Button>
       </div>
     </form>
   )

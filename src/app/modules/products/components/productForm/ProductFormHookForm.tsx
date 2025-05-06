@@ -3,8 +3,8 @@ import type { FC } from 'react'
 import type { ProductCategory } from 'app/models/Product'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsFormField as OdsFormFieldv18, OdsQuantity, OdsRadio, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
-import { ODS_BUTTON_VARIANT, OdsButton, OdsCheckbox, OdsCheckboxControl, OdsCheckboxLabel, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsInput, OdsTextarea } from '@ovhcloud/ods-react'
+import { OdsFormField as OdsFormField, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { BUTTON_VARIANT, Button, Checkbox, CheckboxControl, CheckboxLabel, FormField, FormFieldError, FormFieldLabel, Input, Quantity, QuantityControl, QuantityInput, Radio, RadioControl, RadioGroup, RadioGroupLabel, RadioLabel, Textarea } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -59,90 +59,93 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
   return (
     <form className={ styles['product-form'] }
           onSubmit={ handleSubmit(onSubmit) }>
-      <OdsFormField invalid={ !!errors.title }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!errors.title }>
+        <FormFieldLabel>
           Title:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput { ...register('title') } />
+        <Input { ...register('title') } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { errors.title?.message }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!errors.price }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!errors.price }>
+        <FormFieldLabel>
           Price:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput { ...register('price') }
-                  min={ 0 }
-                  step="any"
-                  type={ ODS_INPUT_TYPE.number } />
+        <Input { ...register('price') }
+               min={ 0 }
+               step="any"
+               type={ ODS_INPUT_TYPE.number } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { errors.price?.message }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!errors.description }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!errors.description }>
+        <FormFieldLabel>
           Description:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsTextarea { ...register('description') } />
+        <Textarea { ...register('description') } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { errors.description?.message }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!errors.hasReturnPolicy }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!errors.hasReturnPolicy }>
+        <FormFieldLabel>
           Return policy:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsCheckbox { ...register('hasReturnPolicy') }
-                     defaultChecked={ product?.hasReturnPolicy }
-                     value="true">
-          <OdsCheckboxControl />
+        <Checkbox { ...register('hasReturnPolicy') }
+                  defaultChecked={ product?.hasReturnPolicy }
+                  value="true">
+          <CheckboxControl />
 
-          <OdsCheckboxLabel>
+          <CheckboxLabel>
             Product can be returned up to 30 days
-          </OdsCheckboxLabel>
-        </OdsCheckbox>
+          </CheckboxLabel>
+        </Checkbox>
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { errors.hasReturnPolicy?.message }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
       <Controller control={ control }
                   name="stock"
-                  render={({ field, fieldState }) =>
-                    <OdsFormFieldv18 error={ fieldState.error?.message }>
-                      <div className={ styles['product-form__fields__stock'] }>
-                        <label className={ styles['product-form__fields__label'] }
-                               htmlFor={ field.name }>
-                          Stock quantity:
-                        </label>
+                  render={({ field }) =>
+                    <FormField invalid={ !!errors.stock }>
+                      <FormFieldLabel>
+                        Stock quantity:
+                      </FormFieldLabel>
 
-                        <OdsQuantity defaultValue={ product?.stock }
-                                     hasError={ !!fieldState.error }
-                                     id={ field.name }
-                                     min={ 0 }
-                                     name={ field.name }
-                                     onOdsBlur={ field.onBlur }
-                                     onOdsChange={ field.onChange } />
-                      </div>
-                    </OdsFormFieldv18>
+                      <Quantity defaultValue={ product?.stock?.toString() }
+                                min={ 0 }
+                                name={ field.name }
+                                onBlur={ field.onBlur }
+                                onValueChange={ ({ valueAsNumber }) => setValue(field.name, valueAsNumber) }>
+                        <QuantityControl>
+                          <QuantityInput />
+                        </QuantityControl>
+                      </Quantity>
+
+                      <FormFieldError>
+                        { errors.stock?.message }
+                      </FormFieldError>
+                    </FormField>
                   } />
 
       <Controller control={ control }
                   name="restockTime"
                   render={({ field, fieldState }) =>
-                    <OdsFormFieldv18 error={ fieldState.error?.message }>
+                    <OdsFormField error={ fieldState.error?.message }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Restock time:
@@ -155,13 +158,13 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                                      onOdsBlur={ field.onBlur }
                                      onOdsChange={ field.onChange }
                                      timezones="all" />
-                    </OdsFormFieldv18>
+                    </OdsFormField>
                   } />
 
       <Controller control={ control }
                   name="minimumOrderQuantity"
                   render={({ field, fieldState }) =>
-                    <OdsFormFieldv18 error={ fieldState.error?.message }>
+                    <OdsFormField error={ fieldState.error?.message }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Minimum order quantity:
@@ -175,92 +178,74 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
                                   onOdsBlur={ field.onBlur }
                                   onOdsChange={ field.onChange } />
                       </div>
-                    </OdsFormFieldv18>
+                    </OdsFormField>
                   } />
 
       <Controller control={ control }
                   name="category"
-                  render={({ field, fieldState }) =>
-                    <OdsFormFieldv18 error={ fieldState.error?.message }>
-                      <label className={ styles['product-form__fields__label'] }>
-                        Category:
-                      </label>
+                  render={ ({ field} ) => (
+                    <FormField>
+                      <RadioGroup defaultValue={ product?.category }
+                                  onValueChange={ ({ value }) => value && setValue(field.name, value as ProductCategory) }
+                                  orientation="horizontal">
+                        <RadioGroupLabel>
+                          Category:
+                        </RadioGroupLabel>
 
-                      <div className={ styles['product-form__fields__category'] }>
-                        <div className={ styles['product-form__fields__category__option'] }>
-                          <OdsRadio hasError={ !!fieldState.error }
-                                    isChecked={ product?.category === 'beauty' }
-                                    inputId="category-beauty"
-                                    name={ field.name }
-                                    onOdsBlur={ field.onBlur }
-                                    onOdsChange={ (e) => {
-                                      if (e.detail.checked) {
-                                        setValue(field.name, e.detail.value as ProductCategory)
-                                      }
-                                    }}
-                                    value="beauty" />
-                          <label htmlFor="category-beauty">Beauty</label>
-                        </div>
+                        <Radio invalid={ !!errors.category }
+                               value="beauty">
+                          <RadioControl />
 
-                        <div className={ styles['product-form__fields__category__option'] }>
-                          <OdsRadio hasError={ !!fieldState.error }
-                                    isChecked={ product?.category === 'fragrances' }
-                                    inputId="category-fragrances"
-                                    name={ field.name }
-                                    onOdsBlur={ field.onBlur }
-                                    onOdsChange={ (e) => {
-                                      if (e.detail.checked) {
-                                        setValue(field.name, e.detail.value as ProductCategory)
-                                      }
-                                    }}
-                                    value="fragrances" />
-                          <label htmlFor="category-fragrances">Fragrances</label>
-                        </div>
+                          <RadioLabel>
+                            Beauty
+                          </RadioLabel>
+                        </Radio>
 
-                        <div className={ styles['product-form__fields__category__option'] }>
-                          <OdsRadio hasError={ !!fieldState.error }
-                                    isChecked={ product?.category === 'furniture' }
-                                    inputId="category-furniture"
-                                    name={ field.name }
-                                    onOdsBlur={ field.onBlur }
-                                    onOdsChange={ (e) => {
-                                      if (e.detail.checked) {
-                                        setValue(field.name, e.detail.value as ProductCategory)
-                                      }
-                                    }}
-                                    value="furniture" />
-                          <label htmlFor="category-furniture">Furniture</label>
-                        </div>
+                        <Radio invalid={ !!errors.category }
+                               value="fragrances">
+                          <RadioControl />
 
-                        <div className={ styles['product-form__fields__category__option'] }>
-                          <OdsRadio hasError={ !!fieldState.error }
-                                    isChecked={ product?.category === 'groceries' }
-                                    inputId="category-groceries"
-                                    name={ field.name }
-                                    onOdsBlur={ field.onBlur }
-                                    onOdsChange={ (e) => {
-                                      if (e.detail.checked) {
-                                        setValue(field.name, e.detail.value as ProductCategory)
-                                      }
-                                    }}
-                                    value="groceries" />
-                          <label htmlFor="category-groceries">Groceries</label>
-                        </div>
-                      </div>
-                    </OdsFormFieldv18>
-                  } />
+                          <RadioLabel>
+                            Fragrances
+                          </RadioLabel>
+                        </Radio>
+
+                        <Radio invalid={ !!errors.category }
+                               value="furniture">
+                          <RadioControl />
+
+                          <RadioLabel>
+                            Furniture
+                          </RadioLabel>
+                        </Radio>
+
+                        <Radio invalid={ !!errors.category }
+                               value="groceries">
+                          <RadioControl />
+
+                          <RadioLabel>
+                            Groceries
+                          </RadioLabel>
+                        </Radio>
+                      </RadioGroup>
+
+                      <FormFieldError>
+                        { errors.category?.message }
+                      </FormFieldError>
+                    </FormField>
+        )} />
 
       <div className={ styles['product-form__actions'] }>
-        <OdsButton onClick={ onCancel }
-                   type="button"
-                   variant={ ODS_BUTTON_VARIANT.outline }>
+        <Button onClick={ onCancel }
+                type="button"
+                variant={ BUTTON_VARIANT.outline }>
           Cancel
-        </OdsButton>
+        </Button>
 
-        <OdsButton isLoading={ isPending }
-                   type="submit">
+        <Button loading={ isPending }
+                type="submit">
           { !!product ? 'Update' : 'Create' }
-        </OdsButton>
+        </Button>
       </div>
     </form>
   )

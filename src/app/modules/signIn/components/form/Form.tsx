@@ -1,8 +1,7 @@
 import type { InferProps } from 'prop-types'
 import type { FC, FocusEvent, FormEvent } from 'react'
 import type { ValidationError } from 'yup'
-import { OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsInput, OdsPassword } from '@ovhcloud/ods-react'
-import { ODS_BUTTON_COLOR, OdsButton } from '@ovhcloud/ods-react'
+import { BUTTON_COLOR, Button, FormField, FormFieldError, FormFieldLabel, Input, Password } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import * as yup from 'yup'
@@ -65,40 +64,40 @@ const Form: FC<InferProps<typeof propTypes>> = ({ isPending, onSubmit }) => {
   return (
     <form className={ styles.form }
           onSubmit={ onFormSubmit }>
-      <OdsFormField invalid={ !!error.username }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!error.username }>
+        <FormFieldLabel>
           Username:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput className={ styles['form__field__username'] }
-                  name="username"
-                  onBlur={ (e) => validateField(e, 'username') } />
+        <Input className={ styles['form__field__username'] }
+               name="username"
+               onBlur={ (e) => validateField(e, 'username') } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { error.username }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!error.password }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!error.password }>
+        <FormFieldLabel>
           Password:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsPassword className={ styles['form__field__password'] }
-                     name="password"
-                     onBlur={ (e) => validateField(e, 'password') } />
+        <Password className={ styles['form__field__password'] }
+                  name="password"
+                  onBlur={ (e) => validateField(e, 'password') } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { error.password }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsButton className={ styles['form__submit'] }
-                 color={ ODS_BUTTON_COLOR.primary }
-                 isLoading={ isPending }
-                 type="submit">
+      <Button className={ styles['form__submit'] }
+              color={ BUTTON_COLOR.primary }
+              loading={ isPending }
+              type="submit">
         Sign In
-      </OdsButton>
+      </Button>
     </form>
   )
 }

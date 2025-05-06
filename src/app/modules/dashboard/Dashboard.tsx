@@ -1,4 +1,4 @@
-import { OdsCard, OdsDivider } from '@ovhcloud/ods-react'
+import { Card, Divider } from '@ovhcloud/ods-react'
 import { useEffect } from 'react'
 import { LoadingContent } from 'app/components/loadingContent/LoadingContent'
 import { Link } from 'app/components/link/Link'
@@ -34,12 +34,12 @@ const Dashboard = () => {
       <PageTitle label="Overview of your playground resources" />
 
       <div className={ styles['dashboard__tiles'] }>
-        <OdsCard className={ styles['dashboard__tiles__tile'] }>
+        <Card className={ styles['dashboard__tiles__tile'] }>
           <span className={ styles['dashboard__tiles__tile__title'] }>
             Users
           </span>
 
-          <OdsDivider className={ styles['dashboard__tiles__tile__divider'] } />
+          <Divider className={ styles['dashboard__tiles__tile__divider'] } />
 
           <LoadingContent isPending={ usersCountStatus === ACTION_STATUS.pending }>
             <span>
@@ -48,16 +48,17 @@ const Dashboard = () => {
           </LoadingContent>
 
           <Link className={ styles['dashboard__tiles__tile__link'] }
-                label="Manage users"
-                route={ ROUTE.users } />
-        </OdsCard>
+                route={ ROUTE.users }>
+            Manage users
+          </Link>
+        </Card>
 
-        <OdsCard className={ styles['dashboard__tiles__tile'] }>
+        <Card className={ styles['dashboard__tiles__tile'] }>
           <span className={ styles['dashboard__tiles__tile__title'] }>
             Products
           </span>
 
-          <OdsDivider className={ styles['dashboard__tiles__tile__divider'] } />
+          <Divider className={ styles['dashboard__tiles__tile__divider'] } />
 
           <LoadingContent isPending={ productsCountStatus === ACTION_STATUS.pending }>
             <span>
@@ -66,9 +67,10 @@ const Dashboard = () => {
           </LoadingContent>
 
           <Link className={ styles['dashboard__tiles__tile__link'] }
-                label="Manage products"
-                route={ ROUTE.products } />
-        </OdsCard>
+                route={ ROUTE.products }>
+            Manage products
+          </Link>
+        </Card>
       </div>
     </div>
   )

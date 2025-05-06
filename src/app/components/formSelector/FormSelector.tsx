@@ -1,7 +1,7 @@
-import type { OdsTabsSelectedEvent } from '@ovhcloud/ods-components'
+import type { TabsChangeEvent } from '@ovhcloud/ods-react'
 import type { FC } from 'react'
 import type { InferProps } from 'prop-types'
-import { OdsTab, OdsTabs } from '@ovhcloud/ods-components/react'
+import { Tab, Tabs, TabList } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 
@@ -20,37 +20,36 @@ const propTypes = {
 const FormSelector: FC<InferProps<typeof propTypes>> = ({ children, isDisabled }) => {
   const [currentTab, setCurrentTab] = useState<string>(FORM_SELECTOR_TAB.native)
 
-  function onOdsTabsSelected(event: OdsTabsSelectedEvent) {
-    setCurrentTab((event.detail.target as HTMLElement)?.id)
+  function onTabChange(event: TabsChangeEvent) {
+    setCurrentTab(event.value)
   }
 
   return (
     <>
-      <OdsTabs onOdsTabsSelected={ onOdsTabsSelected }>
-        <OdsTab id={ FORM_SELECTOR_TAB.native }
-                isDisabled={ isDisabled }
-                isSelected={ currentTab === FORM_SELECTOR_TAB.native }>
-          Using native form
-        </OdsTab>
+      <Tabs defaultValue={ currentTab }
+            onChange={ onTabChange }>
+        <TabList>
+          <Tab disabled={ isDisabled }
+               value={ FORM_SELECTOR_TAB.native }>
+            Using native form
+          </Tab>
 
-        <OdsTab id={ FORM_SELECTOR_TAB.formik }
-                isDisabled={ isDisabled }
-                isSelected={ currentTab === FORM_SELECTOR_TAB.formik }>
-          Using Formik + yup
-        </OdsTab>
+          <Tab disabled={ isDisabled }
+               value={ FORM_SELECTOR_TAB.formik }>
+            Using Formik + yup
+          </Tab>
 
-        <OdsTab id={ FORM_SELECTOR_TAB.hookForm }
-                isDisabled={ isDisabled }
-                isSelected={ currentTab === FORM_SELECTOR_TAB.hookForm }>
-          Using react-hook-form + zod
-        </OdsTab>
+          <Tab disabled={ isDisabled }
+               value={ FORM_SELECTOR_TAB.hookForm }>
+            Using react-hook-form + zod
+          </Tab>
 
-        <OdsTab id={ FORM_SELECTOR_TAB.tanstackForm }
-                isDisabled={ isDisabled }
-                isSelected={ currentTab === FORM_SELECTOR_TAB.tanstackForm }>
-          Using tanstack-form + zod
-        </OdsTab>
-      </OdsTabs>
+          <Tab disabled={ isDisabled }
+               value={ FORM_SELECTOR_TAB.tanstackForm }>
+            Using tanstack-form + zod
+          </Tab>
+        </TabList>
+      </Tabs>
 
       { children(currentTab) }
     </>

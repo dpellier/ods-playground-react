@@ -1,9 +1,9 @@
-import type { OdsDatepickerChangeEvent, OdsPhoneNumberChangeEvent, OdsSelectChangeEvent } from '@ovhcloud/ods-components'
+import type { OdsDatepickerChangeEvent, OdsPhoneNumberChangeEvent } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
 import type { ChangeEvent, FC } from 'react'
 import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsDatepicker, OdsFormField as OdsFormFieldv18, OdsPhoneNumber, OdsSelect } from '@ovhcloud/ods-components/react'
-import { ODS_BUTTON_VARIANT, OdsButton, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsInput } from '@ovhcloud/ods-react'
+import { OdsDatepicker, OdsFormField, OdsPhoneNumber } from '@ovhcloud/ods-components/react'
+import { BUTTON_VARIANT, Button, FormField, FormFieldError, FormFieldLabel, Input, Select, SelectContent, SelectControl } from '@ovhcloud/ods-react'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import PropTypes from 'prop-types'
@@ -51,9 +51,10 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
   })
 
   const roleOptions = useMemo(() => {
-    return USER_ROLES.map((role, idx) => (
-      <option key={ idx } value={ role }>{ role }</option>
-    ))
+    return USER_ROLES.map((role) => ({
+      label: role,
+      value: role,
+    }))
   }, [USER_ROLES])
 
   return (
@@ -67,70 +68,70 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.firstName }}
                   children={ (field) => ((
-                    <OdsFormField invalid={ !!field.state.meta.errors.length }>
-                      <OdsFormFieldLabel>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
                         First name:
-                      </OdsFormFieldLabel>
+                      </FormFieldLabel>
 
-                      <OdsInput defaultValue={ user?.firstName || '' }
-                                name={ field.name }
-                                onBlur={ field.handleBlur }
-                                onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
-                                type={ ODS_INPUT_TYPE.text } />
+                      <Input defaultValue={ user?.firstName || '' }
+                             name={ field.name }
+                             onBlur={ field.handleBlur }
+                             onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
+                             type={ ODS_INPUT_TYPE.text } />
 
-                      <OdsFormFieldError>
+                      <FormFieldError>
                         { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
-                      </OdsFormFieldError>
-                    </OdsFormField>
+                      </FormFieldError>
+                    </FormField>
                   ))} />
 
       <form.Field name="lastName"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.lastName }}
                   children={ (field) => ((
-                    <OdsFormField invalid={ !!field.state.meta.errors.length }>
-                      <OdsFormFieldLabel>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
                         Last name:
-                      </OdsFormFieldLabel>
+                      </FormFieldLabel>
 
-                      <OdsInput defaultValue={ user?.lastName || '' }
-                                name={ field.name }
-                                onBlur={ field.handleBlur }
-                                onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
-                                type={ ODS_INPUT_TYPE.text } />
+                      <Input defaultValue={ user?.lastName || '' }
+                             name={ field.name }
+                             onBlur={ field.handleBlur }
+                             onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
+                             type={ ODS_INPUT_TYPE.text } />
 
-                      <OdsFormFieldError>
+                      <FormFieldError>
                         { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
-                      </OdsFormFieldError>
-                    </OdsFormField>
+                      </FormFieldError>
+                    </FormField>
                   ))} />
 
       <form.Field name="email"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.email }}
                   children={ (field) => ((
-                    <OdsFormField invalid={ !!field.state.meta.errors.length }>
-                      <OdsFormFieldLabel>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
                         Email:
-                      </OdsFormFieldLabel>
+                      </FormFieldLabel>
 
-                      <OdsInput defaultValue={ user?.email || '' }
-                                name={ field.name }
-                                onBlur={ field.handleBlur }
-                                onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
-                                type={ ODS_INPUT_TYPE.email } />
+                      <Input defaultValue={ user?.email || '' }
+                             name={ field.name }
+                             onBlur={ field.handleBlur }
+                             onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
+                             type={ ODS_INPUT_TYPE.email } />
 
-                      <OdsFormFieldError>
+                      <FormFieldError>
                         { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
-                      </OdsFormFieldError>
-                    </OdsFormField>
+                      </FormFieldError>
+                    </FormField>
                   ))} />
 
       <form.Field name="phone"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.phone }}
                   children={ (field) => ((
-                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['user-form__fields__label'] }
                              htmlFor={ field.name }>
                         Phone number:
@@ -143,14 +144,14 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                                       name={ field.name }
                                       onOdsBlur={ field.handleBlur }
                                       onOdsChange={ (e: OdsPhoneNumberChangeEvent) => field.handleChange(e.detail.value as string || '') } />
-                    </OdsFormFieldv18>
+                    </OdsFormField>
                   ))} />
 
       <form.Field name="birthDate"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.birthDate }}
                   children={ (field) => ((
-                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['user-form__fields__label'] }
                              htmlFor={ field.name }>
                         Birth date:
@@ -165,63 +166,67 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                                      onOdsBlur={ field.handleBlur }
                                      // @ts-ignore to look later
                                      onOdsChange={ (e: OdsDatepickerChangeEvent) => field.handleChange(e.detail.value) } />
-                    </OdsFormFieldv18>
+                    </OdsFormField>
                   ))} />
 
       <form.Field name="ip"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.ip }}
                   children={ (field) => ((
-                    <OdsFormField invalid={ !!field.state.meta.errors.length }>
-                      <OdsFormFieldLabel>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
                         IP address:
-                      </OdsFormFieldLabel>
+                      </FormFieldLabel>
 
-                      <OdsInput defaultValue={ user?.ip || '' }
-                                name={ field.name }
-                                onBlur={ field.handleBlur }
-                                onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
-                                type={ ODS_INPUT_TYPE.text } />
+                      <Input defaultValue={ user?.ip || '' }
+                             name={ field.name }
+                             onBlur={ field.handleBlur }
+                             onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
+                             type={ ODS_INPUT_TYPE.text } />
 
-                      <OdsFormFieldError>
+                      <FormFieldError>
                         { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
-                      </OdsFormFieldError>
-                    </OdsFormField>
+                      </FormFieldError>
+                    </FormField>
                   ))} />
 
       <form.Field name="role"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.role }}
                   children={ (field) => ((
-                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
-                      <label className={ styles['user-form__fields__label'] }
-                             htmlFor={ field.name }>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
                         Role:
-                      </label>
+                      </FormFieldLabel>
 
-                      <OdsSelect defaultValue={ user?.role || '' }
-                                 hasError={ !!field.state.meta.errors.length }
-                                 id={ field.name }
-                                 name={ field.name }
-                                 onOdsBlur={ field.handleBlur }
-                                 // @ts-ignore to look later
-                                 onOdsChange={ (e: OdsSelectChangeEvent) => field.handleChange(e.detail.value || '') }>
-                        { roleOptions }
-                      </OdsSelect>
-                    </OdsFormFieldv18>
+                      <Select defaultValue={ user?.role || '' }
+                              items={ roleOptions }
+                              name={ field.name }
+                              onBlur={ field.handleBlur }
+                              // @ts-ignore to be fixed on next release
+                              onValueChange={ ({ value }) => field.handleChange(value[0]) }>
+                        <SelectControl />
+
+                        <SelectContent />
+                      </Select>
+
+                      <FormFieldError>
+                        { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
+                      </FormFieldError>
+                    </FormField>
                   ))} />
 
       <div className={ styles['user-form__actions'] }>
-        <OdsButton onClick={ onCancel }
-                   type="button"
-                   variant={ ODS_BUTTON_VARIANT.outline }>
+        <Button onClick={ onCancel }
+                type="button"
+                variant={ BUTTON_VARIANT.outline }>
           Cancel
-        </OdsButton>
+        </Button>
 
-        <OdsButton isLoading={ isPending }
-                   type="submit">
+        <Button loading={ isPending }
+                type="submit">
           { !!user ? 'Update' : 'Create' }
-        </OdsButton>
+        </Button>
       </div>
     </form>
   )

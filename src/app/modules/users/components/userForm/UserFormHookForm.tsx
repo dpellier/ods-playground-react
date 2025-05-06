@@ -2,8 +2,8 @@ import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsDatepicker, OdsFormField as OdsFormFieldv18, OdsPhoneNumber, OdsSelect } from '@ovhcloud/ods-components/react'
-import { ODS_BUTTON_VARIANT, OdsButton, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsInput } from '@ovhcloud/ods-react'
+import { OdsDatepicker, OdsFormField, OdsPhoneNumber } from '@ovhcloud/ods-components/react'
+import { BUTTON_VARIANT, Button, FormField, FormFieldError, FormFieldLabel, Input, Select, SelectContent, SelectControl } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -49,55 +49,56 @@ const UserFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCance
     resolver: zodResolver(validationSchema),
   })
   const roleOptions = useMemo(() => {
-    return USER_ROLES.map((role, idx) => (
-      <option key={ idx } value={ role }>{ role }</option>
-    ))
+    return USER_ROLES.map((role) => ({
+      label: role,
+      value: role,
+    }))
   }, [USER_ROLES])
 
   return (
     <form className={ styles['user-form'] }
           onSubmit={ handleSubmit(onSubmit) }>
-      <OdsFormField invalid={ !!errors.firstName }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!errors.firstName }>
+        <FormFieldLabel>
           First name:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput { ...register('firstName') } />
+        <Input { ...register('firstName') } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { errors.firstName?.message }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!errors.lastName }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!errors.lastName }>
+        <FormFieldLabel>
           Last name:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput { ...register('lastName') } />
+        <Input { ...register('lastName') } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { errors.lastName?.message }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!errors.email }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!errors.email }>
+        <FormFieldLabel>
           Email:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput { ...register('email') }
-                  type={ ODS_INPUT_TYPE.email } />
+        <Input { ...register('email') }
+               type={ ODS_INPUT_TYPE.email } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { errors.email?.message }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
       <Controller control={ control }
                   name="phone"
                   render={({ field, fieldState }) =>
-                    <OdsFormFieldv18 error={ fieldState.error?.message }>
+                    <OdsFormField error={ fieldState.error?.message }>
                       <label className={ styles['user-form__fields__label'] }
                              htmlFor={ field.name }>
                         Phone number:
@@ -110,13 +111,13 @@ const UserFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCance
                                       name={ field.name }
                                       onOdsBlur={ field.onBlur }
                                       onOdsChange={ field.onChange } />
-                    </OdsFormFieldv18>
+                    </OdsFormField>
                   } />
 
       <Controller control={ control }
                   name="birthDate"
                   render={({ field, fieldState }) =>
-                    <OdsFormFieldv18 error={ fieldState.error?.message }>
+                    <OdsFormField error={ fieldState.error?.message }>
                       <label className={ styles['user-form__fields__label'] }
                              htmlFor={ field.name }>
                         Birth date:
@@ -130,52 +131,49 @@ const UserFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCance
                                      name={ field.name }
                                      onOdsBlur={ field.onBlur }
                                      onOdsChange={ field.onChange } />
-                    </OdsFormFieldv18>
+                    </OdsFormField>
                   } />
 
-      <OdsFormField invalid={ !!errors.ip }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!errors.ip }>
+        <FormFieldLabel>
           IP address:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput { ...register('ip') } />
+        <Input { ...register('ip') } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { errors.ip?.message }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <Controller control={ control }
-                  name="role"
-                  render={({ field, fieldState }) =>
-                    <OdsFormFieldv18 error={ fieldState.error?.message }>
-                      <label className={ styles['user-form__fields__label'] }
-                             htmlFor={ field.name }>
-                        Role:
-                      </label>
+      <FormField invalid={ !!errors.role }>
+        <FormFieldLabel>
+          Role:
+        </FormFieldLabel>
 
-                      <OdsSelect defaultValue={ user?.role }
-                                 hasError={ !!fieldState.error }
-                                 id={ field.name }
-                                 name={ field.name }
-                                 onOdsBlur={ field.onBlur }
-                                 onOdsChange={ field.onChange }>
-                        { roleOptions }
-                      </OdsSelect>
-                    </OdsFormFieldv18>
-                  } />
+        <Select defaultValue={ user?.role }
+                items={ roleOptions }
+                { ...register('role') }>
+          <SelectControl />
 
+          <SelectContent />
+        </Select>
+
+        <FormFieldError>
+          { errors.role?.message }
+        </FormFieldError>
+      </FormField>
       <div className={ styles['user-form__actions'] }>
-        <OdsButton onClick={ onCancel }
-                   type="button"
-                   variant={ ODS_BUTTON_VARIANT.outline }>
+        <Button onClick={ onCancel }
+                type="button"
+                variant={ BUTTON_VARIANT.outline }>
           Cancel
-        </OdsButton>
+        </Button>
 
-        <OdsButton isLoading={ isPending }
-                   type="submit">
+        <Button loading={ isPending }
+                type="submit">
           { !!user ? 'Update' : 'Create' }
-        </OdsButton>
+        </Button>
       </div>
     </form>
   )

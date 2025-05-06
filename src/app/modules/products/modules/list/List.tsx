@@ -1,7 +1,7 @@
 import type { OdsPaginationCurrentChangeEvent, OdsPaginationItemPerPageChangedEvent } from '@ovhcloud/ods-components'
 import type { Product } from 'app/models/Product'
 import { OdsPagination } from '@ovhcloud/ods-components/react'
-import { ODS_ICON_NAME, OdsButton, OdsIcon } from '@ovhcloud/ods-react'
+import { ICON_NAME, Button, Icon } from '@ovhcloud/ods-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
@@ -79,9 +79,9 @@ const List = () => {
       <div className={ styles['list__header'] }>
         <PageTitle label="List of products" />
 
-        <OdsButton onClick={ () => { navigate(`${ROUTE.products}/new`) } }>
-          <OdsIcon name={ ODS_ICON_NAME.plus } /> Create a new product
-        </OdsButton>
+        <Button onClick={ () => { navigate(`${ROUTE.products}/new`) } }>
+          <Icon name={ ICON_NAME.plus } /> Create a new product
+        </Button>
       </div>
 
       <div className={ styles['list__content'] }>

@@ -1,10 +1,10 @@
-import type { OdsQuantityChangeEvent, OdsRadioChangeEvent, OdsRangeChangeEvent, OdsTimepickerChangeEvent } from '@ovhcloud/ods-components'
+import type { OdsRangeChangeEvent, OdsTimepickerChangeEvent } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
 import type { ChangeEvent, FC } from 'react'
 import type { ProductCategory } from 'app/models/Product'
 import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsFormField as OdsFormFieldv18, OdsQuantity, OdsRadio, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
-import { ODS_BUTTON_VARIANT, OdsButton, OdsCheckbox, OdsCheckboxControl, OdsCheckboxLabel, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsInput, OdsTextarea } from '@ovhcloud/ods-react'
+import { OdsFormField as OdsFormField, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { BUTTON_VARIANT, Button, Checkbox, CheckboxControl, CheckboxLabel, FormField, FormFieldError, FormFieldLabel, Input, Quantity, QuantityControl, QuantityInput, Radio, RadioControl, RadioGroup, RadioGroupLabel, RadioLabel, Textarea } from '@ovhcloud/ods-react'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import PropTypes from 'prop-types'
@@ -67,126 +67,124 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.title }}
                   children={ (field) => ((
-                    <OdsFormField invalid={ !!field.state.meta.errors.length }>
-                      <OdsFormFieldLabel>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
                         Title:
-                      </OdsFormFieldLabel>
+                      </FormFieldLabel>
 
-                      <OdsInput defaultValue={ product?.title || '' }
-                                name={ field.name }
-                                onBlur={ field.handleBlur }
-                                onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
-                                type={ ODS_INPUT_TYPE.text } />
+                      <Input defaultValue={ product?.title || '' }
+                             name={ field.name }
+                             onBlur={ field.handleBlur }
+                             onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
+                             type={ ODS_INPUT_TYPE.text } />
 
-                      <OdsFormFieldError>
+                      <FormFieldError>
                         { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
-                      </OdsFormFieldError>
-                    </OdsFormField>
+                      </FormFieldError>
+                    </FormField>
                   ))} />
 
       <form.Field name="price"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.price }}
                   children={ (field) => ((
-                  <OdsFormField invalid={ !!field.state.meta.errors.length }>
-                    <OdsFormFieldLabel>
+                  <FormField invalid={ !!field.state.meta.errors.length }>
+                    <FormFieldLabel>
                       Price:
-                    </OdsFormFieldLabel>
+                    </FormFieldLabel>
 
                     <div className={ styles['product-form__fields__price'] }>
-                      <OdsInput defaultValue={ product?.price }
-                                min={ 0 }
-                                name={ field.name }
-                                onBlur={ field.handleBlur }
-                                onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(parseInt(e.target.value, 10)) }
-                                step="any"
-                                type={ ODS_INPUT_TYPE.number } />
+                      <Input defaultValue={ product?.price }
+                             min={ 0 }
+                             name={ field.name }
+                             onBlur={ field.handleBlur }
+                             onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(parseInt(e.target.value, 10)) }
+                             step="any"
+                             type={ ODS_INPUT_TYPE.number } />
 
                       <span className={ styles['product-form__fields__price__currency'] }>
                         €
                       </span>
                     </div>
 
-                    <OdsFormFieldError>
+                    <FormFieldError>
                       { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
-                    </OdsFormFieldError>
-                  </OdsFormField>
+                    </FormFieldError>
+                  </FormField>
                   ))} />
 
       <form.Field name="description"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.description }}
                   children={ (field) => ((
-                    <OdsFormField invalid={ !!field.state.meta.errors.length }>
-                      <OdsFormFieldLabel>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
                         Description:
-                      </OdsFormFieldLabel>
+                      </FormFieldLabel>
 
-                      <OdsTextarea defaultValue={ product?.description || '' }
-                                   name={ field.name }
-                                   onBlur={ field.handleBlur }
-                                   onChange={ (e: ChangeEvent<HTMLTextAreaElement>) => field.handleChange(e.target.value) } />
+                      <Textarea defaultValue={ product?.description || '' }
+                                name={ field.name }
+                                onBlur={ field.handleBlur }
+                                onChange={ (e: ChangeEvent<HTMLTextAreaElement>) => field.handleChange(e.target.value) } />
 
-                      <OdsFormFieldError>
+                      <FormFieldError>
                         { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
-                      </OdsFormFieldError>
-                    </OdsFormField>
+                      </FormFieldError>
+                    </FormField>
                   ))} />
 
       <form.Field name="hasReturnPolicy"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.hasReturnPolicy }}
                   children={ (field) => ((
-                    <OdsFormField invalid={ !!field.state.meta.errors.length }>
-                      <OdsFormFieldLabel>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
                         Return policy:
-                      </OdsFormFieldLabel>
+                      </FormFieldLabel>
 
-                      <OdsCheckbox defaultChecked={ product?.hasReturnPolicy }
-                                   name={ field.name }
-                                   onBlur={ field.handleBlur }
-                                   onCheckedChange={ ({ checked }) => field.handleChange(!!checked) }>
-                        <OdsCheckboxControl />
+                      <Checkbox defaultChecked={ product?.hasReturnPolicy }
+                                name={ field.name }
+                                onBlur={ field.handleBlur }
+                                onCheckedChange={ ({ checked }) => field.handleChange(!!checked) }>
+                        <CheckboxControl />
 
-                        <OdsCheckboxLabel>
+                        <CheckboxLabel>
                           Product can be returned up to 30 days
-                        </OdsCheckboxLabel>
-                      </OdsCheckbox>
+                        </CheckboxLabel>
+                      </Checkbox>
 
-                      <OdsFormFieldError>
+                      <FormFieldError>
                         { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
-                      </OdsFormFieldError>
-                    </OdsFormField>
+                      </FormFieldError>
+                    </FormField>
                   ))} />
 
       <form.Field name="stock"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.stock }}
                   children={ (field) => ((
-                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
-                      <div className={ styles['product-form__fields__stock'] }>
-                        <label className={ styles['product-form__fields__label'] }
-                               htmlFor={ field.name }>
-                          Stock quantity:
-                        </label>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
+                        Stock quantity:
+                      </FormFieldLabel>
 
-                        <OdsQuantity defaultValue={ product?.stock }
-                                     hasError={ !!field.state.meta.errors.length }
-                                     id={ field.name }
-                                     min={ 0 }
-                                     name={ field.name }
-                                     onOdsBlur={ field.handleBlur }
-                                     // @ts-ignore to look later
-                                     onOdsChange={ (e: OdsQuantityChangeEvent) => field.handleChange(e.detail.value) } />
-                      </div>
-                    </OdsFormFieldv18>
+                      <Quantity defaultValue={ product?.stock?.toString() }
+                                min={ 0 }
+                                name={ field.name }
+                                onBlur={ field.handleBlur }
+                                onValueChange={ ({ valueAsNumber }) => field.handleChange(valueAsNumber) }>
+                        <QuantityControl>
+                          <QuantityInput />
+                        </QuantityControl>
+                      </Quantity>
+                    </FormField>
                   ))} />
 
       <form.Field name="restockTime"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.restockTime }}
                   children={ (field) => ((
-                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Restock time:
@@ -199,14 +197,14 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                                      onOdsBlur={ field.handleBlur }
                                      onOdsChange={ (e: OdsTimepickerChangeEvent) => field.handleChange(e.detail.value as string || '') }
                                      timezones="all" />
-                    </OdsFormFieldv18>
+                    </OdsFormField>
                   ))} />
 
       <form.Field name="minimumOrderQuantity"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.minimumOrderQuantity }}
                   children={ (field) => ((
-                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
+                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
                       <label className={ styles['product-form__fields__label'] }
                              htmlFor={ field.name }>
                         Minimum order quantity:
@@ -221,93 +219,71 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                                   // @ts-ignore to look later
                                   onOdsChange={ (e: OdsRangeChangeEvent) => field.handleChange(e.detail.value) } />
                       </div>
-                    </OdsFormFieldv18>
+                    </OdsFormField>
                   ))} />
 
       <form.Field name="category"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.category }}
                   children={ (field) => ((
-                    <OdsFormFieldv18 error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
-                      <label className={ styles['product-form__fields__label'] }>
-                        Category:
-                      </label>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <RadioGroup defaultValue={ product?.category }
+                                  onValueChange={ (e) => field.handleChange(e.value as ProductCategory) }
+                                  orientation="horizontal">
+                        <RadioGroupLabel>
+                          Category:
+                        </RadioGroupLabel>
 
-                      <div className={ styles['product-form__fields__category'] }>
-                        <div className={ styles['product-form__fields__category__option'] }>
-                          <OdsRadio hasError={ !!field.state.meta.errors.length }
-                                    isChecked={ product?.category === 'beauty' }
-                                    inputId="category-beauty"
-                                    name={ field.name }
-                                    onOdsBlur={ field.handleBlur }
-                                    onOdsChange={ (e: OdsRadioChangeEvent) => {
-                                      if (e.detail.checked) {
-                                        field.handleChange(e.detail.value as ProductCategory)
-                                      }
-                                    }}
-                                    value="beauty" />
-                          <label htmlFor="category-beauty">Beauty</label>
-                        </div>
+                        <Radio invalid={ !!field.state.meta.errors.length }
+                               value="beauty">
+                          <RadioControl />
 
-                        <div className={ styles['product-form__fields__category__option'] }>
-                          <OdsRadio hasError={ !!field.state.meta.errors.length }
-                                    isChecked={ product?.category === 'fragrances' }
-                                    inputId="category-fragrances"
-                                    name={ field.name }
-                                    onOdsBlur={ field.handleBlur }
-                                    onOdsChange={ (e: OdsRadioChangeEvent) => {
-                                      if (e.detail.checked) {
-                                        field.handleChange(e.detail.value as ProductCategory)
-                                      }
-                                    }}
-                                    value="fragrances" />
-                          <label htmlFor="category-fragrances">Fragrances</label>
-                        </div>
+                          <RadioLabel>
+                            Beauty
+                          </RadioLabel>
+                        </Radio>
 
-                        <div className={ styles['product-form__fields__category__option'] }>
-                          <OdsRadio hasError={ !!field.state.meta.errors.length }
-                                    isChecked={ product?.category === 'furniture' }
-                                    inputId="category-furniture"
-                                    name={ field.name }
-                                    onOdsBlur={ field.handleBlur }
-                                    onOdsChange={ (e: OdsRadioChangeEvent) => {
-                                      if (e.detail.checked) {
-                                        field.handleChange(e.detail.value as ProductCategory)
-                                      }
-                                    }}
-                                    value="furniture" />
-                          <label htmlFor="category-furniture">Furniture</label>
-                        </div>
+                        <Radio invalid={ !!field.state.meta.errors.length }
+                               value="fragrances">
+                          <RadioControl />
 
-                        <div className={ styles['product-form__fields__category__option'] }>
-                          <OdsRadio hasError={ !!field.state.meta.errors.length }
-                                    isChecked={ product?.category === 'groceries' }
-                                    inputId="category-groceries"
-                                    name={ field.name }
-                                    onOdsBlur={ field.handleBlur }
-                                    onOdsChange={ (e: OdsRadioChangeEvent) => {
-                                      if (e.detail.checked) {
-                                        field.handleChange(e.detail.value as ProductCategory)
-                                      }
-                                    }}
-                                    value="groceries" />
-                          <label htmlFor="category-groceries">Groceries</label>
-                        </div>
-                      </div>
-                    </OdsFormFieldv18>
+                          <RadioLabel>
+                            Fragrances
+                          </RadioLabel>
+                        </Radio>
+
+                        <Radio invalid={ !!field.state.meta.errors.length }
+                               value="furniture">
+                          <RadioControl />
+
+                          <RadioLabel>
+                            Furniture
+                          </RadioLabel>
+                        </Radio>
+
+                        <Radio invalid={ !!field.state.meta.errors.length }
+                               value="groceries">
+                          <RadioControl />
+
+                          <RadioLabel>
+                            Groceries
+                          </RadioLabel>
+                        </Radio>
+                      </RadioGroup>
+                    </FormField>
                   ))} />
 
       <div className={ styles['product-form__actions'] }>
-        <OdsButton onClick={ onCancel }
-                   type="button"
-                   variant={ ODS_BUTTON_VARIANT.outline }>
+        <Button onClick={ onCancel }
+                type="button"
+                variant={ BUTTON_VARIANT.outline }>
           Cancel
-        </OdsButton>
+        </Button>
 
-        <OdsButton isLoading={ isPending }
-                   type="submit">
+        <Button loading={ isPending }
+                type="submit">
           { !!product ? 'Update' : 'Create' }
-        </OdsButton>
+        </Button>
       </div>
     </form>
   )

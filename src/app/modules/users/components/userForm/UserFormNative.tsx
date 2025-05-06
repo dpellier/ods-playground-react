@@ -2,8 +2,8 @@ import type { OdsFormElement } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
 import type { FC, FormEvent } from 'react'
 import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsDatepicker, OdsFormField as OdsFormFieldv18, OdsPhoneNumber, OdsSelect } from '@ovhcloud/ods-components/react'
-import { ODS_BUTTON_VARIANT, OdsButton, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsInput } from '@ovhcloud/ods-react'
+import { OdsDatepicker, OdsFormField, OdsPhoneNumber } from '@ovhcloud/ods-components/react'
+import { BUTTON_VARIANT, Button, FormField, FormFieldError, FormFieldLabel, Input, Select, SelectContent, SelectControl } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useMemo, useState } from 'react'
 import { User, USER_BIRTH_DATE_FORMAT, USER_ROLES } from 'app/models/User'
@@ -19,9 +19,10 @@ const propTypes = {
 const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel, onSubmit, user }) => {
   const [error, setError] = useState<Record<string, string>>({})
   const roleOptions = useMemo(() => {
-    return USER_ROLES.map((role, idx) => (
-      <option key={ idx } value={ role }>{ role }</option>
-    ))
+    return USER_ROLES.map((role) => ({
+      label: role,
+      value: role,
+    }))
   }, [USER_ROLES])
 
   function onFormSubmit(e: FormEvent) {
@@ -82,58 +83,58 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
   return (
     <form className={ styles['user-form'] }
           onSubmit={ onFormSubmit }>
-      <OdsFormField invalid={ !!error.firstName }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!error.firstName }>
+        <FormFieldLabel>
           First name:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput defaultValue={ user?.firstName }
-                  id="firstName"
-                  name="firstName"
-                  onInvalid={ (e) => updateError(e, 'firstName') }
-                  required={ true }
-                  type={ ODS_INPUT_TYPE.text } />
+        <Input defaultValue={ user?.firstName }
+               id="firstName"
+               name="firstName"
+               onInvalid={ (e) => updateError(e, 'firstName') }
+               required={ true }
+               type={ ODS_INPUT_TYPE.text } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { error.firstName }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!error.lastName }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!error.lastName }>
+        <FormFieldLabel>
           Last name:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput defaultValue={ user?.lastName }
-                  id="lastName"
-                  name="lastName"
-                  onInvalid={ (e) => updateError(e, 'lastName') }
-                  required={ true }
-                  type={ ODS_INPUT_TYPE.text } />
+        <Input defaultValue={ user?.lastName }
+               id="lastName"
+               name="lastName"
+               onInvalid={ (e) => updateError(e, 'lastName') }
+               required={ true }
+               type={ ODS_INPUT_TYPE.text } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { error.lastName }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!error.email }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!error.email }>
+        <FormFieldLabel>
           Email:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput defaultValue={ user?.email }
-                  id="email"
-                  name="email"
-                  onInvalid={ (e) => updateError(e, 'email') }
-                  required={ true }
-                  type={ ODS_INPUT_TYPE.email } />
+        <Input defaultValue={ user?.email }
+               id="email"
+               name="email"
+               onInvalid={ (e) => updateError(e, 'email') }
+               required={ true }
+               type={ ODS_INPUT_TYPE.email } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { error.email }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormFieldv18 error={ error?.phone }>
+      <OdsFormField error={ error?.phone }>
         <label className={ styles['user-form__fields__label'] }
                htmlFor="phone">
           Phone number:
@@ -145,9 +146,9 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
                         isRequired={ true }
                         name="phone"
                         onOdsInvalid={ (e) => updateErrorv18(e, 'phone') } />
-      </OdsFormFieldv18>
+      </OdsFormField>
 
-      <OdsFormFieldv18 error={ error?.birthDate }>
+      <OdsFormField error={ error?.birthDate }>
         <label className={ styles['user-form__fields__label'] }
                htmlFor="birthDate">
           Birth date:
@@ -160,52 +161,57 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
                        isRequired={ true }
                        name="birthDate"
                        onOdsInvalid={ (e) => updateErrorv18(e, 'birthDate') } />
-      </OdsFormFieldv18>
-
-      <OdsFormField invalid={ !!error.ip }>
-        <OdsFormFieldLabel>
-          IP address:
-        </OdsFormFieldLabel>
-
-        <OdsInput defaultValue={ user?.ip }
-                  id="ip"
-                  name="ip"
-                  onInvalid={ (e) => updateError(e, 'ip') }
-                  pattern="^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-                  required={ true }
-                  type={ ODS_INPUT_TYPE.text } />
-
-        <OdsFormFieldError>
-          { error.email }
-        </OdsFormFieldError>
       </OdsFormField>
 
-      <OdsFormFieldv18 error={ error?.role }>
-        <label className={ styles['user-form__fields__label'] }
-               htmlFor="role">
-          Role:
-        </label>
+      <FormField invalid={ !!error.ip }>
+        <FormFieldLabel>
+          IP address:
+        </FormFieldLabel>
 
-        <OdsSelect defaultValue={ user?.role }
-                   id="role"
-                   isRequired={ true }
-                   name="role"
-                   onOdsInvalid={ (e) => updateErrorv18(e, 'role') }>
-          { roleOptions }
-        </OdsSelect>
-      </OdsFormFieldv18>
+        <Input defaultValue={ user?.ip }
+               id="ip"
+               name="ip"
+               onInvalid={ (e) => updateError(e, 'ip') }
+               pattern="^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+               required={ true }
+               type={ ODS_INPUT_TYPE.text } />
+
+        <FormFieldError>
+          { error.email }
+        </FormFieldError>
+      </FormField>
+
+      <FormField invalid={ !!error.role }>
+        <FormFieldLabel>
+          Role:
+        </FormFieldLabel>
+
+        <Select defaultValue={ user?.role }
+                items={ roleOptions }
+                name="role"
+                onInvalid={ (e) => updateError(e, 'role') }
+                required={ true }>
+          <SelectControl />
+
+          <SelectContent />
+        </Select>
+
+        <FormFieldError>
+          { error.role }
+        </FormFieldError>
+      </FormField>
 
       <div className={ styles['user-form__actions'] }>
-        <OdsButton onClick={ onCancel }
-                   type="button"
-                   variant={ ODS_BUTTON_VARIANT.outline }>
+        <Button onClick={ onCancel }
+                type="button"
+                variant={ BUTTON_VARIANT.outline }>
           Cancel
-        </OdsButton>
+        </Button>
 
-        <OdsButton isLoading={ isPending }
-                   type="submit">
+        <Button loading={ isPending }
+                type="submit">
           { !!user ? 'Update' : 'Create' }
-        </OdsButton>
+        </Button>
       </div>
     </form>
   )

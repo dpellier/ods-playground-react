@@ -1,8 +1,8 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
 import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsFormField as OdsFormFieldv18, OdsQuantity, OdsRadio, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
-import { ODS_BUTTON_VARIANT, OdsButton, OdsCheckbox, OdsCheckboxControl, OdsCheckboxLabel, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsInput, OdsTextarea } from '@ovhcloud/ods-react'
+import { OdsFormField, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { BUTTON_VARIANT, Button, Checkbox, CheckboxControl, CheckboxLabel, FormField, FormFieldError, FormFieldLabel, Input, Quantity, QuantityControl, QuantityInput, Radio, RadioControl, RadioGroup, RadioGroupLabel, RadioLabel, Textarea } from '@ovhcloud/ods-react'
 import { useFormik } from 'formik'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
@@ -57,94 +57,93 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
   return (
     <form className={ styles['product-form'] }
           onSubmit={ formik.handleSubmit }>
-      <OdsFormField invalid={ !!(formik.touched.title && formik.errors.title) }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!(formik.touched.title && formik.errors.title) }>
+        <FormFieldLabel>
           Title:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput name="title"
-                  onBlur={ formik.handleBlur }
-                  onChange={ formik.handleChange }
-                  value={ formik.values.title } />
+        <Input name="title"
+               onBlur={ formik.handleBlur }
+               onChange={ formik.handleChange }
+               value={ formik.values.title } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { formik.errors.title }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!(formik.touched.price && formik.errors.price) }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!(formik.touched.price && formik.errors.price) }>
+        <FormFieldLabel>
           Price:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput min={ 0 }
-                  name="price"
+        <Input min={ 0 }
+               name="price"
+               onBlur={ formik.handleBlur }
+               onChange={ formik.handleChange }
+               step="any"
+               type={ ODS_INPUT_TYPE.number }
+               value={ formik.values.price } />
+
+        <FormFieldError>
+          { formik.errors.price }
+        </FormFieldError>
+      </FormField>
+
+      <FormField invalid={ !!(formik.touched.description && formik.errors.description) }>
+        <FormFieldLabel>
+          Description:
+        </FormFieldLabel>
+
+        <Textarea name="description"
                   onBlur={ formik.handleBlur }
                   onChange={ formik.handleChange }
-                  step="any"
-                  type={ ODS_INPUT_TYPE.number }
-                  value={ formik.values.price } />
+                  value={ formik.values.description } />
 
-        <OdsFormFieldError>
-          { formik.errors.price }
-        </OdsFormFieldError>
-      </OdsFormField>
-
-      <OdsFormField invalid={ !!(formik.touched.description && formik.errors.description) }>
-        <OdsFormFieldLabel>
-          Description:
-        </OdsFormFieldLabel>
-
-        <OdsTextarea name="description"
-                     onBlur={ formik.handleBlur }
-                     onChange={ formik.handleChange }
-                     value={ formik.values.description } />
-
-        <OdsFormFieldError>
+        <FormFieldError>
           { formik.errors.description }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!(formik.touched.hasReturnPolicy && formik.errors.hasReturnPolicy) }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!(formik.touched.hasReturnPolicy && formik.errors.hasReturnPolicy) }>
+        <FormFieldLabel>
           Return policy:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsCheckbox defaultChecked={ formik.initialValues.hasReturnPolicy }
-                     name="hasReturnPolicy"
-                     onBlur={ formik.handleBlur }
-                     onChange={ formik.handleChange }
-                     onCheckedChange={ ({ checked }) => formik.setFieldValue('hasReturnPolicy', checked) }>
-          <OdsCheckboxControl />
+        <Checkbox defaultChecked={ formik.initialValues.hasReturnPolicy }
+                  name="hasReturnPolicy"
+                  onBlur={ formik.handleBlur }
+                  onChange={ formik.handleChange }
+                  onCheckedChange={ ({ checked }) => formik.setFieldValue('hasReturnPolicy', checked) }>
+          <CheckboxControl />
 
-          <OdsCheckboxLabel>
+          <CheckboxLabel>
             Product can be returned up to 30 days
-          </OdsCheckboxLabel>
-        </OdsCheckbox>
+          </CheckboxLabel>
+        </Checkbox>
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { formik.errors.description }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormFieldv18 error={ (formik.touched.stock && formik.errors.stock) as string }>
-        <div className={ styles['product-form__fields__stock'] }>
-          <label className={ styles['product-form__fields__label'] }
-                 htmlFor="stock">
-            Stock quantity:
-          </label>
+      <FormField invalid={ !!(formik.touched.stock && formik.errors.stock) }>
+        <FormFieldLabel>
+          Stock quantity:
+        </FormFieldLabel>
 
-          <OdsQuantity hasError={ formik.touched.stock && !!formik.errors.stock ? true : undefined }
-                       id="stock"
-                       min={ 0 }
-                       name="stock"
-                       onOdsBlur={ formik.handleBlur }
-                       onOdsChange={ formik.handleChange }
-                       value={ formik.values.stock } />
-        </div>
-      </OdsFormFieldv18>
+        <Quantity min={ 0 }
+                  name="stock"
+                  onBlur={ formik.handleBlur }
+                  onValueChange={ formik.handleChange }
+                  value={ formik.values.stock?.toString() }>
+          <QuantityControl>
+            <QuantityInput />
+          </QuantityControl>
+        </Quantity>
+      </FormField>
 
-      <OdsFormFieldv18 error={ (formik.touched.restockTime && formik.errors.restockTime) as string }>
+      <OdsFormField error={ (formik.touched.restockTime && formik.errors.restockTime) as string }>
         <label className={ styles['product-form__fields__label'] }
                htmlFor="restockTime">
           Restock time:
@@ -157,9 +156,9 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                        onOdsChange={ formik.handleChange }
                        timezones="all"
                        value={ formik.values.restockTime } />
-      </OdsFormFieldv18>
+      </OdsFormField>
 
-      <OdsFormFieldv18 error={ (formik.touched.minimumOrderQuantity && formik.errors.minimumOrderQuantity) as string }>
+      <OdsFormField error={ (formik.touched.minimumOrderQuantity && formik.errors.minimumOrderQuantity) as string }>
         <label className={ styles['product-form__fields__label'] }
                htmlFor="minimumOrderQuantity">
           Minimum order quantity:
@@ -173,79 +172,61 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                     onOdsChange={ formik.handleChange }
                     value={ formik.values.minimumOrderQuantity } />
         </div>
-      </OdsFormFieldv18>
+      </OdsFormField>
 
-      <OdsFormFieldv18 error={ (formik.touched.category && formik.errors.category) as string }>
-        <label className={ styles['product-form__fields__label'] }>
-          Category:
-        </label>
+      <FormField invalid={ !!(formik.touched.category && formik.errors.category) }>
+        <RadioGroup defaultValue={ formik.initialValues.category }
+                    name="category"
+                    onBlur={ formik.handleBlur }
+                    onValueChange={ ({ value }) => {
+                      formik.setFieldValue('category', value);
+                    }}
+                    orientation="horizontal">
+          <RadioGroupLabel>
+            Category:
+          </RadioGroupLabel>
 
-        <div className={ styles['product-form__fields__category'] }>
-          <div className={ styles['product-form__fields__category__option'] }>
-            <OdsRadio hasError={ formik.touched.category && !!formik.errors.category }
-                      isChecked={ formik.initialValues.category === 'beauty' }
-                      inputId="category-beauty"
-                      name="category"
-                      onOdsBlur={ formik.handleBlur }
-                      onOdsChange={ (e) => {
-                        formik.setFieldValue('category', e.detail.checked ? e.detail.value : null)
-                      }}
-                      value="beauty" />
-            <label htmlFor="category-beauty">Beauty</label>
-          </div>
+          <Radio value="beauty">
+            <RadioControl />
+            <RadioLabel>
+              Beauty
+            </RadioLabel>
+          </Radio>
 
-          <div className={ styles['product-form__fields__category__option'] }>
-            <OdsRadio hasError={ formik.touched.category && !!formik.errors.category }
-                      isChecked={ formik.initialValues.category === 'fragrances' }
-                      inputId="category-fragrances"
-                      name="category"
-                      onOdsBlur={ formik.handleBlur }
-                      onOdsChange={ (e) => {
-                        formik.setFieldValue('category', e.detail.checked ? e.detail.value : null)
-                      }}
-                      value="fragrances" />
-            <label htmlFor="category-fragrances">Fragrances</label>
-          </div>
+          <Radio value="fragrances">
+            <RadioControl />
+            <RadioLabel>
+              Fragrances
+            </RadioLabel>
+          </Radio>
 
-          <div className={ styles['product-form__fields__category__option'] }>
-            <OdsRadio hasError={ formik.touched.category && !!formik.errors.category }
-                      isChecked={ formik.initialValues.category === 'furniture' }
-                      inputId="category-furniture"
-                      name="category"
-                      onOdsBlur={ formik.handleBlur }
-                      onOdsChange={ (e) => {
-                        formik.setFieldValue('category', e.detail.checked ? e.detail.value : null)
-                      }}
-                      value="furniture" />
-            <label htmlFor="category-furniture">Furniture</label>
-          </div>
+          <Radio value="furniture">
+            <RadioControl />
+            <RadioLabel>
+              Furniture
+            </RadioLabel>
+          </Radio>
 
-          <div className={ styles['product-form__fields__category__option'] }>
-            <OdsRadio hasError={ formik.touched.category && !!formik.errors.category }
-                      isChecked={ formik.initialValues.category === 'groceries' }
-                      inputId="category-groceries"
-                      name="category"
-                      onOdsBlur={ formik.handleBlur }
-                      onOdsChange={ (e) => {
-                        formik.setFieldValue('category', e.detail.checked ? e.detail.value : null)
-                      }}
-                      value="groceries" />
-            <label htmlFor="category-groceries">Groceries</label>
-          </div>
-        </div>
-      </OdsFormFieldv18>
+          <Radio value="groceries">
+            <RadioControl />
+            <RadioLabel>
+              Groceries
+            </RadioLabel>
+          </Radio>
+        </RadioGroup>
+      </FormField>
 
       <div className={ styles['product-form__actions'] }>
-        <OdsButton onClick={ onCancel }
-                   type="button"
-                   variant={ ODS_BUTTON_VARIANT.outline }>
+        <Button onClick={ onCancel }
+                type="button"
+                variant={ BUTTON_VARIANT.outline }>
           Cancel
-        </OdsButton>
+        </Button>
 
-        <OdsButton isLoading={ isPending }
-                   type="submit">
+        <Button loading={ isPending }
+                type="submit">
           { !!product ? 'Update' : 'Create' }
-        </OdsButton>
+        </Button>
       </div>
     </form>
   )

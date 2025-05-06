@@ -1,9 +1,8 @@
-import type { OdsCheckboxChangeEvent } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
 import type { FC, ReactElement } from 'react'
 import type { ProductProps } from 'app/models/Product'
-import { OdsCheckbox, OdsMedium } from '@ovhcloud/ods-components/react'
-import { ODS_BUTTON_VARIANT, ODS_ICON_NAME, OdsButton, OdsIcon, OdsPopover, OdsPopoverContent, OdsPopoverTrigger, OdsTable } from '@ovhcloud/ods-react'
+import { OdsMedium } from '@ovhcloud/ods-components/react'
+import { BUTTON_VARIANT, ICON_NAME, POPOVER_POSITION, Button, Checkbox, CheckboxControl, CheckboxLabel, Icon, Popover, PopoverContent, PopoverTrigger, Table } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -47,8 +46,8 @@ const ProductGrid: FC<InferProps<typeof propTypes>> = ({ height, onDeleteProduct
   const navigate = useNavigate()
   const [displayedColumns, setDisplayedColumns] = useState(COLUMNS)
 
-  function onToggleColumn(event: OdsCheckboxChangeEvent, prop: keyof ProductProps) {
-    if (event.detail.checked) {
+  function onToggleColumn(checked: boolean | string, prop: keyof ProductProps) {
+    if (checked) {
       setDisplayedColumns((prev) => COLUMNS.filter((column => {
         return column.prop === prop || prev.some((c) => c.prop === column.prop)
       })))
@@ -58,7 +57,7 @@ const ProductGrid: FC<InferProps<typeof propTypes>> = ({ height, onDeleteProduct
   }
 
   return (
-    <OdsTable style={{ height }}>
+    <Table style={{ height }}>
       <thead>
         <tr>
           {
@@ -71,31 +70,29 @@ const ProductGrid: FC<InferProps<typeof propTypes>> = ({ height, onDeleteProduct
           }
 
           <th scope="col">
-            <OdsPopover>
-              <OdsPopoverTrigger asChild>
-                <OdsButton variant={ ODS_BUTTON_VARIANT.ghost }>
-                  <OdsIcon name={ ODS_ICON_NAME.cog } />
-                </OdsButton>
-              </OdsPopoverTrigger>
+            <Popover position={ POPOVER_POSITION.bottom }>
+              <PopoverTrigger asChild>
+                <Button variant={ BUTTON_VARIANT.ghost }>
+                  <Icon name={ ICON_NAME.cog } />
+                </Button>
+              </PopoverTrigger>
 
-              <OdsPopoverContent>
+              <PopoverContent>
                 {
                   COLUMNS.map((column) => (
-                    <div className={ styles['product-grid__header__action__toggle'] }
-                         key={ column.prop }>
-                      <OdsCheckbox inputId={ `header-action-toggle-${column.prop}` }
-                                   isChecked={ true }
-                                   name={ `toggle-${column.prop}` }
-                                   onOdsChange={ (e: OdsCheckboxChangeEvent) => onToggleColumn(e, column.prop) } />
+                  <Checkbox defaultChecked={ true }
+                            key={ column.prop }
+                            onCheckedChange={ (e) => onToggleColumn(e.checked, column.prop) }>
+                      <CheckboxControl />
 
-                      <label htmlFor={ `header-action-toggle-${column.prop}` }>
+                      <CheckboxLabel>
                         { column.label }
-                      </label>
-                    </div>
+                      </CheckboxLabel>
+                    </Checkbox>
                   ))
                 }
-              </OdsPopoverContent>
-            </OdsPopover>
+              </PopoverContent>
+            </Popover>
           </th>
         </tr>
       </thead>
@@ -118,21 +115,21 @@ const ProductGrid: FC<InferProps<typeof propTypes>> = ({ height, onDeleteProduct
               }
 
               <td className={ styles['product-grid__row__actions'] }>
-                <OdsButton onClick={ () => navigate(`${ROUTE.products}/${product.id}/edit`) }
-                           variant={ ODS_BUTTON_VARIANT.ghost }>
-                  <OdsIcon name={ ODS_ICON_NAME.pen } />
-                </OdsButton>
+                <Button onClick={ () => navigate(`${ROUTE.products}/${product.id}/edit`) }
+                        variant={ BUTTON_VARIANT.ghost }>
+                  <Icon name={ ICON_NAME.pen } />
+                </Button>
 
-                <OdsButton onClick={ () => { onDeleteProduct(product) } }
-                           variant={ ODS_BUTTON_VARIANT.ghost }>
-                  <OdsIcon name={ ODS_ICON_NAME.trash } />
-                </OdsButton>
+                <Button onClick={ () => { onDeleteProduct(product) } }
+                        variant={ BUTTON_VARIANT.ghost }>
+                  <Icon name={ ICON_NAME.trash } />
+                </Button>
               </td>
             </tr>
           ))
         }
       </tbody>
-    </OdsTable>
+    </Table>
   )
 }
 
