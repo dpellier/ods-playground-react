@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { InferProps } from 'prop-types'
-import { ODS_TEXT_PRESET, OdsText } from '@ovhcloud/ods-react'
+import { TEXT_PRESET, Text } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import styles from './pageTitle.module.scss'
 
@@ -10,10 +10,10 @@ const propTypes = {
 
 const PageTitle: FC<InferProps<typeof propTypes>> = ({ label }) => {
   return (
-    <OdsText className={ styles['page-title'] }
-             preset={ ODS_TEXT_PRESET.heading2 }>
+    <Text className={ styles['page-title'] }
+          preset={ TEXT_PRESET.heading2 }>
       { label }
-    </OdsText>
+    </Text>
   )
 }
 

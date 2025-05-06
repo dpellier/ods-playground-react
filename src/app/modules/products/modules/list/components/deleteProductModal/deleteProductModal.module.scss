@@ -1,0 +1,12 @@
+.delete-product-modal {
+  display: flex;
+  flex-flow: column;
+  row-gap: 8px;
+
+  &__actions {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    justify-content: flex-end;
+    column-gap: 8px;
+  }
+}

@@ -1,4 +1,4 @@
-import { ODS_ICON_NAME } from '@ovhcloud/ods-components'
+import { ICON_NAME } from '@ovhcloud/ods-react'
 
 enum ROUTE {
   dashboard = '/dashboard',
@@ -10,22 +10,22 @@ enum ROUTE {
 
 const SIDE_MENU_ITEM = Object.freeze({
   dashboard: {
-    icon: ODS_ICON_NAME.grid,
+    icon: ICON_NAME.grid,
     label: 'Dashboard',
     route: ROUTE.dashboard,
   },
   users: {
-    icon: ODS_ICON_NAME.user,
+    icon: ICON_NAME.user,
     label: 'User Management',
     route: ROUTE.users,
   },
   products: {
-    icon: ODS_ICON_NAME.list,
+    icon: ICON_NAME.list,
     label: 'Product Management',
     route: ROUTE.products,
   },
   faq: {
-    icon: ODS_ICON_NAME.circleQuestion,
+    icon: ICON_NAME.circleQuestion,
     label: 'FAQ',
     route: ROUTE.faq,
   }

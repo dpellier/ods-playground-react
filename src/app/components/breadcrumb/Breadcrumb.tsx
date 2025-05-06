@@ -1,7 +1,8 @@
 import type { FC } from 'react'
-import { OdsBreadcrumb, OdsBreadcrumbItem } from '@ovhcloud/ods-components/react'
+import { Breadcrumb as OdsBreadcrumb, BreadcrumbItem, BreadcrumbLink } from '@ovhcloud/ods-react'
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import { Link } from 'app/components/link/Link'
 import styles from './breadcrumb.module.scss'
 
 type BreadcrumbItem = {
@@ -11,7 +12,6 @@ type BreadcrumbItem = {
 
 const Breadcrumb: FC = () => {
   const location = useLocation()
-  const navigate = useNavigate()
   const [items, setItems] = useState<BreadcrumbItem[]>([])
 
   useEffect(() => {
@@ -32,11 +32,13 @@ const Breadcrumb: FC = () => {
     <OdsBreadcrumb className={ styles.breadcrumb }>
       {
         items.map((item) => (
-          // @ts-ignore TODO href should be optional, waiting for new version
-          <OdsBreadcrumbItem className={ styles['breadcrumb__item'] }
-                             key={ item.href }
-                             onOdsClick={ () => navigate(item.href) }
-                             label={ item.label } />
+          <BreadcrumbItem className={ styles['breadcrumb__item'] }
+                          key={ item.href }>
+            <BreadcrumbLink as={ Link }
+                            route={ item.href }>
+              { item.label }
+            </BreadcrumbLink>
+          </BreadcrumbItem>
         ))
       }
     </OdsBreadcrumb>

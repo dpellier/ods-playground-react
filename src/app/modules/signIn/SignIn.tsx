@@ -1,5 +1,5 @@
 import type { SignInSlicePayload } from 'app/state/slices/session'
-import { ODS_TEXT_PRESET, OdsText } from '@ovhcloud/ods-react'
+import { TEXT_PRESET, Text } from '@ovhcloud/ods-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { ACTION_STATUS } from 'app/constants/slice'
@@ -27,10 +27,10 @@ const SignIn = () => {
 
   return (
     <div className={ styles['sign-in'] }>
-      <OdsText className={ styles['sign-in__title'] }
-               preset={ ODS_TEXT_PRESET.heading1 }>
+      <Text className={ styles['sign-in__title'] }
+            preset={ TEXT_PRESET.heading1 }>
         Welcome to the ODS React Playground App
-      </OdsText>
+      </Text>
 
       <Form isPending={ signInStatus === ACTION_STATUS.pending }
             onSubmit={ onSignIn } />

@@ -1,8 +1,9 @@
+import type { ModalOpenChangeDetail } from '@ovhcloud/ods-react'
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
-import { OdsModal } from '@ovhcloud/ods-components/react'
-import { ODS_BUTTON_VARIANT, OdsButton } from '@ovhcloud/ods-react'
+import { BUTTON_VARIANT, Button, Modal, ModalBody, ModalContent } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
+import styles from './deleteProductModal.module.scss'
 
 const propTypes = {
   isOpen: PropTypes.bool.isRequired,
@@ -13,25 +14,37 @@ const propTypes = {
 }
 
 const DeleteProductModal: FC<InferProps<typeof propTypes>> = ({ isOpen, isPending, onCancelDelete, onSubmitDelete, productTitle }) => {
+  function onOpenChange({ open }: ModalOpenChangeDetail) {
+    if (!open) {
+      onCancelDelete();
+    }
+  }
+
   return (
-    <OdsModal isOpen={ isOpen }
-              onOdsClose={ onCancelDelete }>
-      <p>
-        Are you sure you want to delete the product: { productTitle }?
-      </p>
+    <Modal open={ isOpen }
+           onOpenChange={ onOpenChange }>
+      <ModalContent>
+        <ModalBody className={ styles['delete-product-modal'] }>
+          <p>
+            Are you sure you want to delete the product: { productTitle }?
+          </p>
 
-      <OdsButton onClick={ onCancelDelete }
-                 slot="actions"
-                 variant={ ODS_BUTTON_VARIANT.outline }>
-        Cancel
-      </OdsButton>
+          <div className={ styles['delete-product-modal__actions'] }>
+            <Button onClick={ onCancelDelete }
+                    slot="actions"
+                    variant={ BUTTON_VARIANT.outline }>
+              Cancel
+            </Button>
 
-      <OdsButton isLoading={ isPending }
-                 onClick={ onSubmitDelete }
-                 slot="actions">
-        Delete
-      </OdsButton>
-    </OdsModal>
+            <Button loading={ isPending }
+                    onClick={ onSubmitDelete }
+                    slot="actions">
+              Delete
+            </Button>
+          </div>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   )
 }
 

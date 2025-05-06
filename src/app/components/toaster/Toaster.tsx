@@ -1,16 +1,15 @@
 import type { Toast } from 'react-hot-toast'
-import { ODS_MESSAGE_COLOR } from '@ovhcloud/ods-components'
-import { OdsMessage } from '@ovhcloud/ods-components/react'
+import { MESSAGE_COLOR, Message } from '@ovhcloud/ods-react'
 import { resolveValue, Toaster as ToasterVendor } from 'react-hot-toast'
 
 function getMessageColor(toast: Toast) {
   switch (toast.type) {
     case 'error':
-      return ODS_MESSAGE_COLOR.critical
+      return MESSAGE_COLOR.critical
     case 'success':
-      return ODS_MESSAGE_COLOR.success
+      return MESSAGE_COLOR.success
     default:
-      return ODS_MESSAGE_COLOR.information
+      return MESSAGE_COLOR.information
   }
 }
 
@@ -20,10 +19,10 @@ const Toaster = () => {
                    reverseOrder={ false }>
       {
         (toast) => ((
-          <OdsMessage color={ getMessageColor(toast) }
-                      isDismissible={ false }>
+          <Message color={ getMessageColor(toast) }
+                   dismissible={ false }>
             { resolveValue(toast.message, toast) }
-          </OdsMessage>
+          </Message>
         ))
       }
     </ToasterVendor>

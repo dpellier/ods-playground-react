@@ -2,8 +2,8 @@ import type { OdsFormElement } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
 import type { FC, FormEvent } from 'react'
 import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsFormField as OdsFormFieldv18, OdsQuantity, OdsRadio, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
-import { ODS_BUTTON_VARIANT, OdsButton, OdsCheckbox, OdsCheckboxControl, OdsCheckboxLabel, OdsFormField, OdsFormFieldError, OdsFormFieldLabel, OdsInput, OdsTextarea } from '@ovhcloud/ods-react'
+import { OdsFormField as OdsFormField, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
+import { BUTTON_VARIANT, Button, Checkbox, CheckboxControl, CheckboxLabel, FormField, FormFieldError, FormFieldLabel, Input, Quantity, QuantityControl, QuantityInput, Radio, RadioControl, RadioGroup, RadioGroupLabel, RadioLabel, Textarea } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { Product } from 'app/models/Product'
@@ -73,89 +73,90 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
   return (
     <form className={ styles['product-form'] }
           onSubmit={ onFormSubmit }>
-      <OdsFormField invalid={ !!error.title }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!error.title }>
+        <FormFieldLabel>
           Title:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput defaultValue={ product?.title }
-                  id="title"
-                  name="title"
-                  required={ true }
-                  onBlur={ (e) => updateError(e, 'title') }
-                  onInvalid={ (e) => onInvalidField(e, 'title') } />
+        <Input defaultValue={ product?.title }
+               id="title"
+               name="title"
+               required={ true }
+               onBlur={ (e) => updateError(e, 'title') }
+               onInvalid={ (e) => onInvalidField(e, 'title') } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { error.title }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!error.price }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!error.price }>
+        <FormFieldLabel>
           Price:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsInput defaultValue={ product?.price }
-                  id="price"
-                  min={ 0 }
-                  name="price"
-                  required={ true }
-                  onBlur={ (e) => updateError(e, 'price') }
-                  onInvalid={ (e) => onInvalidField(e, 'price') }
-                  step="any"
-                  type={ ODS_INPUT_TYPE.number } />
+        <Input defaultValue={ product?.price }
+               id="price"
+               min={ 0 }
+               name="price"
+               required={ true }
+               onBlur={ (e) => updateError(e, 'price') }
+               onInvalid={ (e) => onInvalidField(e, 'price') }
+               step="any"
+               type={ ODS_INPUT_TYPE.number } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { error.price }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField invalid={ !!error.description }>
-        <OdsFormFieldLabel>
+      <FormField invalid={ !!error.description }>
+        <FormFieldLabel>
           Description:
-        </OdsFormFieldLabel>
+        </FormFieldLabel>
 
-        <OdsTextarea defaultValue={ product?.description }
-                     id="description"
-                     name="description"
-                     required={ true }
-                     onBlur={ (e) => updateError(e, 'description') }
-                     onInvalid={ (e) => onInvalidField(e, 'description') } />
+        <Textarea defaultValue={ product?.description }
+                  id="description"
+                  name="description"
+                  required={ true }
+                  onBlur={ (e) => updateError(e, 'description') }
+                  onInvalid={ (e) => onInvalidField(e, 'description') } />
 
-        <OdsFormFieldError>
+        <FormFieldError>
           { error.description }
-        </OdsFormFieldError>
-      </OdsFormField>
+        </FormFieldError>
+      </FormField>
 
-      <OdsFormField>
-        <OdsCheckbox defaultChecked={ product?.hasReturnPolicy }
-                     name="hasReturnPolicy"
-                     value="true">
-          <OdsCheckboxControl />
+      <FormField>
+        <Checkbox defaultChecked={ product?.hasReturnPolicy }
+                  name="hasReturnPolicy"
+                  value="true">
+          <CheckboxControl />
 
-          <OdsCheckboxLabel>
+          <CheckboxLabel>
             Product can be returned up to 30 days
-          </OdsCheckboxLabel>
-        </OdsCheckbox>
-      </OdsFormField>
+          </CheckboxLabel>
+        </Checkbox>
+      </FormField>
 
-      <OdsFormFieldv18 error={ error?.stock }>
-        <div className={ styles['product-form__fields__stock'] }>
-          <label className={ styles['product-form__fields__label'] }
-                 htmlFor="stock">
-            Stock quantity:
-          </label>
+      <FormField invalid={ !!error.stock }>
+        <FormFieldLabel>
+          Stock quantity:
+        </FormFieldLabel>
 
-          <OdsQuantity defaultValue={ product?.stock }
-                       id="stock"
-                       isRequired={ true }
-                       min={ 0 }
-                       name="stock"
-                       onOdsInvalid={ (e) => updateErrorv18(e, 'stock') } />
-        </div>
-      </OdsFormFieldv18>
+        <Quantity defaultValue={ product?.stock?.toString() }
+                  min={ 0 }
+                  name="stock"
+                  required={ true }
+                  onBlur={ (e) => updateError(e, 'stock') }
+                  onInvalid={ (e) => onInvalidField(e, 'stock') }>
+          <QuantityControl>
+            <QuantityInput />
+          </QuantityControl>
+        </Quantity>
+      </FormField>
 
-      <OdsFormFieldv18 error={ error?.restockTime }>
+      <OdsFormField error={ error?.restockTime }>
         <label className={ styles['product-form__fields__label'] }
                htmlFor="restockTime">
           Restock time:
@@ -167,9 +168,9 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                        name="restockTime"
                        onOdsInvalid={ (e) => updateErrorv18(e, 'restockTime') }
                        timezones="all" />
-      </OdsFormFieldv18>
+      </OdsFormField>
 
-      <OdsFormFieldv18 error={ error?.minimumOrderQuantity }>
+      <OdsFormField error={ error?.minimumOrderQuantity }>
         <label className={ styles['product-form__fields__label'] }
                htmlFor="minimumOrderQuantity">
           Minimum order quantity:
@@ -182,67 +183,59 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                     name="minimumOrderQuantity"
                     onOdsInvalid={ (e) => updateErrorv18(e, 'minimumOrderQuantity') } />
         </div>
-      </OdsFormFieldv18>
+      </OdsFormField>
 
-      <OdsFormFieldv18 error={ error?.category }>
-        <label className={ styles['product-form__fields__label'] }>
-          Category:
-        </label>
+      <FormField invalid={ !!error.category }>
+        <RadioGroup defaultValue={ product?.category }
+                    name="category"
+                    onBlur={ (e) => updateError(e, 'category') }
+                    onInvalid={ (e) => onInvalidField(e, 'category') }
+                    orientation="horizontal">
+          <RadioGroupLabel>
+            Category:
+          </RadioGroupLabel>
 
-        <div className={ styles['product-form__fields__category'] }>
-          <div className={ styles['product-form__fields__category__option'] }>
-            <OdsRadio isChecked={ product?.category === 'beauty' }
-                      isRequired={ true }
-                      inputId="category-beauty"
-                      name="category"
-                      onOdsInvalid={ (e) => updateErrorv18(e, 'category') }
-                      value="beauty" />
-            <label htmlFor="category-beauty">Beauty</label>
-          </div>
+          <Radio value="beauty">
+            <RadioControl />
+            <RadioLabel>
+              Beauty
+            </RadioLabel>
+          </Radio>
 
-          <div className={ styles['product-form__fields__category__option'] }>
-            <OdsRadio isChecked={ product?.category === 'fragrances' }
-                      isRequired={ true }
-                      inputId="category-fragrances"
-                      name="category"
-                      onOdsInvalid={ (e) => updateErrorv18(e, 'category') }
-                      value="fragrances" />
-            <label htmlFor="category-fragrances">Fragrances</label>
-          </div>
+          <Radio value="fragrances">
+            <RadioControl />
+            <RadioLabel>
+              Fragrances
+            </RadioLabel>
+          </Radio>
 
-          <div className={ styles['product-form__fields__category__option'] }>
-            <OdsRadio isChecked={ product?.category === 'furniture' }
-                      isRequired={ true }
-                      inputId="category-furniture"
-                      name="category"
-                      onOdsInvalid={ (e) => updateErrorv18(e, 'category') }
-                      value="furniture" />
-            <label htmlFor="category-furniture">Furniture</label>
-          </div>
+          <Radio value="furniture">
+            <RadioControl />
+            <RadioLabel>
+              Furniture
+            </RadioLabel>
+          </Radio>
 
-          <div className={ styles['product-form__fields__category__option'] }>
-            <OdsRadio isChecked={ product?.category === 'groceries' }
-                      isRequired={ true }
-                      inputId="category-groceries"
-                      name="category"
-                      onOdsInvalid={ (e) => updateErrorv18(e, 'category') }
-                      value="groceries" />
-            <label htmlFor="category-groceries">Groceries</label>
-          </div>
-        </div>
-      </OdsFormFieldv18>
+          <Radio value="groceries">
+            <RadioControl />
+            <RadioLabel>
+              Groceries
+            </RadioLabel>
+          </Radio>
+        </RadioGroup>
+      </FormField>
 
       <div className={ styles['product-form__actions'] }>
-        <OdsButton onClick={ onCancel }
-                   type="button"
-                   variant={ ODS_BUTTON_VARIANT.outline }>
+        <Button onClick={ onCancel }
+                type="button"
+                variant={ BUTTON_VARIANT.outline }>
           Cancel
-        </OdsButton>
+        </Button>
 
-        <OdsButton isLoading={ isPending }
-                   type="submit">
+        <Button loading={ isPending }
+                type="submit">
           { !!product ? 'Update' : 'Create' }
-        </OdsButton>
+        </Button>
       </div>
     </form>
   )

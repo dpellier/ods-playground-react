@@ -1,4 +1,4 @@
-import { OdsIcon } from '@ovhcloud/ods-react'
+import { Icon } from '@ovhcloud/ods-react'
 import { Link } from 'app/components/link/Link'
 import { SIDE_MENU_ITEMS } from 'app/constants/navigation'
 import styles from './sideMenu.module.scss'
@@ -10,11 +10,12 @@ const SideMenu = () => {
         SIDE_MENU_ITEMS.map((item, idx) => (
           <li className={ styles['side-menu__item'] }
               key={ idx }>
-            <OdsIcon name={ item.icon } />
+            <Icon name={ item.icon } />
 
             <Link className={ styles['side-menu__item__link'] }
-                  label={ item.label }
-                  route={ item.route } />
+                  route={ item.route }>
+              { item.label }
+            </Link>
           </li>
         ))
       }
