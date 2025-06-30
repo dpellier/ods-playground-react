@@ -1,7 +1,6 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
-import { OdsMedium } from '@ovhcloud/ods-components/react'
-import { BUTTON_VARIANT, ICON_NAME, POPOVER_POSITION, Button, Card, Clipboard, ClipboardControl, ClipboardTrigger, Icon, Link as OdsLink, Popover, PopoverContent, PopoverTrigger } from '@ovhcloud/ods-react'
+import { BUTTON_VARIANT, ICON_NAME, POPOVER_POSITION, Button, Card, Clipboard, ClipboardControl, ClipboardTrigger, Icon, Link as OdsLink, Medium, Popover, PopoverContent, PopoverTrigger } from '@ovhcloud/ods-react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import { Link } from 'app/components/link/Link'
@@ -17,10 +16,10 @@ const UserListItem: FC<InferProps<typeof propTypes>> = ({ className, user }) => 
   return (
     <Card className={ classNames(styles['user-list-item'], className) }>
       <div className={ styles['user-list-item__header'] }>
-        <OdsMedium alt={ user.name }
-                   height={ 40 }
-                   src={ user.image }
-                   width={ 40 } />
+        <Medium alt={ user.name }
+                height={ 40 }
+                src={ user.image }
+                width={ 40 } />
 
         <span>
           { user.name }

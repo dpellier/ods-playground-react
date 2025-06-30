@@ -1,10 +1,7 @@
-import type { OdsRangeChangeEvent, OdsTimepickerChangeEvent } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
 import type { ChangeEvent, FC } from 'react'
 import type { ProductCategory } from 'app/models/Product'
-import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsFormField as OdsFormField, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
-import { BUTTON_VARIANT, Button, Checkbox, CheckboxControl, CheckboxLabel, FormField, FormFieldError, FormFieldLabel, Input, Quantity, QuantityControl, QuantityInput, Radio, RadioControl, RadioGroup, RadioGroupLabel, RadioLabel, Textarea } from '@ovhcloud/ods-react'
+import { BUTTON_VARIANT, INPUT_TYPE, Button, Checkbox, CheckboxControl, CheckboxLabel, FormField, FormFieldError, FormFieldLabel, Input, Quantity, QuantityControl, QuantityInput, Radio, RadioControl, RadioGroup, RadioLabel, Range, Textarea, Timepicker, TimepickerControl } from '@ovhcloud/ods-react'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import PropTypes from 'prop-types'
@@ -76,7 +73,7 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                              name={ field.name }
                              onBlur={ field.handleBlur }
                              onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
-                             type={ ODS_INPUT_TYPE.text } />
+                             type={ INPUT_TYPE.text } />
 
                       <FormFieldError>
                         { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
@@ -93,19 +90,13 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                       Price:
                     </FormFieldLabel>
 
-                    <div className={ styles['product-form__fields__price'] }>
-                      <Input defaultValue={ product?.price }
-                             min={ 0 }
-                             name={ field.name }
-                             onBlur={ field.handleBlur }
-                             onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(parseInt(e.target.value, 10)) }
-                             step="any"
-                             type={ ODS_INPUT_TYPE.number } />
-
-                      <span className={ styles['product-form__fields__price__currency'] }>
-                        €
-                      </span>
-                    </div>
+                    <Input defaultValue={ product?.price }
+                           min={ 0 }
+                           name={ field.name }
+                           onBlur={ field.handleBlur }
+                           onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(parseInt(e.target.value, 10)) }
+                           step="any"
+                           type={ INPUT_TYPE.number } />
 
                     <FormFieldError>
                       { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
@@ -184,42 +175,34 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.restockTime }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
-                      <label className={ styles['product-form__fields__label'] }
-                             htmlFor={ field.name }>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
                         Restock time:
-                      </label>
+                      </FormFieldLabel>
 
-                      <OdsTimepicker defaultValue={ product?.restockTime || '' }
-                                     hasError={ !!field.state.meta.errors.length }
-                                     id={ field.name }
-                                     name={ field.name }
-                                     onOdsBlur={ field.handleBlur }
-                                     onOdsChange={ (e: OdsTimepickerChangeEvent) => field.handleChange(e.detail.value as string || '') }
-                                     timezones="all" />
-                    </OdsFormField>
+                      <Timepicker defaultValue={ product?.restockTime || '' }
+                                  name={ field.name }
+                                  onBlur={ field.handleBlur }
+                                  onValueChange={ ({ value }) => field.handleChange(value) }>
+                        <TimepickerControl />
+                      </Timepicker>
+                    </FormField>
                   ))} />
 
       <form.Field name="minimumOrderQuantity"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.minimumOrderQuantity }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
-                      <label className={ styles['product-form__fields__label'] }
-                             htmlFor={ field.name }>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
                         Minimum order quantity:
-                      </label>
+                      </FormFieldLabel>
 
-                      <div>
-                        <OdsRange defaultValue={ product?.minimumOrderQuantity }
-                                  hasError={ !!field.state.meta.errors.length }
-                                  id={ field.name }
-                                  name={ field.name }
-                                  onOdsBlur={ field.handleBlur }
-                                  // @ts-ignore to look later
-                                  onOdsChange={ (e: OdsRangeChangeEvent) => field.handleChange(e.detail.value) } />
-                      </div>
-                    </OdsFormField>
+                      <Range defaultValue={ product ? [product.minimumOrderQuantity] : undefined }
+                             name={ field.name }
+                             onBlur={ field.handleBlur }
+                             onValueChange={ ({ value }) => field.handleChange(value[0]) } />
+                    </FormField>
                   ))} />
 
       <form.Field name="category"
@@ -227,13 +210,13 @@ const ProductFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, 
                   validators={{ onBlur: validationSchema.category }}
                   children={ (field) => ((
                     <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
+                        Category:
+                      </FormFieldLabel>
+
                       <RadioGroup defaultValue={ product?.category }
                                   onValueChange={ (e) => field.handleChange(e.value as ProductCategory) }
                                   orientation="horizontal">
-                        <RadioGroupLabel>
-                          Category:
-                        </RadioGroupLabel>
-
                         <Radio invalid={ !!field.state.meta.errors.length }
                                value="beauty">
                           <RadioControl />

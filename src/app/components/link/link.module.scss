@@ -1,6 +1,5 @@
-@import '@ovhcloud/ods-components/style';
+@import '@ovhcloud/ods-react/style';
 
 .link {
   @include ods-link();
-  @include ods-link-color('primary');
 }

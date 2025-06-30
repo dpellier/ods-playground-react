@@ -1,15 +1,7 @@
-@import '@ovhcloud/ods-react/style';
-
 .user-form {
   display: flex;
   flex-flow: column;
   grid-row-gap: 1rem;
-
-  &__fields {
-    &__label {
-      @include ods-text-label();
-    }
-  }
 
   &__actions {
     display: flex;

@@ -1,12 +1,9 @@
-import type { OdsFormElement } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
 import type { FC, FormEvent } from 'react'
-import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsDatepicker, OdsFormField, OdsPhoneNumber } from '@ovhcloud/ods-components/react'
-import { BUTTON_VARIANT, Button, FormField, FormFieldError, FormFieldLabel, Input, Select, SelectContent, SelectControl } from '@ovhcloud/ods-react'
+import { BUTTON_VARIANT, INPUT_TYPE, Button, Datepicker, DatepickerContent, DatepickerControl, FormField, FormFieldError, FormFieldLabel, Input, PhoneNumber, PhoneNumberControl, PhoneNumberCountryList, Select, SelectContent, SelectControl } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useMemo, useState } from 'react'
-import { User, USER_BIRTH_DATE_FORMAT, USER_ROLES } from 'app/models/User'
+import { User, USER_ROLES } from 'app/models/User'
 import styles from './userForm.module.scss'
 
 const propTypes = {
@@ -62,24 +59,6 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
     }
   }
 
-  async function updateErrorv18(e: CustomEvent, field: string): Promise<void> {
-    if (e.detail.isInvalid) {
-      const errorMessage = await (e.target as HTMLElement & OdsFormElement).getValidationMessage()
-
-      if (errorMessage) {
-        setError((error) => ({
-          ...error,
-          [field]: errorMessage,
-        }))
-      }
-    } else {
-      setError((error) => ({
-        ...error,
-        [field]: '',
-      }))
-    }
-  }
-
   return (
     <form className={ styles['user-form'] }
           onSubmit={ onFormSubmit }>
@@ -93,7 +72,7 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
                name="firstName"
                onInvalid={ (e) => updateError(e, 'firstName') }
                required={ true }
-               type={ ODS_INPUT_TYPE.text } />
+               type={ INPUT_TYPE.text } />
 
         <FormFieldError>
           { error.firstName }
@@ -110,7 +89,7 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
                name="lastName"
                onInvalid={ (e) => updateError(e, 'lastName') }
                required={ true }
-               type={ ODS_INPUT_TYPE.text } />
+               type={ INPUT_TYPE.text } />
 
         <FormFieldError>
           { error.lastName }
@@ -127,41 +106,43 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
                name="email"
                onInvalid={ (e) => updateError(e, 'email') }
                required={ true }
-               type={ ODS_INPUT_TYPE.email } />
+               type={ INPUT_TYPE.email } />
 
         <FormFieldError>
           { error.email }
         </FormFieldError>
       </FormField>
 
-      <OdsFormField error={ error?.phone }>
-        <label className={ styles['user-form__fields__label'] }
-               htmlFor="phone">
+      <FormField invalid={ !!error.phone }>
+        <FormFieldLabel>
           Phone number:
-        </label>
+        </FormFieldLabel>
 
-        <OdsPhoneNumber countries="all"
-                        defaultValue={ user?.phone }
-                        id="phone"
-                        isRequired={ true }
-                        name="phone"
-                        onOdsInvalid={ (e) => updateErrorv18(e, 'phone') } />
-      </OdsFormField>
+        <PhoneNumber countries="all"
+                     defaultValue={ user?.phone }
+                     name="phone"
+                     onInvalid={ (e) => updateError(e, 'phone') }
+                     required>
+          <PhoneNumberCountryList />
 
-      <OdsFormField error={ error?.birthDate }>
-        <label className={ styles['user-form__fields__label'] }
-               htmlFor="birthDate">
+          <PhoneNumberControl />
+        </PhoneNumber>
+      </FormField>
+
+      <FormField invalid={ !!error.birthDate }>
+        <FormFieldLabel>
           Birth date:
-        </label>
+        </FormFieldLabel>
 
-        {/* @ts-ignore IDE gets confused with other React wrapper type */}
-        <OdsDatepicker defaultValue={ user?.birthDate }
-                       format={ USER_BIRTH_DATE_FORMAT }
-                       id="birthDate"
-                       isRequired={ true }
-                       name="birthDate"
-                       onOdsInvalid={ (e) => updateErrorv18(e, 'birthDate') } />
-      </OdsFormField>
+        <Datepicker defaultValue={ user?.birthDate }
+                    name="birthDate"
+                    onInvalid={ (e) => updateError(e, 'birthDate') }
+                    required>
+          <DatepickerControl />
+
+          <DatepickerContent />
+        </Datepicker>
+      </FormField>
 
       <FormField invalid={ !!error.ip }>
         <FormFieldLabel>
@@ -174,7 +155,7 @@ const UserFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
                onInvalid={ (e) => updateError(e, 'ip') }
                pattern="^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
                required={ true }
-               type={ ODS_INPUT_TYPE.text } />
+               type={ INPUT_TYPE.text } />
 
         <FormFieldError>
           { error.email }

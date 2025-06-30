@@ -1,14 +1,12 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsDatepicker, OdsFormField, OdsPhoneNumber } from '@ovhcloud/ods-components/react'
-import { BUTTON_VARIANT, Button, FormField, FormFieldError, FormFieldLabel, Input, Select, SelectContent, SelectControl } from '@ovhcloud/ods-react'
+import { BUTTON_VARIANT, INPUT_TYPE, Button, Datepicker, DatepickerContent, DatepickerControl, FormField, FormFieldError, FormFieldLabel, Input, PhoneNumber, PhoneNumberControl, PhoneNumberCountryList, Select, SelectContent, SelectControl } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { User, USER_BIRTH_DATE_FORMAT, USER_ROLES } from 'app/models/User'
+import { User, USER_ROLES } from 'app/models/User'
 import styles from './userForm.module.scss'
 
 const propTypes = {
@@ -35,6 +33,7 @@ const UserFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCance
     formState: { errors },
     handleSubmit,
     register,
+    setValue,
   } = useForm({
     mode: 'onBlur',
     defaultValues: user || {
@@ -88,7 +87,7 @@ const UserFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCance
         </FormFieldLabel>
 
         <Input { ...register('email') }
-               type={ ODS_INPUT_TYPE.email } />
+               type={ INPUT_TYPE.email } />
 
         <FormFieldError>
           { errors.email?.message }
@@ -97,41 +96,41 @@ const UserFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCance
 
       <Controller control={ control }
                   name="phone"
-                  render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
-                      <label className={ styles['user-form__fields__label'] }
-                             htmlFor={ field.name }>
+                  render={({ field }) =>
+                    <FormField invalid={ !!errors.phone }>
+                      <FormFieldLabel>
                         Phone number:
-                      </label>
+                      </FormFieldLabel>
 
-                      <OdsPhoneNumber countries="all"
-                                      defaultValue={ user?.phone || '' }
-                                      hasError={ !!fieldState.error }
-                                      id={ field.name }
-                                      name={ field.name }
-                                      onOdsBlur={ field.onBlur }
-                                      onOdsChange={ field.onChange } />
-                    </OdsFormField>
+                      <PhoneNumber countries="all"
+                                   defaultValue={ user?.phone }
+                                   name={ field.name }
+                                   onBlur={ field.onBlur }
+                                   onValueChange={ ({ value }) => setValue(field.name, value) }>
+                        <PhoneNumberCountryList />
+
+                        <PhoneNumberControl />
+                      </PhoneNumber>
+                    </FormField>
                   } />
 
       <Controller control={ control }
                   name="birthDate"
-                  render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
-                      <label className={ styles['user-form__fields__label'] }
-                             htmlFor={ field.name }>
+                  render={({ field }) =>
+                    <FormField invalid={ !!errors.birthDate }>
+                      <FormFieldLabel>
                         Birth date:
-                      </label>
+                      </FormFieldLabel>
 
-                      {/*@ts-ignore if someone wants to have a look be my guest*/}
-                      <OdsDatepicker defaultValue={ user?.birthDate }
-                                     format={ USER_BIRTH_DATE_FORMAT }
-                                     hasError={ !!fieldState.error }
-                                     id={ field.name }
-                                     name={ field.name }
-                                     onOdsBlur={ field.onBlur }
-                                     onOdsChange={ field.onChange } />
-                    </OdsFormField>
+                      <Datepicker defaultValue={ user?.birthDate }
+                                  name={ field.name }
+                                  onBlur={ field.onBlur }
+                                  onValueChange={ ({ value }) => setValue(field.name, value) }>
+                        <DatepickerControl />
+
+                        <DatepickerContent />
+                      </Datepicker>
+                    </FormField>
                   } />
 
       <FormField invalid={ !!errors.ip }>

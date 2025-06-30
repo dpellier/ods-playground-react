@@ -1,47 +1,7 @@
-@import '@ovhcloud/ods-components/style';
-
 .product-form {
   display: flex;
   flex-flow: column;
   grid-row-gap: 1rem;
-
-  &__info {
-    align-self: center;
-  }
-
-  &__fields {
-    &__label {
-      @include ods-text-label();
-    }
-
-    &__price {
-      display: flex;
-      column-gap: .5rem;
-      align-items: center;
-
-      &__currency {
-        color: var(--ods-color-primary-500);
-      }
-    }
-
-    &__stock {
-      display: flex;
-      column-gap: 1rem;
-      align-items: center;
-    }
-
-    &__category {
-      display: flex;
-      column-gap: 1rem;
-      align-items: center;
-
-      &__option {
-        display: flex;
-        column-gap: .5rem;
-        align-items: center;
-      }
-    }
-  }
 
   &__actions {
     display: flex;

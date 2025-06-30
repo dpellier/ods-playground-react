@@ -1,13 +1,11 @@
-import type { OdsPaginationCurrentChangeEvent, OdsPaginationItemPerPageChangedEvent } from '@ovhcloud/ods-components'
+import type { PaginationPageChangeDetail } from '@ovhcloud/ods-react'
 import type { User } from 'app/models/User'
-import { OdsPagination } from '@ovhcloud/ods-components/react'
-import { ICON_NAME, Button, Icon } from '@ovhcloud/ods-react'
-import { useEffect } from 'react'
+import { ICON_NAME, Button, Icon, Pagination } from '@ovhcloud/ods-react'
+import {useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LoadingMask } from 'app/components/loadingMask/LoadingMask'
 import { PageTitle } from 'app/components/pageTitle/PageTitle'
 import { ROUTE } from 'app/constants/navigation'
-import { ACTION_STATUS } from 'app/constants/slice'
 import { useAppDispatch, useAppSelector } from 'app/hooks/useRedux'
 import { UserListItem } from 'app/modules/users/modules/list/components/userListItem/UserListItem'
 import { list } from 'app/state/slices/users'
@@ -19,25 +17,25 @@ const List = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const count = useAppSelector((state) => state.users.count)
-  const listStatus = useAppSelector((state) => state.users.listStatus)
   const users: User[] = useAppSelector((state) => state.users.users)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(DEFAULT_PER_PAGE)
 
   useEffect(() => {
-    if (listStatus === ACTION_STATUS.idle) {
-      listUsers(1)
-    }
-  }, [dispatch, listStatus])
+    listUsers()
+  }, [currentPage, pageSize])
 
-  function listUsers(page: number, perPage = DEFAULT_PER_PAGE) {
-    dispatch(list({ page, perPage }))
+  function listUsers() {
+    dispatch(list({ page: currentPage, perPage: pageSize }))
   }
 
-  function onPaginationChange({ detail }: OdsPaginationCurrentChangeEvent) {
-    listUsers(detail.current, detail.itemPerPage)
+  function onPaginationChange({ page }: PaginationPageChangeDetail) {
+    setCurrentPage(page)
   }
 
-  function onPaginationPerPageChange({ detail }: OdsPaginationItemPerPageChangedEvent) {
-    listUsers(detail.currentPage, detail.current)
+  // TODO waiting for ODS patch
+  function onPaginationPerPageChange({ pageSize }: any) {
+    setPageSize(pageSize)
   }
 
   return (
@@ -69,9 +67,13 @@ const List = () => {
 
         {
           !!count &&
-          <OdsPagination onOdsChange={ onPaginationChange }
-                         onOdsItemPerPageChange={ onPaginationPerPageChange }
-                         totalItems={ count } />
+          <Pagination onPageChange={ onPaginationChange }
+                      // @ts-ignore waiting for ODS patch
+                      onPageSizeChange={ onPaginationPerPageChange }
+                      pageSize={ pageSize }
+                      totalItems={ count }
+                      // withPageSizeSelector // TODO waiting for ODS patch
+          />
         }
       </div>
     </div>

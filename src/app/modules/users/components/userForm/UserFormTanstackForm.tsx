@@ -1,15 +1,12 @@
-import type { OdsDatepickerChangeEvent, OdsPhoneNumberChangeEvent } from '@ovhcloud/ods-components'
 import type { InferProps } from 'prop-types'
 import type { ChangeEvent, FC } from 'react'
-import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsDatepicker, OdsFormField, OdsPhoneNumber } from '@ovhcloud/ods-components/react'
-import { BUTTON_VARIANT, Button, FormField, FormFieldError, FormFieldLabel, Input, Select, SelectContent, SelectControl } from '@ovhcloud/ods-react'
+import { BUTTON_VARIANT, INPUT_TYPE, Button, Datepicker, DatepickerContent, DatepickerControl, FormField, FormFieldError, FormFieldLabel, Input, PhoneNumber, PhoneNumberControl, PhoneNumberCountryList, Select, SelectContent, SelectControl } from '@ovhcloud/ods-react'
 import { useForm } from '@tanstack/react-form'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import { z } from 'zod'
-import { User, USER_BIRTH_DATE_FORMAT, USER_ROLES } from 'app/models/User'
+import { User, USER_ROLES } from 'app/models/User'
 import styles from './userForm.module.scss'
 
 const propTypes = {
@@ -77,7 +74,7 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                              name={ field.name }
                              onBlur={ field.handleBlur }
                              onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
-                             type={ ODS_INPUT_TYPE.text } />
+                             type={ INPUT_TYPE.text } />
 
                       <FormFieldError>
                         { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
@@ -98,7 +95,7 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                              name={ field.name }
                              onBlur={ field.handleBlur }
                              onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
-                             type={ ODS_INPUT_TYPE.text } />
+                             type={ INPUT_TYPE.text } />
 
                       <FormFieldError>
                         { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
@@ -119,7 +116,7 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                              name={ field.name }
                              onBlur={ field.handleBlur }
                              onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
-                             type={ ODS_INPUT_TYPE.email } />
+                             type={ INPUT_TYPE.email } />
 
                       <FormFieldError>
                         { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }
@@ -131,42 +128,41 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.phone }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
-                      <label className={ styles['user-form__fields__label'] }
-                             htmlFor={ field.name }>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
                         Phone number:
-                      </label>
+                      </FormFieldLabel>
 
-                      <OdsPhoneNumber countries="all"
-                                      defaultValue={ user?.phone || '' }
-                                      hasError={ !!field.state.meta.errors.length }
-                                      id={ field.name }
-                                      name={ field.name }
-                                      onOdsBlur={ field.handleBlur }
-                                      onOdsChange={ (e: OdsPhoneNumberChangeEvent) => field.handleChange(e.detail.value as string || '') } />
-                    </OdsFormField>
+                      <PhoneNumber countries="all"
+                                   defaultValue={ user?.phone }
+                                   name={ field.name }
+                                   onBlur={ field.handleBlur }
+                                   onValueChange={ ({ value }) => field.handleChange(value) }>
+                        <PhoneNumberCountryList />
+
+                        <PhoneNumberControl />
+                      </PhoneNumber>
+                    </FormField>
                   ))} />
 
       <form.Field name="birthDate"
                   validatorAdapter={ zodValidator() }
                   validators={{ onBlur: validationSchema.birthDate }}
                   children={ (field) => ((
-                    <OdsFormField error={ field.state.meta.errors.length ? field.state.meta.errors[0] as string : '' }>
-                      <label className={ styles['user-form__fields__label'] }
-                             htmlFor={ field.name }>
+                    <FormField invalid={ !!field.state.meta.errors.length }>
+                      <FormFieldLabel>
                         Birth date:
-                      </label>
+                      </FormFieldLabel>
 
-                      {/* @ts-ignore IDE gets confused with other React wrapper type */}
-                      <OdsDatepicker defaultValue={ user?.birthDate }
-                                     format={ USER_BIRTH_DATE_FORMAT }
-                                     hasError={ !!field.state.meta.errors.length }
-                                     id={ field.name }
-                                     name={ field.name }
-                                     onOdsBlur={ field.handleBlur }
-                                     // @ts-ignore to look later
-                                     onOdsChange={ (e: OdsDatepickerChangeEvent) => field.handleChange(e.detail.value) } />
-                    </OdsFormField>
+                      <Datepicker defaultValue={ user?.birthDate }
+                                  name={ field.name }
+                                  onBlur={ field.handleBlur }
+                                  onValueChange={ ({ value }) => field.handleChange(value) }>
+                        <DatepickerControl />
+
+                        <DatepickerContent />
+                      </Datepicker>
+                    </FormField>
                   ))} />
 
       <form.Field name="ip"
@@ -182,7 +178,7 @@ const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onC
                              name={ field.name }
                              onBlur={ field.handleBlur }
                              onChange={ (e: ChangeEvent<HTMLInputElement>) => field.handleChange(e.target.value) }
-                             type={ ODS_INPUT_TYPE.text } />
+                             type={ INPUT_TYPE.text } />
 
                       <FormFieldError>
                         { field.state.meta.errors.length ? field.state.meta.errors[0] : '' }

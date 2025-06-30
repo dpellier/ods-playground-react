@@ -2,9 +2,7 @@ import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
 import type { ProductCategory } from 'app/models/Product'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsFormField as OdsFormField, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
-import { BUTTON_VARIANT, Button, Checkbox, CheckboxControl, CheckboxLabel, FormField, FormFieldError, FormFieldLabel, Input, Quantity, QuantityControl, QuantityInput, Radio, RadioControl, RadioGroup, RadioGroupLabel, RadioLabel, Textarea } from '@ovhcloud/ods-react'
+import { BUTTON_VARIANT, INPUT_TYPE, Button, Checkbox, CheckboxControl, CheckboxLabel, FormField, FormFieldError, FormFieldLabel, Input, Quantity, QuantityControl, QuantityInput, Radio, RadioControl, RadioGroup, RadioLabel, Range, Textarea, Timepicker, TimepickerControl } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -79,7 +77,7 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
         <Input { ...register('price') }
                min={ 0 }
                step="any"
-               type={ ODS_INPUT_TYPE.number } />
+               type={ INPUT_TYPE.number } />
 
         <FormFieldError>
           { errors.price?.message }
@@ -144,54 +142,47 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
 
       <Controller control={ control }
                   name="restockTime"
-                  render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
-                      <label className={ styles['product-form__fields__label'] }
-                             htmlFor={ field.name }>
+                  render={({ field }) =>
+                    <FormField invalid={ !!errors.restockTime }>
+                      <FormFieldLabel>
                         Restock time:
-                      </label>
+                      </FormFieldLabel>
 
-                      <OdsTimepicker defaultValue={ product?.restockTime || '' }
-                                     hasError={ !!fieldState.error }
-                                     id={ field.name }
-                                     name={ field.name }
-                                     onOdsBlur={ field.onBlur }
-                                     onOdsChange={ field.onChange }
-                                     timezones="all" />
-                    </OdsFormField>
+                      <Timepicker defaultValue={ product?.restockTime }
+                                  name={ field.name }
+                                  onBlur={ field.onBlur }
+                                  onValueChange={ ({ value }) => setValue(field.name, value) }>
+                        <TimepickerControl />
+                      </Timepicker>
+                    </FormField>
                   } />
 
       <Controller control={ control }
                   name="minimumOrderQuantity"
-                  render={({ field, fieldState }) =>
-                    <OdsFormField error={ fieldState.error?.message }>
-                      <label className={ styles['product-form__fields__label'] }
-                             htmlFor={ field.name }>
+                  render={({ field }) =>
+                    <FormField invalid={ !!errors.minimumOrderQuantity }>
+                      <FormFieldLabel>
                         Minimum order quantity:
-                      </label>
+                      </FormFieldLabel>
 
-                      <div>
-                        <OdsRange defaultValue={ product?.minimumOrderQuantity }
-                                  hasError={ !!fieldState.error }
-                                  id={ field.name }
-                                  name={ field.name }
-                                  onOdsBlur={ field.onBlur }
-                                  onOdsChange={ field.onChange } />
-                      </div>
-                    </OdsFormField>
+                      <Range defaultValue={ product ? [product.minimumOrderQuantity] : undefined }
+                             name={ field.name }
+                             onBlur={ field.onBlur }
+                             onValueChange={ ({ value }) => setValue(field.name, value[0]) } />
+                    </FormField>
                   } />
 
       <Controller control={ control }
                   name="category"
                   render={ ({ field} ) => (
                     <FormField>
+                      <FormFieldLabel>
+                        Category:
+                      </FormFieldLabel>
+
                       <RadioGroup defaultValue={ product?.category }
                                   onValueChange={ ({ value }) => value && setValue(field.name, value as ProductCategory) }
                                   orientation="horizontal">
-                        <RadioGroupLabel>
-                          Category:
-                        </RadioGroupLabel>
-
                         <Radio invalid={ !!errors.category }
                                value="beauty">
                           <RadioControl />
