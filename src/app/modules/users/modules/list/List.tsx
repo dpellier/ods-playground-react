@@ -1,4 +1,4 @@
-import type { PaginationPageChangeDetail } from '@ovhcloud/ods-react'
+import type { PaginationPageChangeDetail, PaginationPageSizeChangeDetail } from '@ovhcloud/ods-react'
 import type { User } from 'app/models/User'
 import { ICON_NAME, Button, Icon, Pagination } from '@ovhcloud/ods-react'
 import {useEffect, useState} from 'react'
@@ -33,8 +33,7 @@ const List = () => {
     setCurrentPage(page)
   }
 
-  // TODO waiting for ODS patch
-  function onPaginationPerPageChange({ pageSize }: any) {
+  function onPaginationPerPageChange({ pageSize }: PaginationPageSizeChangeDetail) {
     setPageSize(pageSize)
   }
 
@@ -68,12 +67,10 @@ const List = () => {
         {
           !!count &&
           <Pagination onPageChange={ onPaginationChange }
-                      // @ts-ignore waiting for ODS patch
                       onPageSizeChange={ onPaginationPerPageChange }
                       pageSize={ pageSize }
                       totalItems={ count }
-                      // withPageSizeSelector // TODO waiting for ODS patch
-          />
+                      withPageSizeSelector />
         }
       </div>
     </div>
