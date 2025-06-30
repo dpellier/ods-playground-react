@@ -1,8 +1,6 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
-import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsFormField, OdsRange, OdsTimepicker } from '@ovhcloud/ods-components/react'
-import { BUTTON_VARIANT, Button, Checkbox, CheckboxControl, CheckboxLabel, FormField, FormFieldError, FormFieldLabel, Input, Quantity, QuantityControl, QuantityInput, Radio, RadioControl, RadioGroup, RadioGroupLabel, RadioLabel, Textarea } from '@ovhcloud/ods-react'
+import { BUTTON_VARIANT, INPUT_TYPE, Button, Checkbox, CheckboxControl, CheckboxLabel, FormField, FormFieldError, FormFieldLabel, Input, Quantity, QuantityControl, QuantityInput, Radio, RadioControl, RadioGroup, RadioLabel, Range, Textarea, Timepicker, TimepickerControl } from '@ovhcloud/ods-react'
 import { useFormik } from 'formik'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
@@ -82,7 +80,7 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                onBlur={ formik.handleBlur }
                onChange={ formik.handleChange }
                step="any"
-               type={ ODS_INPUT_TYPE.number }
+               type={ INPUT_TYPE.number }
                value={ formik.values.price } />
 
         <FormFieldError>
@@ -135,7 +133,9 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
         <Quantity min={ 0 }
                   name="stock"
                   onBlur={ formik.handleBlur }
-                  onValueChange={ formik.handleChange }
+                  onValueChange={ ({ value }) => {
+                    formik.setFieldValue('stock', value);
+                  }}
                   value={ formik.values.stock?.toString() }>
           <QuantityControl>
             <QuantityInput />
@@ -143,38 +143,39 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
         </Quantity>
       </FormField>
 
-      <OdsFormField error={ (formik.touched.restockTime && formik.errors.restockTime) as string }>
-        <label className={ styles['product-form__fields__label'] }
-               htmlFor="restockTime">
+      <FormField invalid={ !!(formik.touched.restockTime && formik.errors.restockTime) }>
+        <FormFieldLabel>
           Restock time:
-        </label>
+        </FormFieldLabel>
 
-        <OdsTimepicker hasError={ formik.touched.restockTime && !!formik.errors.restockTime ? true : undefined }
-                       id="restockTime"
-                       name="restockTime"
-                       onOdsBlur={ formik.handleBlur }
-                       onOdsChange={ formik.handleChange }
-                       timezones="all"
-                       value={ formik.values.restockTime } />
-      </OdsFormField>
+        <Timepicker name="restockTime"
+                    onBlur={ formik.handleBlur }
+                    onValueChange={ ({ value }) => {
+                      formik.setFieldValue('restockTime', value);
+                    }}
+                    value={ formik.values.restockTime }>
+          <TimepickerControl />
+        </Timepicker>
+      </FormField>
 
-      <OdsFormField error={ (formik.touched.minimumOrderQuantity && formik.errors.minimumOrderQuantity) as string }>
-        <label className={ styles['product-form__fields__label'] }
-               htmlFor="minimumOrderQuantity">
+      <FormField invalid={ !!(formik.touched.minimumOrderQuantity && formik.errors.minimumOrderQuantity) }>
+        <FormFieldLabel>
           Minimum order quantity:
-        </label>
+        </FormFieldLabel>
 
-        <div>
-          <OdsRange hasError={ formik.touched.minimumOrderQuantity && !!formik.errors.minimumOrderQuantity }
-                    id="minimumOrderQuantity"
-                    name="minimumOrderQuantity"
-                    onOdsBlur={ formik.handleBlur }
-                    onOdsChange={ formik.handleChange }
-                    value={ formik.values.minimumOrderQuantity } />
-        </div>
-      </OdsFormField>
+        <Range name="minimumOrderQuantity"
+               onBlur={ formik.handleBlur }
+               onValueChange={ ({ value }) => {
+                 formik.setFieldValue('minimumOrderQuantity', value[0]);
+               }}
+               value={ formik.values.minimumOrderQuantity ? [formik.values.minimumOrderQuantity] : undefined } />
+      </FormField>
 
       <FormField invalid={ !!(formik.touched.category && formik.errors.category) }>
+        <FormFieldLabel>
+          Category:
+        </FormFieldLabel>
+
         <RadioGroup defaultValue={ formik.initialValues.category }
                     name="category"
                     onBlur={ formik.handleBlur }
@@ -182,10 +183,6 @@ const ProductFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
                       formik.setFieldValue('category', value);
                     }}
                     orientation="horizontal">
-          <RadioGroupLabel>
-            Category:
-          </RadioGroupLabel>
-
           <Radio value="beauty">
             <RadioControl />
             <RadioLabel>

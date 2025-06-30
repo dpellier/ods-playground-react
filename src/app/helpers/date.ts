@@ -1,4 +1,4 @@
-import { formatDate as vendorFormatter, parseDate as vendorParser } from '@ovhcloud/ods-components'
+import { format as vendorFormatter, parse as vendorParser } from 'date-fns'
 
 function formatDate(date: Date, format: string) {
   if (typeof date === 'string') {
@@ -8,7 +8,7 @@ function formatDate(date: Date, format: string) {
 }
 
 function parseDate(str: string, format: string) {
-  return new Date(vendorParser(str, format) || 0)
+  return new Date(vendorParser(str, format, new Date()) || 0)
 }
 
 export {

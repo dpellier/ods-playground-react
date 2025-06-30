@@ -1,8 +1,7 @@
 import type { InferProps } from 'prop-types'
 import type { FC, ReactElement } from 'react'
 import type { ProductProps } from 'app/models/Product'
-import { OdsMedium } from '@ovhcloud/ods-components/react'
-import { BUTTON_VARIANT, ICON_NAME, POPOVER_POSITION, Button, Checkbox, CheckboxControl, CheckboxLabel, Icon, Popover, PopoverContent, PopoverTrigger, Table } from '@ovhcloud/ods-react'
+import { BUTTON_VARIANT, ICON_NAME, POPOVER_POSITION, Button, Checkbox, CheckboxControl, CheckboxLabel, Icon, Medium, Popover, PopoverContent, PopoverTrigger, Table } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -24,10 +23,10 @@ const propTypes = {
 }
 
 const Thumbnail = (product: Product) => (
-  <OdsMedium alt={ product.title }
-             height={ 60 }
-             src={ product.thumbnail }
-             width={ 60 } />
+  <Medium alt={ product.title }
+          height={ 60 }
+          src={ product.thumbnail }
+          width={ 60 } />
 )
 
 const COLUMNS: Column[] = [

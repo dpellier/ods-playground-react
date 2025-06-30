@@ -1,5 +1,5 @@
 import type { Toast } from 'react-hot-toast'
-import { MESSAGE_COLOR, Message } from '@ovhcloud/ods-react'
+import { MESSAGE_COLOR, Message, MessageBody } from '@ovhcloud/ods-react'
 import { resolveValue, Toaster as ToasterVendor } from 'react-hot-toast'
 
 function getMessageColor(toast: Toast) {
@@ -21,7 +21,9 @@ const Toaster = () => {
         (toast) => ((
           <Message color={ getMessageColor(toast) }
                    dismissible={ false }>
-            { resolveValue(toast.message, toast) }
+            <MessageBody>
+              { resolveValue(toast.message, toast) }
+            </MessageBody>
           </Message>
         ))
       }

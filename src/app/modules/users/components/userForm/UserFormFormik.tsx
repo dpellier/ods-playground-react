@@ -1,13 +1,11 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
-import { ODS_INPUT_TYPE } from '@ovhcloud/ods-components'
-import { OdsDatepicker, OdsFormField, OdsPhoneNumber } from '@ovhcloud/ods-components/react'
-import { BUTTON_VARIANT, Button, FormField, FormFieldError, FormFieldLabel, Input, Select, SelectContent, SelectControl } from '@ovhcloud/ods-react'
+import { BUTTON_VARIANT, INPUT_TYPE, Button, Datepicker, DatepickerContent, DatepickerControl, FormField, FormFieldError, FormFieldLabel, Input, PhoneNumber, PhoneNumberControl, PhoneNumberCountryList, Select, SelectContent, SelectControl } from '@ovhcloud/ods-react'
 import { useFormik } from 'formik'
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import * as yup from 'yup'
-import { User, USER_BIRTH_DATE_FORMAT, USER_ROLES } from 'app/models/User'
+import { User, USER_ROLES } from 'app/models/User'
 import styles from './userForm.module.scss'
 
 const propTypes = {
@@ -63,7 +61,7 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
         <Input name="firstName"
                onBlur={ formik.handleBlur }
                onChange={ formik.handleChange }
-               type={ ODS_INPUT_TYPE.text }
+               type={ INPUT_TYPE.text }
                value={ formik.values.firstName } />
 
         <FormFieldError>
@@ -79,7 +77,7 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
         <Input name="lastName"
                onBlur={ formik.handleBlur }
                onChange={ formik.handleChange }
-               type={ ODS_INPUT_TYPE.text }
+               type={ INPUT_TYPE.text }
                value={ formik.values.lastName } />
 
         <FormFieldError>
@@ -95,7 +93,7 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
         <Input name="email"
                onBlur={ formik.handleBlur }
                onChange={ formik.handleChange }
-               type={ ODS_INPUT_TYPE.email }
+               type={ INPUT_TYPE.email }
                value={ formik.values.email } />
 
         <FormFieldError>
@@ -103,35 +101,38 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
         </FormFieldError>
       </FormField>
 
-      <OdsFormField error={ (formik.touched.phone && formik.errors.phone) as string }>
-        <label className={ styles['user-form__fields__label'] }
-               htmlFor="phone">
+      <FormField invalid={ !!(formik.touched.phone && formik.errors.phone) }>
+        <FormFieldLabel>
           Phone number:
-        </label>
+        </FormFieldLabel>
 
-        <OdsPhoneNumber countries="all"
-                        hasError={ formik.touched.phone && !!formik.errors.phone }
-                        id="phone"
-                        name="phone"
-                        onOdsBlur={ formik.handleBlur }
-                        onOdsChange={ formik.handleChange }
-                        value={ formik.values.phone } />
-      </OdsFormField>
+        <PhoneNumber countries="all"
+                     name="phone"
+                     onBlur={ formik.handleBlur }
+                     onChange={ formik.handleChange }
+                     value={ formik.values.phone }>
+          <PhoneNumberCountryList />
 
-      <OdsFormField error={ (formik.touched.birthDate && formik.errors.birthDate) as string }>
-        <label className={ styles['user-form__fields__label'] }
-               htmlFor="birthDate">
+          <PhoneNumberControl />
+        </PhoneNumber>
+      </FormField>
+
+      <FormField invalid={ !!(formik.touched.birthDate && formik.errors.birthDate) }>
+        <FormFieldLabel>
           Birth date:
-        </label>
+        </FormFieldLabel>
 
-        <OdsDatepicker format={ USER_BIRTH_DATE_FORMAT }
-                       hasError={ formik.touched.birthDate && !!formik.errors.birthDate }
-                       id="birthDate"
-                       name="birthDate"
-                       onOdsBlur={ formik.handleBlur }
-                       onOdsChange={ formik.handleChange }
-                       value={ formik.values.birthDate } />
-      </OdsFormField>
+        <Datepicker name="birthDate"
+                    onBlur={ formik.handleBlur }
+                    onValueChange={ ({ value }) => {
+                      formik.setFieldValue('birthDate', value);
+                    }}
+                    value={ formik.values.birthDate }>
+          <DatepickerControl />
+
+          <DatepickerContent />
+        </Datepicker>
+      </FormField>
 
       <FormField invalid={ !!(formik.touched.ip && formik.errors.ip) }>
         <FormFieldLabel>
@@ -141,7 +142,7 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
         <Input name="ip"
                onBlur={ formik.handleBlur }
                onChange={ formik.handleChange }
-               type={ ODS_INPUT_TYPE.text }
+               type={ INPUT_TYPE.text }
                value={ formik.values.ip } />
 
         <FormFieldError>
@@ -158,7 +159,9 @@ const UserFormFormik: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel,
                 items={ roleOptions }
                 name="role"
                 onBlur={ formik.handleBlur }
-                onChange={ formik.handleChange }
+                onValueChange={ ({ value }) => {
+                  formik.setFieldValue('role', value[0]);
+                }}
                 required={ true }>
           <SelectControl />
 

@@ -1,7 +1,6 @@
-import type { OdsPaginationCurrentChangeEvent, OdsPaginationItemPerPageChangedEvent } from '@ovhcloud/ods-components'
+import type { PaginationPageChangeDetail } from '@ovhcloud/ods-react'
 import type { Product } from 'app/models/Product'
-import { OdsPagination } from '@ovhcloud/ods-components/react'
-import { ICON_NAME, Button, Icon } from '@ovhcloud/ods-react'
+import { ICON_NAME, Button, Icon, Pagination } from '@ovhcloud/ods-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
@@ -23,15 +22,14 @@ const List = () => {
   const count = useAppSelector((state) => state.products.count)
   const products = useAppSelector((state) => state.products.products)
   const deleteStatus = useAppSelector((state) => state.products.deleteStatus)
-  const listStatus = useAppSelector((state) => state.products.listStatus)
   const [productToDelete, setProductToDelete] = useState<Product | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(DEFAULT_PER_PAGE)
 
   useEffect(() => {
-    if (listStatus === ACTION_STATUS.idle) {
-      listProducts(1)
-    }
-  }, [dispatch, listStatus])
+    listProducts()
+  }, [currentPage, pageSize])
 
   useEffect(() => {
     if (isSubmitting && deleteStatus === ACTION_STATUS.succeeded) {
@@ -47,8 +45,8 @@ const List = () => {
     }
   }, [deleteStatus, isSubmitting])
 
-  function listProducts(page: number, perPage = DEFAULT_PER_PAGE) {
-    dispatch(list({ page, perPage }))
+  function listProducts() {
+    dispatch(list({ page: currentPage, perPage: pageSize }))
   }
 
   function onCancelDelete() {
@@ -66,12 +64,13 @@ const List = () => {
     }
   }
 
-  function onPaginationChange({ detail }: OdsPaginationCurrentChangeEvent) {
-    listProducts(detail.current, detail.itemPerPage)
+  function onPaginationChange({ page }: PaginationPageChangeDetail) {
+    setCurrentPage(page)
   }
 
-  function onPaginationPerPageChange({ detail }: OdsPaginationItemPerPageChangedEvent) {
-    listProducts(detail.currentPage, detail.current)
+  // TODO waiting for ODS patch
+  function onPaginationPerPageChange({ pageSize }: any) {
+    setPageSize(pageSize)
   }
 
   return (
@@ -97,9 +96,13 @@ const List = () => {
 
         {
           !!count &&
-          <OdsPagination onOdsChange={ onPaginationChange }
-                         onOdsItemPerPageChange={ onPaginationPerPageChange }
-                         totalItems={ count } />
+          <Pagination onPageChange={ onPaginationChange }
+                      // @ts-ignore waiting for ODS patch
+                      onPageSizeChange={ onPaginationPerPageChange }
+                      pageSize={ pageSize }
+                      totalItems={ count }
+                      // withPageSizeSelector // TODO waiting for ODS patch
+          />
         }
       </div>
 

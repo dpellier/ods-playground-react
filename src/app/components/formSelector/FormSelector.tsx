@@ -1,4 +1,4 @@
-import type { TabsChangeEvent } from '@ovhcloud/ods-react'
+import type { TabsValueChangeEvent } from '@ovhcloud/ods-react'
 import type { FC } from 'react'
 import type { InferProps } from 'prop-types'
 import { Tab, Tabs, TabList } from '@ovhcloud/ods-react'
@@ -20,14 +20,14 @@ const propTypes = {
 const FormSelector: FC<InferProps<typeof propTypes>> = ({ children, isDisabled }) => {
   const [currentTab, setCurrentTab] = useState<string>(FORM_SELECTOR_TAB.native)
 
-  function onTabChange(event: TabsChangeEvent) {
+  function onTabChange(event: TabsValueChangeEvent) {
     setCurrentTab(event.value)
   }
 
   return (
     <>
       <Tabs defaultValue={ currentTab }
-            onChange={ onTabChange }>
+            onValueChange={ onTabChange }>
         <TabList>
           <Tab disabled={ isDisabled }
                value={ FORM_SELECTOR_TAB.native }>
