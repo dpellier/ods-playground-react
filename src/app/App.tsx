@@ -1,9 +1,9 @@
+import { Toaster } from '@ovhcloud/ods-react';
 import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { Header } from 'app/components/header/Header'
 import { LoadingMask } from 'app/components/loadingMask/LoadingMask'
 import { SideMenu } from 'app/components/sideMenu/SideMenu'
-import { Toaster } from 'app/components/toaster/Toaster'
 import { ROUTE } from 'app/constants/navigation'
 import { useAuth } from 'app/hooks/useAuth'
 import styles from './app.module.scss'

@@ -1,8 +1,7 @@
 import type { PaginationPageChangeDetail, PaginationPageSizeChangeDetail } from '@ovhcloud/ods-react'
 import type { Product } from 'app/models/Product'
-import { ICON_NAME, Button, Icon, Pagination } from '@ovhcloud/ods-react'
+import { ICON_NAME, Button, Icon, Pagination, toast } from '@ovhcloud/ods-react'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { LoadingMask } from 'app/components/loadingMask/LoadingMask'
 import { PageTitle } from 'app/components/pageTitle/PageTitle'
@@ -40,7 +39,7 @@ const List = () => {
     }
 
     if (isSubmitting && deleteStatus === ACTION_STATUS.failed) {
-      toast.error('Something went wrong while deleting the product')
+      toast.critical('Something went wrong while deleting the product')
       setIsSubmitting(false)
     }
   }, [deleteStatus, isSubmitting])

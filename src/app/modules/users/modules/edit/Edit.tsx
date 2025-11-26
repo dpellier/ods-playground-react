@@ -1,6 +1,6 @@
 import type { UserProps } from 'app/models/User'
+import { toast } from '@ovhcloud/ods-react'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 import { FORM_SELECTOR_TAB, FormSelector } from 'app/components/formSelector/FormSelector'
 import { LoadingMask } from 'app/components/loadingMask/LoadingMask'
@@ -43,7 +43,7 @@ const Edit = () => {
     }
 
     if (isSubmitting && updateStatus === ACTION_STATUS.failed) {
-      toast.error('Something went wrong while updating the user')
+      toast.critical('Something went wrong while updating the user')
       setIsSubmitting(false)
     }
   }, [isSubmitting, updateStatus])
