@@ -1,7 +1,6 @@
 import type { SignInSlicePayload } from 'app/state/slices/session'
-import { TEXT_PRESET, Text } from '@ovhcloud/ods-react'
+import { TEXT_PRESET, Text, toast } from '@ovhcloud/ods-react'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-hot-toast'
 import { ACTION_STATUS } from 'app/constants/slice'
 import { useAuth } from 'app/hooks/useAuth'
 import { useAppSelector } from 'app/hooks/useRedux'
@@ -15,7 +14,7 @@ const SignIn = () => {
 
   useEffect(() => {
     if (isSubmitting && signInStatus === ACTION_STATUS.failed) {
-      toast.error('Something went wrong while signing in')
+      toast.critical('Something went wrong while signing in')
       setIsSubmitting(false)
     }
   }, [isSubmitting, signInStatus])

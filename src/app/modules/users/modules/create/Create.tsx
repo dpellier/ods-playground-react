@@ -1,6 +1,6 @@
 import type { UserProps } from 'app/models/User'
+import { toast } from '@ovhcloud/ods-react'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { FORM_SELECTOR_TAB, FormSelector } from 'app/components/formSelector/FormSelector'
 import { PageTitle } from 'app/components/pageTitle/PageTitle'
@@ -28,7 +28,7 @@ const Create = () => {
     }
 
     if (isSubmitting && createStatus === ACTION_STATUS.failed) {
-      toast.error('Something went wrong while saving the user')
+      toast.critical('Something went wrong while saving the user')
       setIsSubmitting(false)
     }
   }, [isSubmitting, createStatus])

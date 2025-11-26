@@ -1,6 +1,6 @@
 import type { ProductProps } from 'app/models/Product'
+import { toast } from '@ovhcloud/ods-react'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 import { FORM_SELECTOR_TAB, FormSelector } from 'app/components/formSelector/FormSelector'
 import { LoadingMask } from 'app/components/loadingMask/LoadingMask'
@@ -43,7 +43,7 @@ const Edit = () => {
     }
 
     if (isSubmitting && updateStatus === ACTION_STATUS.failed) {
-      toast.error('Something went wrong while updating the product')
+      toast.critical('Something went wrong while updating the product')
       setIsSubmitting(false)
     }
   }, [isSubmitting, updateStatus])

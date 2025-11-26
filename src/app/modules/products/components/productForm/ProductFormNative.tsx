@@ -116,6 +116,10 @@ const ProductFormNative: FC<InferProps<typeof propTypes>> = ({ isPending, onCanc
       </FormField>
 
       <FormField>
+        <FormFieldLabel>
+          Return policy:
+        </FormFieldLabel>
+
         <Checkbox defaultChecked={ product?.hasReturnPolicy }
                   name="hasReturnPolicy"
                   value="true">

@@ -31,7 +31,7 @@ $list-height: 400px;
         grid-template-columns: 1fr 1fr;
       }
 
-      @media screen and (min-width: $ods-breakpoint-large-screen) {
+      @media screen and (min-width: $ods-breakpoint-widescreen) {
         grid-template-columns: 1fr 1fr 1fr;
       }
 
