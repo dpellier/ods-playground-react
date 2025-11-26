@@ -30,7 +30,7 @@ const validationSchema = {
 const UserFormTanstackForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCancel, onSubmit, user }) => {
   const form = useForm({
     defaultValues: user || {
-      birthDate: undefined,
+      birthDate: null,
       email: '',
       firstName: '',
       ip: '',

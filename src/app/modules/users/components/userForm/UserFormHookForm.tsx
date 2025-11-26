@@ -1,5 +1,6 @@
 import type { InferProps } from 'prop-types'
 import type { FC } from 'react'
+import type { USER_ROLE } from 'app/models/User'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { BUTTON_VARIANT, INPUT_TYPE, Button, Datepicker, DatepickerContent, DatepickerControl, FormField, FormFieldError, FormFieldLabel, Input, PhoneNumber, PhoneNumberControl, PhoneNumberCountryList, Select, SelectContent, SelectControl } from '@ovhcloud/ods-react'
 import PropTypes from 'prop-types'
@@ -125,7 +126,7 @@ const UserFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCance
                       <Datepicker defaultValue={ user?.birthDate }
                                   name={ field.name }
                                   onBlur={ field.onBlur }
-                                  onValueChange={ ({ value }) => setValue(field.name, value) }>
+                                  onValueChange={ ({ value }) => value && setValue(field.name, value) }>
                         <DatepickerControl />
 
                         <DatepickerContent />
@@ -145,23 +146,30 @@ const UserFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCance
         </FormFieldError>
       </FormField>
 
-      <FormField invalid={ !!errors.role }>
-        <FormFieldLabel>
-          Role:
-        </FormFieldLabel>
+      <Controller control={ control }
+                  name="role"
+                  render={({ field }) =>
+                    <FormField invalid={ !!errors.role }>
+                      <FormFieldLabel>
+                        Role:
+                      </FormFieldLabel>
 
-        <Select defaultValue={ user?.role }
-                items={ roleOptions }
-                { ...register('role') }>
-          <SelectControl />
+                      <Select defaultValue={ user?.role }
+                              items={ roleOptions }
+                              name={ field.name }
+                              onBlur={ field.onBlur }
+                              onValueChange={ ({ value }) => setValue(field.name, value[0] as USER_ROLE) }>
+                        <SelectControl />
 
-          <SelectContent />
-        </Select>
+                        <SelectContent />
+                      </Select>
 
-        <FormFieldError>
-          { errors.role?.message }
-        </FormFieldError>
-      </FormField>
+                      <FormFieldError>
+                        { errors.role?.message }
+                      </FormFieldError>
+                    </FormField>
+                  } />
+
       <div className={ styles['user-form__actions'] }>
         <Button onClick={ onCancel }
                 type="button"

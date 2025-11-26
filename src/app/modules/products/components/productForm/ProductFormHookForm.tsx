@@ -74,7 +74,7 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
           Price:
         </FormFieldLabel>
 
-        <Input { ...register('price') }
+        <Input { ...register('price', { valueAsNumber: true }) }
                min={ 0 }
                step="any"
                type={ INPUT_TYPE.number } />
@@ -96,25 +96,31 @@ const ProductFormHookForm: FC<InferProps<typeof propTypes>> = ({ isPending, onCa
         </FormFieldError>
       </FormField>
 
-      <FormField invalid={ !!errors.hasReturnPolicy }>
-        <FormFieldLabel>
-          Return policy:
-        </FormFieldLabel>
+      <Controller control={ control }
+                  name="hasReturnPolicy"
+                  render={({ field }) =>
+                    <FormField invalid={ !!errors.hasReturnPolicy }>
+                      <FormFieldLabel>
+                        Return policy:
+                      </FormFieldLabel>
 
-        <Checkbox { ...register('hasReturnPolicy') }
-                  defaultChecked={ product?.hasReturnPolicy }
-                  value="true">
-          <CheckboxControl />
+                      <Checkbox defaultChecked={ product?.hasReturnPolicy }
+                                name={ field.name }
+                                onBlur={ field.onBlur }
+                                onCheckedChange={ ({ checked }) => setValue(field.name, !!checked) }
+                                value="true">
+                        <CheckboxControl />
 
-          <CheckboxLabel>
-            Product can be returned up to 30 days
-          </CheckboxLabel>
-        </Checkbox>
+                        <CheckboxLabel>
+                          Product can be returned up to 30 days
+                        </CheckboxLabel>
+                      </Checkbox>
 
-        <FormFieldError>
-          { errors.hasReturnPolicy?.message }
-        </FormFieldError>
-      </FormField>
+                      <FormFieldError>
+                        { errors.hasReturnPolicy?.message }
+                      </FormFieldError>
+                    </FormField>
+                  }/>
 
       <Controller control={ control }
                   name="stock"
