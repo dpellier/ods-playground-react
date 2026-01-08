@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "3.9.1",
-    "@ovhcloud/ods-react": "19.3.0",
-    "@ovhcloud/ods-themes": "19.3.0",
+    "@ovhcloud/ods-react": "19.4.0",
+    "@ovhcloud/ods-themes": "19.4.0",
     "@reduxjs/toolkit": "2.0.1",
     "@tanstack/react-form": "0.39.0",
     "@tanstack/zod-form-adapter": "0.39.0",
